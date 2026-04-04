@@ -23,9 +23,9 @@ Order numbers are random (e.g., `ORD-B45E8258`). Invoice numbers are sequential 
 
 See the dedicated gateway setup guides:
 
-- [Stripe Setup](/gateways/stripe)
-- [PayPal Setup](/gateways/paypal)
-- [Mollie Setup](/gateways/mollie)
+- [Stripe Setup](/licensedock/gateways/stripe)
+- [PayPal Setup](/licensedock/gateways/paypal)
+- [Mollie Setup](/licensedock/gateways/mollie)
 
 ## Email Settings
 
@@ -33,4 +33,4 @@ Configure SMTP settings for sending order confirmations, license details, and re
 
 ## Next Steps
 
-- [Quick Start](/getting-started/quick-start) – create your first product
+- [Quick Start](/licensedock/getting-started/quick-start) – create your first product

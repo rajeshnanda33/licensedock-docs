@@ -31,6 +31,6 @@ Set the limit to `0` for unlimited activations.
 
 If you're building the license check into your software, see the API reference:
 
-- [Activate License](/api/activate)
-- [Deactivate License](/api/deactivate)
-- [Validate License](/api/validate)
+- [Activate License](/licensedock/api/activate)
+- [Deactivate License](/licensedock/api/deactivate)
+- [Validate License](/licensedock/api/validate)

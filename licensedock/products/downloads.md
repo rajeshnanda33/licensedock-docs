@@ -14,7 +14,7 @@ Attach downloadable files to your products. Customers with a valid license can d
 
 Each download has a version number. When you upload a new version, customers see it as an available update in the **customer portal**.
 
-If you sell Joomla extensions, your customers can also receive updates directly in their Joomla admin panel. See [Joomla Update Server Integration](/api/updates#joomla-update-server-integration) for setup instructions.
+If you sell Joomla extensions, your customers can also receive updates directly in their Joomla admin panel. See [Joomla Update Server Integration](/licensedock/api/updates#joomla-update-server-integration) for setup instructions.
 
 ## Secure Downloads
 

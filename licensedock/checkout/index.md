@@ -25,5 +25,5 @@ To enable checkout on your site, create a menu item:
 
 ## Next Steps
 
-- [Coupons](/checkout/coupons) – discount codes
-- [Guest Checkout](/checkout/guest-checkout) – allow purchases without registration
+- [Coupons](/licensedock/checkout/coupons) – discount codes
+- [Guest Checkout](/licensedock/checkout/guest-checkout) – allow purchases without registration

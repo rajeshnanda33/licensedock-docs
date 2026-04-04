@@ -31,5 +31,5 @@ After installation, ensure the following plugins are enabled:
 
 ## Next Steps
 
-- [Configure your store](/getting-started/configuration) – set currency, gateway keys, and store details
-- [Quick Start guide](/getting-started/quick-start) – create your first product and make a test sale
+- [Configure your store](/licensedock/getting-started/configuration) – set currency, gateway keys, and store details
+- [Quick Start guide](/licensedock/getting-started/quick-start) – create your first product and make a test sale

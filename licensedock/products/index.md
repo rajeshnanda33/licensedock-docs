@@ -35,6 +35,6 @@ A product can have multiple plans, and each plan can have multiple prices with d
 
 ## Next Steps
 
-- [Plans & Pricing](/products/plans) – set up plans and prices
-- [Downloads](/products/downloads) – manage downloadable files
-- [Tags](/products/tags) – organize products with tags
+- [Plans & Pricing](/licensedock/products/plans) – set up plans and prices
+- [Downloads](/licensedock/products/downloads) – manage downloadable files
+- [Tags](/licensedock/products/tags) – organize products with tags

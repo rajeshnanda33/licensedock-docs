@@ -59,8 +59,8 @@ All endpoints authenticate using the `license_key` included in the request. No a
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | [/licenses/activate](/api/activate) | Activate a license |
-| POST | [/licenses/deactivate](/api/deactivate) | Deactivate a license |
-| POST | [/licenses/validate](/api/validate) | Validate a license |
-| GET | [/updates/:product_id](/api/updates) | Check for updates |
-| GET | [/downloads/:product_id](/api/downloads) | Download a product file |
+| POST | [/licenses/activate](/licensedock/api/activate) | Activate a license |
+| POST | [/licenses/deactivate](/licensedock/api/deactivate) | Deactivate a license |
+| POST | [/licenses/validate](/licensedock/api/validate) | Validate a license |
+| GET | [/updates/:product_id](/licensedock/api/updates) | Check for updates |
+| GET | [/downloads/:product_id](/licensedock/api/downloads) | Download a product file |

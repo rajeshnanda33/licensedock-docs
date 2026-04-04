@@ -1,0 +1,11 @@
+/* Place extension switcher right before contona.com, appearance, social links */
+.VPNavBar .content-body > div:has(.ext-switcher) {
+  order: 1;
+  display: flex;
+  align-items: center;
+}
+
+.VPNavBar .content-body .search { order: 0; }
+.VPNavBar .content-body .menu { order: 4; }
+.VPNavBar .content-body .appearance { order: 5; }
+.VPNavBar .content-body .social-links { order: 6; }

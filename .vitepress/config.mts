@@ -1,8 +1,10 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'LicenseDock',
-  description: 'Documentation for LicenseDock – Joomla extension for selling digital products and software licenses',
+  title: 'Contona Docs',
+  description: 'Documentation for Joomla extensions by Contona',
+
+  srcExclude: ['CLAUDE.md', 'README.md'],
 
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }]
@@ -10,88 +12,112 @@ export default defineConfig({
 
   themeConfig: {
     logo: '/logo.svg',
+    siteTitle: 'Contona Docs',
+
+    extensions: [
+      { text: 'LicenseDock', link: '/licensedock/' },
+      { text: 'Anything Slider', link: '/anything-slider/' }
+    ],
 
     nav: [
-      { text: 'Guide', link: '/getting-started/installation' },
-      { text: 'API Reference', link: '/api/' },
-      { text: 'LicenseDock.com', link: 'https://licensedock.com' }
+      { text: 'contona.com', link: 'https://contona.com/joomla-extensions' }
     ],
 
-    sidebar: [
-      {
-        text: 'Getting Started',
-        items: [
-          { text: 'Installation', link: '/getting-started/installation' },
-          { text: 'Configuration', link: '/getting-started/configuration' },
-          { text: 'Quick Start', link: '/getting-started/quick-start' }
-        ]
-      },
-      {
-        text: 'Products',
-        items: [
-          { text: 'Overview', link: '/products/' },
-          { text: 'Plans & Pricing', link: '/products/plans' },
-          { text: 'Downloads', link: '/products/downloads' },
-          { text: 'Tags', link: '/products/tags' }
-        ]
-      },
-      {
-        text: 'Checkout',
-        items: [
-          { text: 'Checkout Flow', link: '/checkout/' },
-          { text: 'Coupons', link: '/checkout/coupons' },
-          { text: 'Guest Checkout', link: '/checkout/guest-checkout' }
-        ]
-      },
-      {
-        text: 'Licenses',
-        items: [
-          { text: 'Managing Licenses', link: '/licenses/' },
-          { text: 'Activations', link: '/licenses/activations' }
-        ]
-      },
-      {
-        text: 'Payment Gateways',
-        items: [
-          { text: 'Stripe', link: '/gateways/stripe' },
-          { text: 'PayPal', link: '/gateways/paypal' },
-          { text: 'Mollie', link: '/gateways/mollie' },
-          { text: 'Webhooks', link: '/gateways/webhooks' }
-        ]
-      },
-      {
-        text: 'API Reference',
-        items: [
-          { text: 'Overview', link: '/api/' },
-          { text: 'Activate License', link: '/api/activate' },
-          { text: 'Deactivate License', link: '/api/deactivate' },
-          { text: 'Validate License', link: '/api/validate' },
-          { text: 'Check Updates', link: '/api/updates' },
-          { text: 'Downloads', link: '/api/downloads' }
-        ]
-      },
-      {
-        text: 'Customer Portal',
-        items: [
-          { text: 'Overview', link: '/portal/' }
-        ]
-      },
-      {
-        text: 'Emails',
-        items: [
-          { text: 'Email Templates', link: '/emails/' }
-        ]
-      },
-      {
-        text: 'Invoices',
-        items: [
-          { text: 'Invoice Settings', link: '/invoices/' }
-        ]
-      }
-    ],
+    sidebar: {
+      '/licensedock/': [
+        {
+          text: 'Introduction',
+          link: '/licensedock/'
+        },
+        {
+          text: 'Getting Started',
+          items: [
+            { text: 'Installation', link: '/licensedock/getting-started/installation' },
+            { text: 'Configuration', link: '/licensedock/getting-started/configuration' },
+            { text: 'Quick Start', link: '/licensedock/getting-started/quick-start' }
+          ]
+        },
+        {
+          text: 'Products',
+          items: [
+            { text: 'Overview', link: '/licensedock/products/' },
+            { text: 'Plans & Pricing', link: '/licensedock/products/plans' },
+            { text: 'Downloads', link: '/licensedock/products/downloads' },
+            { text: 'Tags', link: '/licensedock/products/tags' }
+          ]
+        },
+        {
+          text: 'Checkout',
+          items: [
+            { text: 'Checkout Flow', link: '/licensedock/checkout/' },
+            { text: 'Coupons', link: '/licensedock/checkout/coupons' },
+            { text: 'Guest Checkout', link: '/licensedock/checkout/guest-checkout' }
+          ]
+        },
+        {
+          text: 'Licenses',
+          items: [
+            { text: 'Managing Licenses', link: '/licensedock/licenses/' },
+            { text: 'Activations', link: '/licensedock/licenses/activations' }
+          ]
+        },
+        {
+          text: 'Payment Gateways',
+          items: [
+            { text: 'Stripe', link: '/licensedock/gateways/stripe' },
+            { text: 'PayPal', link: '/licensedock/gateways/paypal' },
+            { text: 'Mollie', link: '/licensedock/gateways/mollie' },
+            { text: 'Webhooks', link: '/licensedock/gateways/webhooks' }
+          ]
+        },
+        {
+          text: 'API Reference',
+          items: [
+            { text: 'Overview', link: '/licensedock/api/' },
+            { text: 'Activate License', link: '/licensedock/api/activate' },
+            { text: 'Deactivate License', link: '/licensedock/api/deactivate' },
+            { text: 'Validate License', link: '/licensedock/api/validate' },
+            { text: 'Check Updates', link: '/licensedock/api/updates' },
+            { text: 'Downloads', link: '/licensedock/api/downloads' }
+          ]
+        },
+        {
+          text: 'Customer Portal',
+          items: [
+            { text: 'Overview', link: '/licensedock/portal/' }
+          ]
+        },
+        {
+          text: 'Emails',
+          items: [
+            { text: 'Email Templates', link: '/licensedock/emails/' }
+          ]
+        },
+        {
+          text: 'Invoices',
+          items: [
+            { text: 'Invoice Settings', link: '/licensedock/invoices/' }
+          ]
+        }
+      ],
+
+      '/anything-slider/': [
+        {
+          text: 'Introduction',
+          link: '/anything-slider/'
+        },
+        {
+          text: 'Getting Started',
+          items: [
+            { text: 'Installation', link: '/anything-slider/getting-started/installation' },
+            { text: 'Configuration', link: '/anything-slider/getting-started/configuration' }
+          ]
+        }
+      ]
+    },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/contona/licensedock' }
+      { icon: 'github', link: 'https://github.com/contona' }
     ],
 
     search: {
@@ -99,7 +125,7 @@ export default defineConfig({
     },
 
     footer: {
-      message: 'LicenseDock by Contona',
+      message: 'Joomla Extensions by Contona',
       copyright: 'Copyright 2026 Contona'
     }
   }

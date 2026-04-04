@@ -31,4 +31,4 @@ From here you can:
 
 ## Next Steps
 
-- [Activations](/licenses/activations) – how activation tracking works
+- [Activations](/licensedock/licenses/activations) – how activation tracking works
