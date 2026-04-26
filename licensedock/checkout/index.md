@@ -1,29 +1,72 @@
 # Checkout Flow
 
-LicenseDock uses a direct, single-product checkout – no shopping cart. This is the same model used by Paddle, Gumroad, and LemonSqueezy.
+LicenseDock uses a direct, single-product checkout – no shopping cart. Same model as Paddle, Gumroad, and LemonSqueezy.
 
-## How It Works
+## Flow
 
 ```
-Product Page → "Buy Now" → Checkout Page → Payment → Thank You
+Product Page → Buy Now → Checkout → Payment → Thank You
 ```
 
-1. Customer clicks **Buy Now** on a product page
-2. Customer is taken to the checkout page with their selected plan and price
-3. Customer enters billing details and pays via Stripe, PayPal, or Mollie
-4. On success, they see the thank-you page with order details
+1. Customer clicks **Buy Now** on a product or plan card
+2. The selection (plan + price + trial flag) is saved to their session and to the `ld_cart` cookie
+3. They land on the checkout page
+4. They sign in or proceed as guest, fill in billing details, and pay
+5. On success, the thank-you page shows the order, license keys, and download links
 
-If payment fails or the customer cancels, they can return to the checkout page and try again – LicenseDock remembers what they were buying.
+If they navigate away or close the browser, the `ld_cart` cookie (24 hours) reseeds the session when they come back – their selection is still there.
 
 ## Menu Item
 
-To enable checkout on your site, create a menu item:
+Create a single Checkout menu item:
 
-1. Go to **Menus → Add New Menu Item**
-2. Select **LicenseDock → Checkout** as the type
-3. Save (you can hide it from the menu if you want – the URL just needs to exist)
+1. **Menus → New**
+2. Type: **LicenseDock → Checkout**
+3. Save
+
+You can hide it from navigation – the URL just needs to exist for routing.
+
+## Buy Links
+
+Anywhere you want a direct purchase link, use:
+
+```
+/checkout?plan_price_id=42
+/checkout?plan_price_id=42&trial=1
+/checkout?plan_price_id=42&coupon=LAUNCH20
+```
+
+Each plan/price has a **Copy buy link** button in admin that builds these URLs for you.
+
+## Payment Methods
+
+Customers pick from any gateway you've enabled – Stripe, PayPal, Mollie. See [Payment Gateways](/licensedock/gateways/stripe).
+
+## Billing Details
+
+The checkout form collects:
+
+| Field | Required | Notes |
+|-------|----------|-------|
+| Name | Yes | – |
+| Email | Yes | – |
+| Company | No | For B2B |
+| Address, City, Postcode, Country | Yes | – |
+| State / Region | No | – |
+| Tax ID | No | VAT, GST, EIN. Shown on the invoice |
+| Phone | Optional | Visibility controlled by the **Phone Field on Checkout** setting (`hidden`, `optional`, `required`) |
+
+## Empty Checkout
+
+If a customer hits `/checkout` with no selection in session and no `ld_cart` cookie, they see an empty-state page with a *Browse Products* link.
+
+## Abandoned Checkout Recovery
+
+If a customer reaches checkout and leaves without paying, LicenseDock can email them a recovery link. Configure intervals and max attempts in [Settings → Abandoned Checkout Recovery](/licensedock/getting-started/configuration#abandoned-checkout-recovery).
+
+The recovery link reseeds the original selection (plan, trial, coupon) into their session and drops them back at checkout.
 
 ## Next Steps
 
 - [Coupons](/licensedock/checkout/coupons) – discount codes
-- [Guest Checkout](/licensedock/checkout/guest-checkout) – allow purchases without registration
+- [Guest Checkout](/licensedock/checkout/guest-checkout) – buy without an account first

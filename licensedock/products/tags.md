@@ -1,19 +1,30 @@
 # Tags
 
-Tags let you categorize products for filtering and organization.
+Tags categorise products for filtering, listing pages, and menu items.
 
 ## Creating Tags
 
-1. Go to **Components → LicenseDock → Tags**
-2. Click **New**
-3. Enter a tag name and save
+Go to **Components → LicenseDock → Tags → New**.
 
-## Using Tags
+| Field | Notes |
+|-------|-------|
+| Title | Tag name (e.g. *Joomla Extensions*) |
+| Alias | URL slug, auto-generated from title |
+| Description | Free-text shown on the tag page |
+| Image | Optional banner image for the tag page |
+| Status | Published, Unpublished |
 
-- Assign tags to products in the product edit form
-- Create tag-filtered menu items to show products by category
-- Useful for organizing products into groups like "Joomla Extensions", "WordPress Plugins", "Themes", etc.
+## Assigning Tags
 
-## Tag-Filtered Menu Items
+Open a product and pick one or more tags from the **Tags** field on the edit form.
 
-You can create menu items that display only products with a specific tag. This is useful for building category pages on your site.
+## Tag Menu Items
+
+Create a menu item that lists products with a specific tag:
+
+1. **Menus → New**
+2. Type: **LicenseDock → Products by Tag**
+3. Pick the tag
+4. Save
+
+This is how you build category pages like *Joomla Extensions*, *WordPress Plugins*, or *Themes* without duplicating product listings.

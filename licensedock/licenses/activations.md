@@ -1,36 +1,66 @@
 # Activations
 
-Activations track where a license is being used. Each activation represents one site, device, user, or server using the software.
+An activation records that a license is being used somewhere – a website, a device, a user, or a server instance. The plan's **activation type** controls what each activation represents.
 
 ## Activation Types
 
-The activation type is set on the **plan** and determines what you're counting:
+| Type | Tracks | Identifier example | Normalisation |
+|------|--------|---------------------|---------------|
+| `domain` | Websites | `example.com` | Protocol, `www.`, and path stripped. Lowercased |
+| `device` | Computers, phones, IoT | `MacBook-Pro-ABC123` | Kept as-is |
+| `seat` | Individual users | `user@company.com` | Lowercased |
+| `instance` | Server / container instances | `prod-api-01` | Kept as-is |
 
-| Type | What it tracks | Example |
-|------|---------------|---------|
-| Domain | Websites | `example.com` |
-| Device | Computers or phones | `MacBook-Pro-ABC123` |
-| Seat | Individual users | `user@company.com` |
-| Instance | Servers | `server-prod-01` |
+Normalisation happens server-side in the API. A customer's app can send `https://www.Example.com/path` and it's stored as `example.com` – so the same site can't accidentally consume two activation slots.
 
 ## How It Works
 
-When a customer installs your software, it connects to LicenseDock to register where it's being used:
+The customer's software (or a license-check plugin in your Joomla extension, WordPress plugin, desktop app, etc.) talks to LicenseDock through three API calls:
 
-1. **Activate** – registers the site, device, or user against the license
-2. **Validate** – checks if the license is still valid for that location
-3. **Deactivate** – removes an activation, freeing up a slot
+| Endpoint | Purpose |
+|----------|---------|
+| [`POST /licenses/activate`](/licensedock/api/activate) | Register a new activation |
+| [`POST /licenses/validate`](/licensedock/api/validate) | Check the license is still good (run on app start, periodically, or before features that need it) |
+| [`POST /licenses/deactivate`](/licensedock/api/deactivate) | Remove an activation, freeing a slot |
+
+Activation is idempotent – calling activate twice with the same identifier returns success without creating a duplicate.
 
 ## Activation Limit
 
-Each plan defines a maximum number of activations. When the limit is reached, further activations are blocked until the customer deactivates an existing one.
+Each plan has an **Activation Limit**. `0` means unlimited. When the limit is reached, the API returns:
 
-Set the limit to `0` for unlimited activations.
+```json
+{
+  "error": {
+    "code": "ACTIVATION_LIMIT_REACHED",
+    "message": "Activation limit reached.",
+    "activation_limit": 5,
+    "activations_used": 5
+  }
+}
+```
+
+The customer needs to deactivate one of their existing activations (from your app or the customer portal) to free a slot.
+
+## Activation Record
+
+Each activation row holds:
+
+| Field | Notes |
+|-------|-------|
+| Identifier | Normalised based on activation type |
+| Name | Optional friendly label – set this from your app to help customers identify activations in the portal |
+| IP Address | IP of the request that activated |
+| Activated At | Timestamp |
+
+## Admin Override
+
+Admins can add or remove activations directly from **Components → LicenseDock → Licenses → Edit**. Adding bypasses the activation limit so support can help customers without forcing them to deactivate first.
 
 ## For Developers
 
-If you're building the license check into your software, see the API reference:
+Building license-check into your software? Start with the API reference:
 
-- [Activate License](/licensedock/api/activate)
-- [Deactivate License](/licensedock/api/deactivate)
-- [Validate License](/licensedock/api/validate)
+- [Activate](/licensedock/api/activate)
+- [Deactivate](/licensedock/api/deactivate)
+- [Validate](/licensedock/api/validate)

@@ -1,6 +1,6 @@
 # Downloads
 
-Download a product file securely. The endpoint verifies the license before serving the file.
+Stream a product file. The endpoint verifies the license before delivering the file.
 
 ## Request
 
@@ -10,33 +10,33 @@ GET /api/index.php/v1/licensedock/downloads/{product_id}
 
 ### Parameters
 
-| Parameter | Type | In | Required | Description |
-|-----------|------|-----|----------|-------------|
+| Parameter | Type | In | Required | Notes |
+|-----------|------|-----|----------|-------|
 | `product_id` | integer | URL | Yes | Product ID |
 | `license_key` | string | Query | Yes* | The license key |
-| `dlid` | string | Query | Yes* | Alternative to `license_key` (Joomla convention) |
-| `identifier` | string | Query | No | Activation identifier to verify |
+| `dlid` | string | Query | Yes* | Alias for `license_key` (Joomla update system) |
+| `identifier` | string | Query | No | Activation identifier to verify before serving |
 
-*Either `license_key` or `dlid` must be provided. The `dlid` parameter exists for compatibility with Joomla's update system.
+*Either `license_key` or `dlid` must be present.
 
 ### Example
 
 ```bash
-# Using license_key
-curl -OJ "https://yoursite.com/api/index.php/v1/licensedock/downloads/42?license_key=ABCD-1234-EFGH-5678"
+# License key
+curl -OJ "https://yoursite.com/api/index.php/v1/licensedock/downloads/42?license_key=A1B2C3D4-E5F6A7B8-C9D0E1F2-A3B4C5D6"
 
-# Using dlid (Joomla update system)
-curl -OJ "https://yoursite.com/api/index.php/v1/licensedock/downloads/42?dlid=ABCD-1234-EFGH-5678"
+# Joomla update system
+curl -OJ "https://yoursite.com/api/index.php/v1/licensedock/downloads/42?dlid=A1B2C3D4-E5F6A7B8-C9D0E1F2-A3B4C5D6"
 
-# With activation identifier
-curl -OJ "https://yoursite.com/api/index.php/v1/licensedock/downloads/42?license_key=ABCD-1234-EFGH-5678&identifier=example.com"
+# With activation check
+curl -OJ "https://yoursite.com/api/index.php/v1/licensedock/downloads/42?license_key=A1B2C3D4-E5F6A7B8-C9D0E1F2-A3B4C5D6&identifier=example.com"
 ```
 
 ## Response
 
 ### Success (200)
 
-Returns the file as a binary download:
+Streams the file directly:
 
 ```
 Content-Type: application/zip
@@ -45,9 +45,9 @@ Content-Length: 5242880
 Cache-Control: no-cache, no-store, must-revalidate
 ```
 
-### Errors (JSON mode)
+### Errors – JSON Mode
 
-When using `license_key`, errors return JSON:
+When called with `license_key`, errors are JSON:
 
 ```json
 {
@@ -58,58 +58,60 @@ When using `license_key`, errors return JSON:
 }
 ```
 
-| Code | Status | When |
-|------|--------|------|
+| Code | HTTP | When |
+|------|------|------|
 | `INVALID_REQUEST` | 400 | Missing `product_id` or license key |
 | `LICENSE_NOT_FOUND` | 403 | License key doesn't exist |
-| `LICENSE_INACTIVE` | 403 | License is not active |
-| `LICENSE_EXPIRED` | 403 | License has expired |
+| `LICENSE_INACTIVE` | 403 | License status isn't `active` |
+| `LICENSE_EXPIRED` | 403 | License is past `expires_at` |
 | `PRODUCT_MISMATCH` | 403 | License doesn't belong to this product |
-| `ACTIVATION_NOT_FOUND` | 403 | Identifier not activated on this license |
-| `DOWNLOAD_NOT_FOUND` | 404 | No download available for this product |
-| `FILE_NOT_FOUND` | 404 | Download record exists but file missing from server |
-| `RATE_LIMITED` | 429 | Too many requests (60 per minute per IP) |
+| `ACTIVATION_NOT_FOUND` | 403 | `identifier` was supplied but isn't activated |
+| `DOWNLOAD_NOT_FOUND` | 404 | No published download for this product |
+| `FILE_NOT_FOUND` | 404 | Download record exists but the file is missing |
+| `RATE_LIMITED` | 429 | More than 60 requests in 60 seconds from this IP |
 
-### Errors (Joomla mode)
+### Errors – Plain-Text Mode
 
-When using `dlid`, errors return **plain text** with the HTTP status code – no JSON wrapper. This is for compatibility with Joomla's updater, which expects simple error messages.
+When called with `dlid`, errors are plain text with the appropriate HTTP status. This keeps Joomla's updater happy:
 
-## Validation Flow
+```
+HTTP/1.1 403
+Content-Type: text/plain
 
-The download endpoint validates in this order:
+License has expired
+```
 
-1. **License exists** – is the key valid?
-2. **License active** – status must be `active`
-3. **License not expired** – `expires_at` must be in the future (or null for lifetime)
-4. **Product match** – license must belong to the requested product
-5. **Activation check** – if `identifier` is provided, it must be activated on this license
-6. **File exists** – product must have a published download with a file on disk
+## Validation Order
 
-### Identifier Normalization
+The endpoint stops at the first failure:
 
-If you pass an `identifier`, it's normalized based on the plan's activation type before checking:
+1. `product_id` and license key are present
+2. License key exists
+3. License `status` is `active`
+4. License hasn't expired
+5. License belongs to the requested product
+6. If `identifier` was supplied, it's activated on the license
+7. Product has a published download
+8. The file exists on disk and is inside the download base directory
 
-| Type | Input | Normalized |
-|------|-------|------------|
-| `domain` | `https://www.example.com/path` | `example.com` |
-| `seat` | `User@Email.com` | `user@email.com` |
-| `device` | `MacBook-Pro-ABC123` | `MacBook-Pro-ABC123` (unchanged) |
-| `instance` | `server-prod-01` | `server-prod-01` (unchanged) |
+## Identifier Normalisation
+
+If `identifier` is supplied, it's normalised based on the plan's activation type. See [API conventions](/licensedock/api/#identifier-normalisation).
 
 ## Download Logging
 
 Every successful download is logged with:
 
 - User ID, product ID, license ID
-- File name and version
-- Client IP address
-- Activation identifier (if provided)
+- File name, version
+- Client IP
+- Activation identifier (if supplied)
 - Timestamp
 
-View download logs in the admin panel for analytics and auditing.
+View the log in **Components → LicenseDock → Downloads**.
 
 ## Security
 
-- **Path traversal protection** – file paths are validated with `realpath()` against the base download directory
-- **Rate limiting** – 60 requests per 60 seconds per IP address
-- **No direct file access** – download files are stored outside the web root with `.htaccess` protection
+- **Path traversal protection** – served files must resolve inside the configured download base directory
+- **Rate limiting** – 60 requests per 60 seconds per IP
+- **No direct access** – store download files outside the web root, or block them with `.htaccess` / nginx config. LicenseDock streams files itself
