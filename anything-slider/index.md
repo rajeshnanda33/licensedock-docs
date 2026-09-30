@@ -1,6 +1,6 @@
 # Anything Slider
 
-Anything Slider is a Joomla 5 module for creating image sliders with animated elements, smooth transitions, and flexible navigation controls – no coding required.
+Anything Slider is a Joomla module for creating image sliders with animated elements, smooth transitions, and flexible navigation controls – no coding required.
 
 ## Features
 

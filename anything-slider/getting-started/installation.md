@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Joomla 5.x
+- Joomla
 - PHP 8.1 or higher
 
 ## Install via Joomla Installer

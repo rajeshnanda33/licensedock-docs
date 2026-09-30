@@ -1,6 +1,6 @@
 # Deactivate License
 
-Remove an activation, freeing up a slot.
+Remove an activation and free its slot.
 
 ## Request
 
@@ -12,19 +12,17 @@ POST /api/index.php/v1/licensedock/licenses/deactivate
 
 | Parameter | Type | Required | Notes |
 |-----------|------|----------|-------|
-| `license_key` | string | Yes | The license key (or use `dlid`) |
-| `identifier` | string | Yes | The activation to remove |
-| `dlid` | string | – | Alias for `license_key` |
+| `license_key` | string | Yes | The license key. `dlid` is accepted as an alias |
+| `identifier` | string | Yes | The activation to remove. Normalised the same way as on activate |
+| `product_id` | integer | Recommended | A key for another product is refused with `PRODUCT_MISMATCH` |
 
 ### Example
 
 ```bash
 curl -X POST https://yoursite.com/api/index.php/v1/licensedock/licenses/deactivate \
-  -H "Content-Type: application/json" \
-  -d '{
-    "license_key": "A1B2C3D4-E5F6A7B8-C9D0E1F2-A3B4C5D6",
-    "identifier": "example.com"
-  }'
+  -d "license_key=A1B2C3D4-E5F6A7B8-C9D0E1F2-A3B4C5D6" \
+  -d "identifier=example.com" \
+  -d "product_id=42"
 ```
 
 ## Response
@@ -46,11 +44,15 @@ curl -X POST https://yoursite.com/api/index.php/v1/licensedock/licenses/deactiva
 
 | Code | HTTP | When |
 |------|------|------|
-| `INVALID_REQUEST` | 400 | Missing `license_key` or `identifier` |
-| `LICENSE_NOT_FOUND` | 403 | License key doesn't exist |
+| `INVALID_REQUEST` | 400 | Missing `license_key` or `identifier`, or `identifier` over 255 characters |
+| `LICENSE_INVALID` | 403 | Key doesn't exist, or its status isn't `active` |
+| `PRODUCT_MISMATCH` | 403 | `product_id` was sent and the key doesn't cover it |
 | `ACTIVATION_NOT_FOUND` | 404 | No activation matches that identifier on this license |
-| `RATE_LIMITED` | 429 | More than 60 requests in 60 seconds from this IP |
+| `RATE_LIMITED` | 429 | Per-IP or per-key limit hit. See [Rate Limiting](/licensedock/api/#rate-limiting) |
+| `INTERNAL_ERROR` | 500 | Unexpected server failure |
+
+A suspended, revoked or cancelled license can't remove activations through the API. A license that is `active` but past its expiry date still can.
 
 ## Identifier Normalisation
 
-The `identifier` is normalised the same way as on activate – see [API conventions](/licensedock/api/#identifier-normalisation).
+See [API conventions](/licensedock/api/#identifier-normalisation).

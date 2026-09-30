@@ -1,75 +1,79 @@
 # Quick Start
 
-Get a product live and take a test payment. Five minutes, assuming you've already set the store currency and at least one gateway in [Configuration](/licensedock/getting-started/configuration).
+Get a product live and take a test payment. This assumes you have set the store currency in [Configuration](/licensedock/getting-started/configuration) and entered test credentials for at least one gateway under **Components → LicenseDock → Payment Gateways**.
 
 ## 1. Create a Product
 
 1. Go to **Components → LicenseDock → Products → New**
-2. Fill in **Title**, **Alias** (auto-generates from title), and **Description**
-3. Set **Status** to *Published*
-4. Save
+2. Fill in **Title** (the alias is generated from it) and the description
+3. On the **Details** tab, leave **Requires License** on if the product needs a license key
+4. Publish and save
+
+Plans and downloads can only be added once the product has been saved.
 
 ## 2. Add a Plan
 
-A plan is a tier of the product (e.g. *Single Site*, *Developer*, *Agency*).
+A plan is a tier of the product (e.g. *Single Site*, *5 Sites*, *Unlimited*).
 
-1. On the product edit page, click **Add Plan**
+1. Open the **Plans & Pricing** tab and click **Add Plan**
 2. Set the plan **Title**
-3. Pick an **Activation Type** – `domain`, `device`, `seat`, or `instance` – this controls what each activation represents
+3. Pick an **Activation Type** – Domain, Device, Seat or Instance – which decides what each activation represents
 4. Set the **Activation Limit** (`0` = unlimited)
-5. Save
+5. Click **Apply**
 
 ## 3. Add a Price
 
 Each plan has one or more prices.
 
-1. On the plan edit page, click **Add Price**
-2. Set the **Amount**
-3. Pick a **Billing Cycle** – `monthly`, `quarterly`, `semi_annual`, `annual`, or `one_time`
-4. Optionally set **Trial Days** and **Trial Price** (set trial price to 0 for a free trial)
-5. Save
+1. On the plan card, click **Add Price**
+2. Pick a **Billing Cycle** – Monthly, Quarterly, Semi-Annual, Annual or One-Time
+3. For One-Time, choose the **Access Duration**: Lifetime, or Valid For a number of days, weeks, months or years
+4. Set the **Price**
+5. Optionally set **Trial Days** and **Trial Price** (`0` for a free trial)
+6. Click **Apply**
 
-You can offer the same plan with multiple billing cycles (e.g. monthly and annual) – the customer picks one at checkout.
+Give a plan several prices to offer, for example, monthly and annual billing. See [Plans & Pricing](/licensedock/products/plans).
 
 ## 4. Upload a Download (Optional)
 
-If your product is software, attach the file:
+If the product is a file or software:
 
-1. On the product edit page, open the **Downloads** tab
-2. Click **Add Download**
-3. Set the **Version** (e.g. `1.0.0`) and **Changelog**
-4. Upload one or more files (you can label each – Windows, macOS, Source, etc.)
-5. Save
+1. Open the **Downloads** tab and click **Add Version**
+2. Set the **Version** and **Release notes**
+3. Upload one or more files
+4. Save
 
-## 5. Create a Menu Item
+See [Downloads](/licensedock/products/downloads).
 
-LicenseDock needs at least a Checkout menu item to handle payments.
+## 5. Create a Checkout Menu Item
 
 1. **Menus → Main Menu → New**
-2. Pick **LicenseDock → Checkout** (you can hide it from the menu – the URL just needs to exist)
-3. Save
+2. Menu Item Type: **LicenseDock → Checkout**
+3. Save. The item can be hidden from the menu – the URL just needs to exist
 
-Add a **LicenseDock → Product** menu item if you want a public product page. Otherwise customers reach checkout via a direct buy link from the plan/price (Copy buy link button in admin).
+Add a **LicenseDock → Single Product** or **Products** menu item for a public product page. Without one, customers can reach checkout through a buy link: **Copy buy link** on each price copies a checkout URL for it.
 
 ## 6. Make a Test Purchase
 
-1. Visit the product page (or use the buy link from the plan)
+1. Open the product page, or paste the buy link into a browser
 2. Click **Buy Now**
-3. Complete checkout using your gateway's test credentials – Stripe accepts `4242 4242 4242 4242` with any future expiry and CVC
-4. The order, subscription, and license appear under **Components → LicenseDock**
+3. Pay with your gateway's test credentials – Stripe accepts `4242 4242 4242 4242` with any future expiry date and CVC
+4. The order, invoice, license and (for recurring prices) subscription appear under **Components → LicenseDock**
 
-## What Happens Behind the Scenes
+Test orders are marked as test and kept out of the live figures on the [Dashboard](/licensedock/admin/dashboard). **Cleanup** in the LicenseDock menu deletes them all when you are done.
 
-On a successful payment LicenseDock:
+## What Happens on a Successful Payment
 
-1. Marks the order completed and assigns a sequential invoice number
-2. Generates a license key (if the plan requires one) and links it to the order
-3. Creates a subscription record (for recurring prices)
-4. Queues the purchase confirmation email and admin notification
-5. Renders an on-demand PDF invoice
+1. The order is marked completed
+2. A purchase invoice is issued with the next sequential number
+3. A license key is generated for each product that requires one
+4. A subscription is created for recurring prices
+5. The `purchase_confirmation` email is sent with the invoice PDF attached, and `admin_new_order` goes to the admin addresses
+
+A guest buyer gets a Joomla account created in the background. The receipt carries the link to set a password for it.
 
 ## Next Steps
 
 - [Plans & Pricing](/licensedock/products/plans) – activation types and billing cycles in detail
-- [Payment Gateways](/licensedock/gateways/stripe) – Stripe, PayPal, Mollie setup
-- [API Reference](/licensedock/api/) – integrate license checks into your software
+- [Payment Gateways](/licensedock/gateways/stripe) – Stripe, PayPal and Mollie setup
+- [API Reference](/licensedock/api/) – license checks from your software

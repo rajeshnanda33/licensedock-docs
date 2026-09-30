@@ -1,18 +1,23 @@
 # LicenseDock
 
-LicenseDock is a Joomla 5 extension for selling digital products and software licenses. It handles the full lifecycle – from checkout to license activation – natively within Joomla.
+LicenseDock is a Joomla extension for selling software and digital products. It handles checkout, payment, license keys, downloads, subscriptions, invoices and customer emails inside Joomla.
 
 ## Features
 
-- **Products & Plans** – Create products with flexible pricing. One-time purchases or recurring subscriptions with monthly, quarterly, or annual billing.
-- **License Management** – Automatic license key generation with activation tracking by domain, device, seat, or instance.
-- **Payment Gateways** – Accept payments via Stripe, PayPal, and Mollie. Automatic payment notifications, subscription management, and refund support.
-- **Customer Portal** – Self-service portal where customers view orders, download products, manage licenses, and handle subscriptions.
-- **Developer API** – REST API to activate, validate, check for updates, and deliver secure downloads directly from your software.
-- **Invoices & Emails** – Automatic PDF invoice generation, sequential numbering, and customisable email notifications for every order event.
+- **Products & Plans** – Products with plans and prices. One-time purchases, lifetime or time-limited access, or recurring subscriptions billed monthly, quarterly, semi-annually or annually. Trials, bundles and tags.
+- **Checkout** – Single-product checkout with guest buying, coupons, configurable billing fields, country restrictions and consent checkboxes.
+- **Payment Gateways** – Stripe, PayPal and Mollie, each with test and live mode. Webhooks keep orders, renewals, refunds and disputes in sync.
+- **Subscriptions** – Upgrades and downgrades with proration, renewal reminders, dunning for failed payments, and renewal and lapsed-customer discounts.
+- **License Management** – Automatic license keys with activation tracking by domain, device, seat or instance.
+- **Developer API** – REST endpoints to activate, deactivate and validate licenses, check for updates and serve downloads from your software.
+- **Customer Portal** – Customers see their subscriptions, licenses, downloads, invoices and account details, and can download a copy of their data.
+- **Invoices** – Sequential PDF invoices for purchases, renewals and plan changes, and credit notes for refunds.
+- **Tax** – Per-country tax rates, tax-inclusive or tax-exclusive pricing, and EU VAT rules with reverse charge for verified business buyers.
+- **Emails** – 36 editable templates for customers and admins, sent through a queue with retries, over Joomla mail or your own SMTP.
+- **Admin Tools** – Revenue dashboard, Store Health checks, logs for emails, webhooks, subscription events and downloads, CSV import and test data cleanup.
 
 ## Next Steps
 
-- [Installation](/licensedock/getting-started/installation) – install and set up LicenseDock
+- [Installation](/licensedock/getting-started/installation) – install LicenseDock and set up scheduled tasks
 - [Configuration](/licensedock/getting-started/configuration) – configure your store settings
 - [Quick Start](/licensedock/getting-started/quick-start) – create your first product and make a test sale

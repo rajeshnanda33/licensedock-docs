@@ -1,33 +1,44 @@
 # Guest Checkout
 
-Customers can buy without registering first. The Joomla user account is created silently after payment.
+Customers can buy without registering first. LicenseDock creates their Joomla account after payment.
 
 ## Flow
 
-1. Guest clicks **Buy Now** on a product
-2. On the checkout page they see an inline **Have an account? Sign in** panel for returning customers, alongside the guest name and email fields
-3. Guest fills in name, email, billing details, and pays
-4. After successful payment, LicenseDock creates a Joomla user with the billing email (or links the order to an existing user with the same email)
-5. The guest receives:
-   - A purchase confirmation email with order details, license keys, and download links
-   - An account activation email with a link to set their password
+1. A guest opens checkout from a **Buy Now** button or a buy link.
+2. The checkout page offers an **Already have an account? Sign in** panel for returning customers, and **Name** and **Email** fields for everyone else.
+3. The guest fills in their details and billing address and pays.
+4. When the order completes, LicenseDock looks for a Joomla user with the billing email:
+   - **None found** – a new user is created with that name and email, a random password and the group set in **Users → Options → New User Registration Group**. The account is marked as not yet activated.
+   - **Found** – the order is linked to that existing user. No second account is created, and their password is left alone.
+5. The guest receives the purchase confirmation email with the order, license keys and download links. For a new account it also contains a **Set Password & Sign In** link.
 
-Once they activate, they have a regular Joomla account and can sign in to the customer portal.
+The activation link is valid for 14 days. Once the customer sets a password, the account is a normal Joomla account and they can sign in to the [customer portal](/licensedock/portal/).
 
-## Existing Email
+## Thank-You Page for Guests
 
-If the billing email matches an existing Joomla user, the order is linked to that user automatically – no duplicate account is created.
+The guest's thank-you page depends on the account:
 
-## Inline Sign-In on Checkout
+| Situation | What the page shows |
+|-----------|---------------------|
+| New account, not yet activated | **Check your inbox**, with instructions to open the email and click **Set Password & Sign In**, and a **Resend the email** link |
+| Email already had an account | "You already have an account with us." and **Sign in to your account** |
 
-Returning customers can sign in directly on the checkout page without leaving. The session preserves their selection across the sign-in flow, so they don't have to start over.
+**Resend the email** sends a separate account activation email with a fresh 14-day link. It works only from the thank-you page's own signed link, and can be used once a minute.
 
-## What Carries Over
+## Signing In During Checkout
 
-| Data | Where it lives | Lifetime |
-|------|----------------|----------|
-| Plan, trial flag, coupon | Session + `ld_cart` cookie | 24 hours (cookie) or session lifetime |
-| Guest name and email | Session (`BuyerContextHelper`) | Session lifetime |
-| Billing details | Form state, not persisted until payment | Page render |
+Returning customers can sign in from the panel on the checkout page. Their selection, trial and coupon survive the login, and their saved billing details are filled in. A normal Joomla login page works too.
 
-The `ld_cart` cookie is first-party, strictly necessary, and stores only the plan price ID, trial flag, and coupon code – nothing personal.
+A guest who never signs in but uses the email of an existing account is still handled: the order joins that account after payment.
+
+## What Is Remembered
+
+| Data | Where | Lifetime |
+|------|-------|----------|
+| Plan price, trial flag, coupon | Session and the `ld_cart` cookie | Session, or 24 hours for the cookie |
+| Name and email typed so far | Session | Session |
+| Name, email and billing fields | The browser's `localStorage`, same device only | The longest abandoned-checkout reminder interval plus 12 hours, capped at 7 days. 24 hours when reminders are off |
+
+The `localStorage` copy never leaves the browser and is cleared on the thank-you page. It lets a guest who returns from a reminder email find their details already filled in. When a reminder link is opened on a different device, the details come from the original order instead – see [Abandoned Checkout Recovery](/licensedock/checkout/abandoned-checkout).
+
+The `ld_cart` cookie holds only the price ID, trial flag and coupon code. See [The `ld_cart` Cookie](/licensedock/checkout/#ld-cart-cookie).

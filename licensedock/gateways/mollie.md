@@ -1,74 +1,95 @@
 # Mollie
 
-Mollie handles one-time payments, subscriptions, plan changes, and refunds. It supports a wide range of European payment methods including iDEAL, Bancontact, SOFORT, and credit cards.
+Mollie handles one-time payments, subscriptions, plan changes, refunds and chargebacks, with the payment methods enabled on your Mollie account (cards, iDEAL, Bancontact, SEPA Direct Debit and others).
 
 ## Setup
 
-1. Create a [Mollie account](https://www.mollie.com)
-2. In the Mollie Dashboard → **Developers → API keys**, copy your test and live API keys
-3. In Joomla admin → **Components → LicenseDock → Gateways → Mollie**
-4. Enter:
-   - **Test API Key** (`test_...`)
-   - **Live API Key** (`live_...`)
-5. Set the mode to **Test** or **Live**
-6. Save
+1. In the Mollie Dashboard → **Developers → API keys**, copy your test API key (`test_...`) and live API key (`live_...`).
+2. In Joomla admin, go to **Components → LicenseDock → Payment Gateways** and find the **Mollie** card.
+3. Set **Status** to **Enabled** and **Mode** to **Test** or **Live**. The card shows the **API Key** field for the selected mode.
+4. Enter the API key for that mode and click **Apply**.
+5. Click **Check connection** in the card header. LicenseDock calls Mollie with the saved key for the mode selected on the card and lists the payment methods enabled on your account.
 
-API keys are encrypted at rest with AES-256-CBC.
+### Credential storage
 
-## Webhook Setup
+API keys are encrypted at rest with AES-256-GCM, using a key derived from the `secret` in Joomla's `configuration.php`. Once saved, the field shows a mask. Leave it empty to keep the stored key, or type a new one to replace it.
 
-LicenseDock passes a webhook URL with each Mollie payment, so there's no separate webhook configuration in the Mollie Dashboard. Mollie hits:
+If the Joomla `secret` changes, stored keys can no longer be decrypted and **Check connection** says so. Enter them again and click **Apply**.
+
+## Webhook
+
+LicenseDock sends its webhook URL to Mollie with every payment and subscription it creates, so Mollie knows where to post without any setup in the Mollie Dashboard. The URL is shown on the Mollie card:
 
 ```
 https://yoursite.com/api/index.php/v1/licensedock/webhooks/mollie
 ```
 
-For local development, set **Webhook Base URL** in **Settings → Gateways** to your tunnel URL (ngrok, Cloudflare Tunnel) – Mollie can't reach `localhost`.
+Mollie posts to it whenever the status of one of those payments changes: paid, failed, expired, canceled, refunded or charged back. There are no events to select.
 
-Unlike Stripe and PayPal, Mollie webhooks don't carry a signature. LicenseDock verifies each notification by re-fetching the payment status from Mollie's API, so a forged webhook can't fake a paid status.
+The Mollie Dashboard also has a **Webhooks** page for Mollie's newer event webhooks (payouts, balances, sales invoices, payment links). LicenseDock doesn't use them.
 
-## Events Handled
+Mollie notifications carry only a payment ID and no signature. LicenseDock fetches that payment from the Mollie API with your API key and acts on what Mollie returns, so a forged request can't fake a payment status. If the fetch fails, LicenseDock answers with an error so Mollie retries.
 
-| Notification | Status | Action |
-|--------------|--------|--------|
-| Payment | `paid` | Completes the one-time order or records a subscription renewal |
-| Payment | `paid` (with refund/chargeback) | Applies the refund or chargeback |
-| Payment | `failed` | Marks the order failed (one-time) or records a dunning failure (subscription) |
-| Payment | `expired` / `canceled` | Marks the order terminal |
+::: warning Moving to a new domain
+Mollie keeps the webhook URL that was sent when each payment or subscription was created. Subscriptions created before a domain change keep notifying the old URL.
+:::
 
-Webhook handlers are idempotent – Mollie may send the same payment ID multiple times as the status changes, and LicenseDock handles that safely.
+For local development, set **Webhook Base URL** at the top of the Payment Gateways page to a public tunnel URL (ngrok, Cloudflare Tunnel). Mollie can't reach `localhost`. Clear it again in production – **Store Health** warns when its host doesn't match your site.
 
-## Plan Changes
+## What each notification does
 
-| Mode | Behaviour |
-|------|-----------|
-| Immediate (net > 0) | `PATCH` the Mollie subscription, create a one-off payment using the existing mandate – no redirect |
-| Immediate (net < 0) | `PATCH` the subscription, refund the difference on a refundable past payment |
-| Scheduled | `PATCH` the subscription amount, takes effect on the next renewal |
+| Payment status | Action |
+|----------------|--------|
+| `paid` | Completes a one-time or first subscription order, or records a subscription renewal |
+| `paid` with refunds or chargebacks | Records each new refund with status `refunded`, and each new chargeback |
+| `failed` (subscription payment) | Records a failed renewal payment |
+| `failed` (one-time payment) | Marks the order **Failed** and emails the customer |
+| `expired` | Marks the order **Failed** (abandoned checkout, no email) |
+| `canceled` | Marks the order **Cancelled** (abandoned checkout, no email) |
+| Plan-change payment `paid` | Applies the pending plan upgrade |
+| Plan-change payment `failed` / `expired` / `canceled` | Leaves the plan unchanged |
 
-Mollie has no native mid-cycle proration – LicenseDock handles deltas through one-off payments and refunds.
+Mollie sends the same payment ID for every status change, and every handler checks what it has already recorded, so repeated notifications are safe.
 
-See [Plan Change Behaviour](/licensedock/gateways/webhooks#plan-changes) for the full matrix.
+## How payments work
+
+| Purchase | Flow |
+|----------|------|
+| One-time | The customer pays on Mollie's hosted page and returns. The order completes on return or when the webhook arrives, whichever comes first |
+| Subscription | The first payment is made with `sequenceType=first`, which creates a mandate. LicenseDock then creates a Mollie subscription, and Mollie charges the mandate each cycle with no customer redirect |
+
+Mollie shows the methods enabled on your Mollie account. A free trial or 100% coupon on a subscription makes the first payment zero, and Mollie only offers methods that accept that, such as credit card and PayPal.
+
+Coupons apply to the first charge only.
+
+## Subscriptions
+
+| Mollie notification | What LicenseDock does |
+|---------------------|-----------------------|
+| Renewal payment `paid` | Records the renewal, extends the subscription and its licenses, and applies any scheduled plan change |
+| Renewal payment `failed` | Marks the subscription **Past Due** and emails the customer on the first failure. If payment hasn't recovered after the **Dunning grace period** (**Settings**, default 14 days), the subscription is cancelled |
+
+Mollie doesn't send notifications for subscription status changes, only for the payments a subscription creates. Cancelling from the customer's account or a full refund cancels the Mollie subscription through the API.
+
+## Plan changes
+
+Mollie has no built-in proration, so LicenseDock charges the difference as a separate payment on the customer's mandate.
+
+| Change | Behaviour |
+|--------|-----------|
+| Upgrade, immediate | LicenseDock creates a one-off payment for the prorated difference. The customer sees "Your payment is processing", and the plan switches when Mollie confirms the payment. If it fails, the plan stays as it was. No redirect |
+| Any change, scheduled | The new price applies at the next renewal |
+| Downgrade | Always scheduled for the next renewal. No charge or refund today |
+
+See [Plan changes](/licensedock/gateways/webhooks#plan-changes) for all three gateways side by side.
+
+## Refunds and chargebacks
+
+Refunds issued from LicenseDock admin go through the Mollie API. Refunds made in the Mollie Dashboard reach LicenseDock through the payment webhook.
+
+Mollie reports a chargeback after the bank has already reversed the payment. LicenseDock treats it as a dispute that is opened and lost at once. See [Refunds](/licensedock/gateways/refunds) and [Disputes](/licensedock/gateways/disputes).
 
 ## Testing
 
-- Use test keys (`test_...`) and Mollie's test cards from the [Mollie test mode docs](https://docs.mollie.com/overview/testing)
-- Mollie's free test mode accepts test cards without real charges
-
-## Supported Payment Methods
-
-Mollie automatically displays available payment methods based on the customer's location:
-
-- Credit and debit cards (Visa, Mastercard, Amex)
-- iDEAL (Netherlands)
-- Bancontact (Belgium)
-- SOFORT / Klarna
-- PayPal (via Mollie)
-- SEPA Direct Debit
-- Bank transfer
-
-## How Payments Work
-
-- **One-time** – customer pays on Mollie's hosted page, returns, webhook completes the order
-- **Recurring** – first payment uses `sequenceType=first` to create a mandate. Mollie's subscription API charges automatically on each cycle using the mandate. No customer redirect on renewals
-- **Refunds** – issued from LicenseDock admin → Mollie processes → webhook applies the refund locally
+- Use your test API key (`test_...`) and the test payment methods from [Mollie's testing docs](https://docs.mollie.com/overview/testing). In test mode Mollie lets you choose the outcome of each payment.
+- Orders placed while Mollie is in test mode are flagged as test orders. They are hidden from the Orders list by default (filter **Test** to see them), kept out of your figures, and can be removed under **Cleanup**.

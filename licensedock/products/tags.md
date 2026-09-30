@@ -1,30 +1,41 @@
 # Tags
 
-Tags categorise products for filtering, listing pages, and menu items.
+Tags group products into categories for the products listing and for tag pages.
 
 ## Creating Tags
 
 Go to **Components → LicenseDock → Tags → New**.
 
-| Field | Notes |
-|-------|-------|
-| Title | Tag name (e.g. *Joomla Extensions*) |
-| Alias | URL slug, auto-generated from title |
-| Description | Free-text shown on the tag page |
-| Image | Optional banner image for the tag page |
-| Status | Published, Unpublished |
+| Field | Default | Notes |
+|-------|---------|-------|
+| Title | – | Required. Tag name, such as *Joomla Extensions* |
+| Alias | – | URL slug, generated from the title when left blank |
+| Description | – | Plain text shown at the top of the tag page |
+| Image | – | Optional image shown at the top of the tag page |
+| Status | Unpublished | Published, Unpublished, Archived, Trashed |
+| Ordering | 0 | Position in the tag filter dropdown |
 
 ## Assigning Tags
 
-Open a product and pick one or more tags from the **Tags** field on the edit form.
+Open a product and pick one or more tags in the **Tags** field in the sidebar of the **Details** tab.
 
-## Tag Menu Items
+## Tag Pages
 
-Create a menu item that lists products with a specific tag:
+Create a menu item that lists the products with one tag:
 
 1. **Menus → New**
-2. Type: **LicenseDock → Products by Tag**
-3. Pick the tag
+2. Menu item type: **LicenseDock → Products**
+3. Set **Filter by Tag** to the tag
 4. Save
 
-This is how you build category pages like *Joomla Extensions*, *WordPress Plugins*, or *Themes* without duplicating product listings.
+The page lists only products with that tag. The tag's image and description appear above the list, the tag title is added to the breadcrumb, and the tag title is used as the page heading unless the menu item sets its own.
+
+Use this to build category pages such as *Joomla Extensions*, *WordPress Plugins* or *Themes* from one catalogue.
+
+## Tag Filter on the Products Page
+
+The products listing has a tag dropdown in its toolbar. It lists published tags that have at least one published product, so empty tags stay hidden. Choosing a tag reloads the listing with a `tag` parameter holding the tag ID, such as `?tag=3`.
+
+## Translations
+
+Tag title and description are translatable. See [Translations](/licensedock/products/translations).

@@ -40,10 +40,13 @@ export default defineConfig({
         {
           text: 'Products',
           items: [
-            { text: 'Overview', link: '/licensedock/products/' },
+            { text: 'Products', link: '/licensedock/products/' },
             { text: 'Plans & Pricing', link: '/licensedock/products/plans' },
             { text: 'Downloads', link: '/licensedock/products/downloads' },
-            { text: 'Tags', link: '/licensedock/products/tags' }
+            { text: 'Bundles', link: '/licensedock/products/bundles' },
+            { text: 'Tags', link: '/licensedock/products/tags' },
+            { text: 'Product Snippets', link: '/licensedock/products/snippets' },
+            { text: 'Translations', link: '/licensedock/products/translations' }
           ]
         },
         {
@@ -51,7 +54,10 @@ export default defineConfig({
           items: [
             { text: 'Checkout Flow', link: '/licensedock/checkout/' },
             { text: 'Coupons', link: '/licensedock/checkout/coupons' },
-            { text: 'Guest Checkout', link: '/licensedock/checkout/guest-checkout' }
+            { text: 'Guest Checkout', link: '/licensedock/checkout/guest-checkout' },
+            { text: 'Tax', link: '/licensedock/checkout/tax' },
+            { text: 'Checkout Consent', link: '/licensedock/checkout/consent' },
+            { text: 'Abandoned Checkout Recovery', link: '/licensedock/checkout/abandoned-checkout' }
           ]
         },
         {
@@ -62,12 +68,33 @@ export default defineConfig({
           ]
         },
         {
+          text: 'Subscriptions',
+          items: [
+            { text: 'Lifecycle & Statuses', link: '/licensedock/subscriptions/' },
+            { text: 'Plan Changes', link: '/licensedock/subscriptions/plan-changes' },
+            { text: 'Dunning', link: '/licensedock/subscriptions/dunning' },
+            { text: 'Renewals & Reminders', link: '/licensedock/subscriptions/renewals' }
+          ]
+        },
+        {
           text: 'Payment Gateways',
           items: [
             { text: 'Stripe', link: '/licensedock/gateways/stripe' },
             { text: 'PayPal', link: '/licensedock/gateways/paypal' },
             { text: 'Mollie', link: '/licensedock/gateways/mollie' },
-            { text: 'Webhooks', link: '/licensedock/gateways/webhooks' }
+            { text: 'Webhooks', link: '/licensedock/gateways/webhooks' },
+            { text: 'Refunds', link: '/licensedock/gateways/refunds' },
+            { text: 'Disputes', link: '/licensedock/gateways/disputes' }
+          ]
+        },
+        {
+          text: 'Integrations',
+          items: [
+            { text: 'Overview', link: '/licensedock/integrations/' },
+            { text: 'WordPress Plugins', link: '/licensedock/integrations/wordpress' },
+            { text: 'WordPress Themes', link: '/licensedock/integrations/wordpress-themes' },
+            { text: 'Joomla Extensions', link: '/licensedock/integrations/joomla' },
+            { text: 'PHP Client', link: '/licensedock/integrations/php' }
           ]
         },
         {
@@ -88,15 +115,20 @@ export default defineConfig({
           ]
         },
         {
-          text: 'Emails',
+          text: 'Emails & Invoices',
           items: [
-            { text: 'Email Templates', link: '/licensedock/emails/' }
+            { text: 'Emails', link: '/licensedock/emails/' },
+            { text: 'Invoices', link: '/licensedock/invoices/' }
           ]
         },
         {
-          text: 'Invoices',
+          text: 'Administration',
           items: [
-            { text: 'Invoice Settings', link: '/licensedock/invoices/' }
+            { text: 'Dashboard & Store Health', link: '/licensedock/admin/dashboard' },
+            { text: 'Logs', link: '/licensedock/admin/logs' },
+            { text: 'Scheduled Tasks', link: '/licensedock/admin/scheduled-tasks' },
+            { text: 'Imports', link: '/licensedock/admin/imports' },
+            { text: 'Privacy & GDPR', link: '/licensedock/admin/privacy' }
           ]
         }
       ],
