@@ -31,11 +31,60 @@ These are available in email templates as `{store_name}`, `{store_url}`, `{store
 
 | Setting | Default | Notes |
 |---------|---------|-------|
-| Currency | `USD` | Store-wide. Every price uses it |
+| Currency | `USD` | Store-wide. Every price uses it. Choose from [40 currencies](#supported-currencies) |
 | Date Format | `d M Y` | Six formats, including `Y-m-d` |
 | Time Format | 12-hour | 12-hour or 24-hour |
 
 Orders and transactions keep their own currency, so historical orders display correctly after a currency change. When the store holds data in more than one currency, the [Dashboard](/licensedock/admin/dashboard) shows a switch to report in each one.
+
+#### Supported currencies
+
+The first six appear at the top of the list under **Popular**.
+
+| Code | Currency |
+|------|----------|
+| `USD` | US Dollar |
+| `EUR` | Euro |
+| `GBP` | British Pound |
+| `INR` | Indian Rupee |
+| `AUD` | Australian Dollar |
+| `CAD` | Canadian Dollar |
+| `AED` | UAE Dirham |
+| `BGN` | Bulgarian Lev |
+| `BHD` | Bahraini Dinar |
+| `BRL` | Brazilian Real |
+| `CHF` | Swiss Franc |
+| `CLP` | Chilean Peso |
+| `CNY` | Chinese Yuan |
+| `CZK` | Czech Koruna |
+| `DKK` | Danish Krone |
+| `HKD` | Hong Kong Dollar |
+| `HUF` | Hungarian Forint |
+| `IDR` | Indonesian Rupiah |
+| `ILS` | Israeli Shekel |
+| `JOD` | Jordanian Dinar |
+| `JPY` | Japanese Yen |
+| `KRW` | South Korean Won |
+| `KWD` | Kuwaiti Dinar |
+| `MXN` | Mexican Peso |
+| `MYR` | Malaysian Ringgit |
+| `NOK` | Norwegian Krone |
+| `NZD` | New Zealand Dollar |
+| `OMR` | Omani Rial |
+| `PHP` | Philippine Peso |
+| `PLN` | Polish Zloty |
+| `RON` | Romanian Leu |
+| `SAR` | Saudi Riyal |
+| `SEK` | Swedish Krona |
+| `SGD` | Singapore Dollar |
+| `THB` | Thai Baht |
+| `TRY` | Turkish Lira |
+| `TWD` | Taiwan Dollar |
+| `UAH` | Ukrainian Hryvnia |
+| `VND` | Vietnamese Dong |
+| `ZAR` | South African Rand |
+
+Prices and payments follow each currency's own minor unit: `JPY`, `KRW`, `VND` and `CLP` have no decimals, and `BHD`, `KWD`, `OMR` and `JOD` have three. Check that your payment gateway account accepts the currency before you switch.
 
 ### Editor
 
