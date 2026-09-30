@@ -32,7 +32,7 @@ These are available in email templates as `{store_name}`, `{store_url}`, `{store
 | Setting | Default | Notes |
 |---------|---------|-------|
 | Currency | `USD` | Store-wide. Every price uses it. Choose from [40 currencies](#supported-currencies) |
-| Date Format | `d M Y` | Six formats, including `Y-m-d` |
+| Date Format | `d M Y` | `d M Y`, `M d, Y`, `d/m/Y`, `m/d/Y`, `Y-m-d` or `d.m.Y` |
 | Time Format | 12-hour | 12-hour or 24-hour |
 
 Orders and transactions keep their own currency, so historical orders display correctly after a currency change. When the store holds data in more than one currency, the [Dashboard](/licensedock/admin/dashboard) shows a switch to report in each one.

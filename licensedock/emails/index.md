@@ -83,12 +83,30 @@ The edit screen has:
 - **Subject**
 - **Body** – HTML, with a rendered preview and an **Edit** toggle for the source
 - **Variables for this template** – the placeholders this email supports
-- **Auto-rendered blocks** – blocks such as `{license_section}` or `{downloads_section}` that LicenseDock builds and includes only when they apply. Each has a **Sample output**
+- **Auto-rendered blocks** – content LicenseDock builds and includes only when it applies (see [Content blocks](#content-blocks)). Each has a **Sample output**
 - **Available in every template** – `{signature}`, `{store_name}`, `{store_url}`, `{store_email}`, `{logo_url}`
 
 A template you have not changed shows **Using default**, and component updates refresh it when a new default ships. Once you edit it, it shows **Customized** and updates leave it alone. **Reset to default** restores the shipped version.
 
 Placeholder values are HTML-escaped, apart from the blocks LicenseDock builds itself, so text a buyer typed at checkout cannot inject markup into an email.
+
+### Content blocks
+
+Each template offers the blocks that fit it.
+
+| Block | Shows |
+|-------|-------|
+| `{license_section}` | Activation limit and expiry, when the order includes a license. The key itself is never emailed |
+| `{downloads_section}` | Download links for each file, when the order includes downloads |
+| `{pricing_section}` | The order's pricing: a trial breakdown (paid today, after trial, future renewals, trial ends) or a single total |
+| `{recurring_section}` | Auto-renewal price and date, on new recurring orders |
+| `{renewal_section}` | A "subscription extended" note, on renewal orders |
+| `{consent_section}` | The consents the buyer accepted at checkout |
+| `{billing_section}` | The buyer's billing details: name, company, address, email, phone, tax ID |
+| `{account_cta}` | Account button: **Set password** for new accounts, **Go to account** otherwise |
+| `{trial_pricing_block}` | The charge when the trial ends, plus the future renewal price when it is lower |
+| `{renewal_block}` | Renewal price, with an "after expiry" comparison when a renewal discount applies |
+| `{grace_intro_block}`, `{post_grace_block}` | Renewal price compared with the price after the grace period ends. Empty without a grace period or renewal discount |
 
 ## Languages
 

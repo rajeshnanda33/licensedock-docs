@@ -94,7 +94,15 @@ Common header names from other platforms' exports are recognised when the standa
 | `cancelled_at` | `canceled_at`, `cancel_date`, `cancellation_date` |
 | `created` | `created_at`, `order_date`, `purchase_date`, `date` |
 
-Values must use LicenseDock's own codes, such as `annual` for yearly billing.
+These columns only accept LicenseDock's own codes:
+
+| Column | Codes |
+|--------|-------|
+| Order `status` | `pending`, `completed`, `failed`, `refunded`, `partially_refunded`, `disputed`, `cancelled` |
+| License `status` | `active`, `expired`, `revoked`, `suspended`, `cancelled` |
+| Subscription `status` | `active`, `trialing`, `expired`, `cancelled`, `suspended`, `pending`, `past_due` |
+| `billing_cycle` | `monthly`, `quarterly`, `semi_annual`, `annual`, `one_time` |
+| `activation_type` | `domain`, `device`, `seat`, `instance` |
 
 ## Customer Options
 

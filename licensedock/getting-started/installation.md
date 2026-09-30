@@ -31,6 +31,10 @@ The package installs the component and five plugins:
 | `plg_pagecache_licensedock` | Keeps checkout and account pages out of Joomla's page cache |
 | `plg_content_licensedock` | Product shortcodes for articles and modules |
 
+## Languages
+
+English (`en-GB`) and German (`de-DE`) are included for the storefront, checkout, admin, emails and invoices. Other languages use Joomla's standard language files: add a translation under **System → Languages** or with language overrides.
+
 ## Plugins After Install
 
 On a fresh install, the web services, user, task and page cache plugins are enabled automatically. The content plugin is left disabled – enable it under **System → Plugins** when you want product shortcodes.
