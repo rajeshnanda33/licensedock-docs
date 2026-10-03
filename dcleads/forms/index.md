@@ -74,7 +74,7 @@ The settings shown depend on the type.
 |---------|-------|-------|
 | Placeholder | Name, Email, Phone, Subject, Message, Short text, Long text, Number, Website address | Grey example text inside the empty input |
 | Help text | All except Heading or note | A short line under the input |
-| Field name | Other questions, except Heading or note | Used in links that [preselect an answer](/dcleads/forms/placing#preselect-an-answer-from-a-link). Made from the label when empty. Letters, numbers and underscores |
+| Field name | Other questions, except Heading or note | Used in links that [Prefill by URL](/dcleads/forms/placing#prefill-by-url). Made from the label when empty. Letters, numbers and underscores |
 
 ### Email and Phone
 

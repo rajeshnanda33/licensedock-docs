@@ -61,16 +61,16 @@ Give the module an **Anchor**, for example `enquiry`, then link to it from a but
 
 The anchor is a module setting. To link to a form on a menu item page, link to the page itself.
 
-## Preselect an Answer from a Link
+## Prefill by URL
 
-A link can choose an answer for the visitor in a Subject, Dropdown, Radio buttons or Checkboxes field. Add the field's name and the answer to the link:
+A link can preselect an option in a Subject, Dropdown, Radio buttons or Checkboxes field, so a button for one plan or service opens the form with that choice already made. Add the field's name and the option to the link:
 
 ```
 /pricing?subject=growth#enquiry
 /start-your-project?subject=joomla-extension&budget=not-sure-yet
 ```
 
-The form editor lists every link part under **Preselect from a link**, with a **Copy** button, once the form is saved. You can also write them yourself:
+The form editor shows the pattern and the form's field names under **Prefill by URL**, below Status, once the form is saved.
 
 - The name is the field's **Field name**. Subject always uses `subject`.
 - The answer matches in any letter case, and spaces and symbols can be left out: `Growth`, `growth` and `GROWTH` all choose Growth, and `web-application-saas` chooses Web Application / SaaS.
