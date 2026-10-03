@@ -32,4 +32,4 @@ The **Status** line under the field shows the current state of the key. See [Act
 
 The **Permissions** toolbar button opens Joomla's permissions screen for DC Leads. It holds permissions only; every other setting is on the Settings screen.
 
-Saving Permissions leaves your settings untouched while the **System - DC Leads campaign capture** plugin is enabled. With the plugin off, saving Permissions resets the Settings. See [Permissions](/dcleads/leads/#permissions) for what each action allows.
+Saving Permissions leaves your settings untouched while the **System - DC Leads** plugin is enabled. With the plugin off, saving Permissions resets the Settings. See [Permissions](/dcleads/leads/#permissions) for what each action allows.

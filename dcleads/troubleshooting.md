@@ -63,7 +63,7 @@ The visitor's session expired while the page was open. With JavaScript, the form
 
 ## Leads Show No Source
 
-- Enable **System - DC Leads campaign capture** under **System → Plugins**.
+- Enable **System - DC Leads** under **System → Plugins**.
 - Tracking takes the first tagged URL of a visitor session. When testing, open the tagged URL in a fresh private window.
 
 See [Campaign Tracking](/dcleads/leads/tracking).
@@ -76,7 +76,7 @@ See [Campaign Tracking](/dcleads/leads/tracking).
 
 ## Settings Reset After Saving Permissions
 
-The **System - DC Leads campaign capture** plugin protects your settings when Permissions is saved. Keep it enabled.
+The **System - DC Leads** plugin protects your settings when Permissions is saved. Keep it enabled.
 
 ## No Updates Showing
 

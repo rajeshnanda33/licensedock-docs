@@ -1,6 +1,6 @@
 # Campaign Tracking
 
-Each lead records where the visitor came from: the page they landed on, the site that sent them and the ad tags on their first tagged visit. This is done by the **System - DC Leads campaign capture** plugin, which is enabled on install. Nothing that identifies the person is stored.
+Each lead records where the visitor came from: the page they landed on, the site that sent them and the ad tags on their first tagged visit. This is done by the **System - DC Leads** plugin, which is enabled on install. Nothing that identifies the person is stored.
 
 ## What Is Captured
 
@@ -58,5 +58,5 @@ Google Ads and Meta add their click IDs on their own when auto-tagging is on.
 
 ## If Leads Show No Source
 
-- Check that **System - DC Leads campaign capture** is enabled under **System → Plugins**. The [Dashboard](/dcleads/admin/dashboard) flags it when it is off.
+- Check that **System - DC Leads** is enabled under **System → Plugins**. The [Dashboard](/dcleads/admin/dashboard) flags it when it is off.
 - Tracking needs a Joomla session. When you test, use a fresh private window so the tagged URL is the first page of the session.

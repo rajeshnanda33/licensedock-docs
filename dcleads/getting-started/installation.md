@@ -18,7 +18,7 @@ The package installs three extensions:
 |-----------|---------|
 | `com_dcleads` | The component: forms, leads, settings and the form menu item |
 | `mod_dcleads_form` | **DC Leads - Form** module, shows a form in any module position |
-| `plg_system_dcleads` | **System - DC Leads campaign capture**, records the landing page, referrer and ad tags of each visit |
+| `plg_system_dcleads` | **System - DC Leads**, records the landing page, referrer and ad tags of each visit |
 
 On a fresh install the system plugin is enabled automatically. On an update its state is left as it is. Without it, leads do not record where they came from – the [Dashboard](/dcleads/admin/dashboard) flags this.
 
