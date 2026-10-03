@@ -45,6 +45,16 @@ DC Leads forms work with Joomla's caching, including the **System - Page Cache**
 - **Campaign tracking** – the tracking plugin runs before a cached page is served, so tags and landing pages are still recorded.
 - **Errors without JavaScript** – after a failed plain post, Joomla's conservative or progressive caching is turned off for the page that shows the errors, so the visitor sees their errors and values.
 
+## "Please complete the check above the button" After Solving the Captcha
+
+The **System - Page Cache** plugin can cache the captcha challenge that the Proof of Work captcha fetches, so every visitor gets the same stored challenge and a solved captcha is refused. From DC Leads 1.1.0 the tracking plugin keeps captcha requests out of the page cache. On 1.0.0, open **System → Plugins → System - Page Cache** and add this line to **Exclude URLs**:
+
+```
+option=com_ajax
+```
+
+Then clear the cache under **System → Clear Cache**.
+
 Saving DC Leads Settings clears Joomla's system cache.
 
 ## "The security token did not match"
