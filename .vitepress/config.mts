@@ -16,6 +16,8 @@ export default defineConfig({
 
     extensions: [
       { text: 'LicenseDock', link: '/licensedock/' },
+      { text: 'DC Theme', link: '/dctheme/' },
+      { text: 'DC Leads', link: '/dcleads/' },
       { text: 'Anything Slider', link: '/anything-slider/' }
     ],
 
@@ -129,6 +131,82 @@ export default defineConfig({
             { text: 'Scheduled Tasks', link: '/licensedock/admin/scheduled-tasks' },
             { text: 'Imports', link: '/licensedock/admin/imports' },
             { text: 'Privacy & GDPR', link: '/licensedock/admin/privacy' }
+          ]
+        }
+      ],
+
+      '/dctheme/': [
+        {
+          text: 'Getting Started',
+          items: [
+            { text: 'Introduction', link: '/dctheme/' },
+            { text: 'Installation', link: '/dctheme/getting-started/installation' },
+            { text: 'Sample Data', link: '/dctheme/getting-started/sample-data' }
+          ]
+        },
+        {
+          text: 'Template',
+          items: [
+            { text: 'Branding', link: '/dctheme/template/branding' },
+            { text: 'Colours', link: '/dctheme/template/colours' },
+            { text: 'Typography', link: '/dctheme/template/typography' },
+            { text: 'Header', link: '/dctheme/template/header' },
+            { text: 'Layout', link: '/dctheme/template/layout' },
+            { text: 'Consent & Analytics', link: '/dctheme/template/consent-analytics' },
+            { text: 'Extras', link: '/dctheme/template/extras' }
+          ]
+        },
+        {
+          text: 'Modules',
+          items: [
+            { text: 'Hero Banner', link: '/dctheme/modules/hero' },
+            { text: 'Section', link: '/dctheme/modules/section' },
+            { text: 'Pricing', link: '/dctheme/modules/pricing' },
+            { text: 'Menu', link: '/dctheme/modules/menu' },
+            { text: 'Testimonials', link: '/dctheme/modules/testimonials' },
+            { text: 'Gallery', link: '/dctheme/modules/gallery' },
+            { text: 'FAQ', link: '/dctheme/modules/faq' },
+            { text: 'Logo Strip', link: '/dctheme/modules/logo-strip' }
+          ]
+        }
+      ],
+
+      '/dcleads/': [
+        {
+          text: 'Getting Started',
+          items: [
+            { text: 'Introduction', link: '/dcleads/' },
+            { text: 'Installation', link: '/dcleads/getting-started/installation' },
+            { text: 'Quick Start', link: '/dcleads/getting-started/quick-start' }
+          ]
+        },
+        {
+          text: 'Forms',
+          items: [
+            { text: 'Building a Form', link: '/dcleads/forms/' },
+            { text: 'Placing a Form', link: '/dcleads/forms/placing' }
+          ]
+        },
+        {
+          text: 'Leads',
+          items: [
+            { text: 'Leads', link: '/dcleads/leads/' },
+            { text: 'Campaign Tracking', link: '/dcleads/leads/tracking' }
+          ]
+        },
+        {
+          text: 'Settings',
+          items: [
+            { text: 'Email Settings', link: '/dcleads/settings/email' },
+            { text: 'Spam Protection', link: '/dcleads/settings/spam' },
+            { text: 'General Settings', link: '/dcleads/settings/general' }
+          ]
+        },
+        {
+          text: 'Administration',
+          items: [
+            { text: 'Dashboard', link: '/dcleads/admin/dashboard' },
+            { text: 'Troubleshooting', link: '/dcleads/troubleshooting' }
           ]
         }
       ],
