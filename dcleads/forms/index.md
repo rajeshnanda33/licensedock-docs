@@ -116,7 +116,26 @@ The **Default country** setting preselects the country.
 | Setting | Default | Notes |
 |---------|---------|-------|
 | Thank you page | None | A menu item to send the visitor to after a successful send. A page of its own is the easiest way to track an ad conversion |
-| Thank you message | "Thank you. We have your message and will reply soon." | Shown in place of the form. Only used when no thank-you page is chosen |
+| Thank you message | "Thank you. We have your message and will reply soon." | Only used when no thank-you page is chosen |
+| After sending | Show the message only | **Show the message above the form** keeps the form, emptied for another enquiry, which suits support pages. Only used when no thank-you page is chosen |
+
+## Overrides Tab
+
+Settings for this form only. An empty field, or **Use default**, follows **Components → DC Leads → Settings**, and shows the value that applies.
+
+| Setting | Notes |
+|---------|-------|
+| Captcha | For example **No captcha** on an ad landing page, while other forms keep one |
+| Minimum seconds on the form | The spam timer for this form |
+| Email me new leads | On or off for this form |
+| Send to | Recipients for this form's leads, for example sales or support |
+| Subject | The notification subject. Placeholders: `{name}`, `{form}`. Possible spam keeps its `[Possible spam]` mark |
+| Send auto-reply | On or off for this form |
+| Reply-To name, Reply-To email, Subject, Message | The auto-reply for this form |
+| Default country | The phone flag and country field this form starts on |
+| Assign to | New leads from this form go straight to this user |
+
+Resending a lead's email from the lead list uses its form's overrides too.
 
 ## How the Form Sends
 
