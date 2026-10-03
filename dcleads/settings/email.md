@@ -44,7 +44,8 @@ An optional thank-you email to the visitor.
 | Setting | Default | Description |
 |---------|---------|-------------|
 | Send auto-reply | No | Sends the thank-you email to the address the visitor entered |
-| Reply-To | First **Send to** address, else Global Configuration **From Email** | Where the visitor's reply goes |
+| Reply-To name | Global Configuration **Reply-To Name**, else the From name | The name on the reply address |
+| Reply-To email | Global Configuration **Reply-To Email**, else the first **Send to** address | Where the visitor's reply goes |
 | Subject | "Thank you for getting in touch" | Empty uses the text shown in the box |
 | Message | See below | Plain text. Empty uses the text shown in the box |
 
