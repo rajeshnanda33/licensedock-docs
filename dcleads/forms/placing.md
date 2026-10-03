@@ -61,6 +61,25 @@ Give the module an **Anchor**, for example `enquiry`, then link to it from a but
 
 The anchor is a module setting. To link to a form on a menu item page, link to the page itself.
 
+## Preselect an Answer from a Link
+
+A link can choose an answer for the visitor in a Subject, Dropdown, Radio buttons or Checkboxes field. Add the field's name and the answer to the link:
+
+```
+/pricing?subject=growth#enquiry
+/start-your-project?subject=joomla-extension&budget=not-sure-yet
+```
+
+The form editor lists every link part under **Preselect from a link**, with a **Copy** button, once the form is saved. You can also write them yourself:
+
+- The name is the field's **Field name**. Subject always uses `subject`.
+- The answer matches in any letter case, and spaces and symbols can be left out: `Growth`, `growth` and `GROWTH` all choose Growth, and `web-application-saas` chooses Web Application / SaaS.
+- For Checkboxes, separate several answers with commas: `?services=design,hosting`.
+- Only the field's own answers can be chosen. An unknown answer is ignored and the field stays empty.
+- An answer the visitor already gave, for example after a failed send, is kept.
+
+It works on pages served from Joomla's page cache too, because the form script reads the link in the browser.
+
 ## Several Forms on One Page
 
 Any number of forms, or copies of the same form, can share a page. Each keeps its own errors and values when it is sent without JavaScript.

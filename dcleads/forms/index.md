@@ -68,13 +68,13 @@ The settings shown depend on the type.
 | Ask for state or province | Country | Adds a state or province field beside the country |
 | Note text | Heading or note | The paragraph under the heading |
 
-**More options: placeholder, help text, name in exports** opens three more settings:
+**More options: placeholder, help text, field name** opens three more settings:
 
 | Setting | Types | Notes |
 |---------|-------|-------|
 | Placeholder | Name, Email, Phone, Subject, Message, Short text, Long text, Number, Website address | Grey example text inside the empty input |
 | Help text | All except Heading or note | A short line under the input |
-| Name in exports | Other questions, except Heading or note | A short machine name for the answer. Made from the label when empty. Letters, numbers and underscores |
+| Field name | Other questions, except Heading or note | Used in links that [preselect an answer](/dcleads/forms/placing#preselect-an-answer-from-a-link). Made from the label when empty. Letters, numbers and underscores |
 
 ### Email and Phone
 
