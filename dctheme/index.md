@@ -1,6 +1,6 @@
 # DC Theme
 
-DC Theme is a Joomla 6 site template with eight content modules. Branding, colours, fonts, header layout, region widths and section order are all set in the template style in Joomla admin.
+DC Theme is a Joomla 6 package. One install adds 11 extensions: a site template, eight content modules and two plugins. Branding, colours, fonts, header layout, region widths and section order are all set in the template style in Joomla admin.
 
 ## What Is in the Package
 

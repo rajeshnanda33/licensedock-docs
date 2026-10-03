@@ -1,6 +1,8 @@
 # DC Leads
 
-DC Leads is a Joomla extension for lead capture forms. Every enquiry is saved to your database before any email is sent, and each lead records the ad, campaign or click that brought the visitor. File uploads are in progress.
+DC Leads is a Joomla package for lead capture forms. One install adds three extensions: the DC Leads component, a form module and a system plugin for campaign tracking.
+
+Every enquiry is saved to your database before any email is sent, and each lead records the ad, campaign or click that brought the visitor. File uploads are in progress.
 
 ## Features
 
