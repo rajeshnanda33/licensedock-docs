@@ -58,12 +58,16 @@ It is recorded like a refund from admin: status change, credit note, emails, and
 
 ## Mark as Refunded
 
-**Mark as Refunded**, next to **Refund** in the actions menu, records a refund without contacting any gateway. Use it for money returned outside the gateways, or for a gateway whose webhook isn't set up.
+**Mark as Refunded**, next to **Refund** in the actions menu, records a refund that LicenseDock didn't send to the gateway. Use it for money returned outside LicenseDock (a bank transfer, cash, another account), or for a gateway whose webhook isn't set up. No money is moved.
 
-It records the amount, issues the credit note and sends the emails in the same way. A full refund marked this way revokes licenses and cancels the subscription in LicenseDock, but **doesn't cancel the subscription at the gateway**. Cancel it in the gateway dashboard yourself, or the customer keeps being charged.
+It records the amount, issues the credit note and sends the emails in the same way. A full refund marked this way revokes licenses and cancels the subscription in LicenseDock.
 
-::: warning Don't record a gateway refund twice
-When the webhook is working, a refund made in the gateway dashboard is recorded automatically. Marking it as refunded as well records a partial refund twice.
+When the subscription is still billed by Stripe, PayPal or Mollie, the dialog also shows **Also cancel the subscription in Stripe (next renewal …)**, ticked. Leave it ticked so the customer isn't charged again. Untick it only if billing should continue, for example if you marked the wrong order. A cancelled gateway subscription can't be restarted. Partial refunds never cancel anything.
+
+If the gateway doesn't confirm the cancellation, LicenseDock emails you so you can check it in the gateway dashboard. If a gateway charges a subscription that is cancelled in LicenseDock, you get a **Needs your attention** email with the amount, so you can refund the charge or reactivate the subscription.
+
+::: tip Refunds made in the gateway dashboard are already recorded
+When the webhook is working, a refund made in the Stripe, PayPal or Mollie dashboard is recorded automatically and shows under **Already Refunded**. The Mark as Refunded dialog lists those refunds so you don't record one twice.
 :::
 
 ## When a refund fails
