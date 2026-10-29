@@ -83,7 +83,7 @@ Lists the published versions of every product the customer has access to, groupe
 
 | Access | Result |
 |--------|--------|
-| Active or trialing subscription, or a cancelled one still inside its paid period | Download links |
+| Active, trialing or past-due subscription, or a cancelled one still inside its paid period | Download links |
 | Expired subscription | Versions listed with an **Expired** badge and no links |
 | Bundle | Products included in a bundle inherit the bundle's access |
 

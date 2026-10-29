@@ -8,13 +8,11 @@ Dunning is what happens between a failed renewal payment and either recovery or 
 
 | Setting | Default | Range | Notes |
 |---------|---------|-------|-------|
-| Dunning grace period | 14 days | 1–90 | Days after the first failed payment before the subscription is ended and the license expires |
+| Dunning grace period | 14 days | 0–90 | Days after the first failed payment before the subscription is ended and the license expires. **0** means never end it automatically |
 
 The grace period is counted from the first failure in the current dunning cycle, so later retries don't restart it.
 
-::: warning
-The settings page says a value of **0** means "never auto-cancel". In 1.9.3 a saved 0 is stored as 14, so the backstop always runs.
-:::
+With **0**, a past-due subscription stays past due, with its license and downloads, until a gateway retry succeeds or you cancel it yourself. Store Health does not report those subscriptions as stuck.
 
 The grace period is enforced by the **LicenseDock - Reminders & Expiration** scheduled task. See [The Reminders & Expiration Task](/licensedock/subscriptions/#the-reminders-expiration-task).
 
