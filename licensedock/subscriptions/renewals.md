@@ -83,6 +83,8 @@ Reminders are sent by the **LicenseDock - Reminders & Expiration** scheduled tas
 |-------|---------|
 | Renewal reminders | Subscriptions that won't renew automatically (auto-renewal off, one-time with an access period, manual recurring) and haven't expired yet. Auto-renewing gateway subscriptions are skipped, because they're charged automatically |
 | Subscription Expired | Every subscription the task expires, when **Send notice** is Yes |
+
+Each subscription gets each reminder once. A subscription that is already past several reminder days, such as one bought close to its expiry, gets only the latest one that's due.
 | Grace reminders | Expired subscriptions still inside the grace period, only when the Renewal Discount is above zero and higher than the Lapsed Discount |
 | Trial Ending Reminder | Trials ending in 3 days |
 | Trial Winback | Customers who cancelled during a trial, the set number of days after they cancelled |

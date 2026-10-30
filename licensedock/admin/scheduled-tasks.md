@@ -80,6 +80,8 @@ For servers with SSH access. Run `crontab -e` and add, with your site's path:
 
 The Automation tab shows this line with your site path already filled in.
 
+Emails sent by CLI cron link to your site's address, which LicenseDock records when you open any LicenseDock admin screen. You don't need to set `$live_site`.
+
 ### Lazy Scheduler
 
 Joomla's Lazy Scheduler runs tasks when visitors load pages. It is on by default (check under **System → Manage → Scheduled Tasks → Options → Lazy Scheduler**). On a quiet site, emails can be delayed by hours, so use web cron or CLI cron in production.

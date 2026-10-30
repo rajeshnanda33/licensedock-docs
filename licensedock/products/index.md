@@ -50,6 +50,8 @@ The main column follows the order of the product page.
 | Gallery Folder | – | Folder path such as `images/my-product`. Every image in it becomes a gallery slide |
 | Gallery Ratio | 16:9 | 21:9, 2:1, 16:9, 3:2, 4:3, 1:1 or 2:3. Pick the ratio your images already are – other images are centred, never cropped |
 
+Upload images at any size. When you save the product, LicenseDock makes smaller WebP copies (480, 800, 1200 and 1600px wide, plus a copy at most 2560px on its long edge) in `media/com_licensedock/thumbs/`. Each visitor's browser loads the copy that fits the screen, and the lightbox opens the 2560px copy. The **Image** is also the picture on the product's catalogue card and the gallery's first slide.
+
 ### Info Buttons
 
 A repeatable list of links shown below the product hero – Documentation, Live Demo, Changelog and so on.
