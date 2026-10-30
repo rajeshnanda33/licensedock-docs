@@ -153,7 +153,48 @@ Joomla appends the stored line to the download URL, so the store sees `?dlid=KEY
 
 Each activation is an HTTP request to your store, so run it when the key is saved, not on every page load. To re-check later, call [validate](/licensedock/api/validate) now and then, e.g. once a day.
 
-### 5. Set the product's Download API Access
+### 5. Optional: check the domain at download time
+
+The stored line carries the domain that was activated. If someone copies a whole site (files and database), the copy carries that line too and can download under the original site's activation.
+
+If your extension ships a system plugin, close that gap there: at download time, replace the stored domain with the domain of the site actually downloading. A copied site then sends its own domain, which was never activated, and the store refuses it with `ACTIVATION_NOT_FOUND` until it activates and uses up a site.
+
+```php
+use Joomla\CMS\Event\Installer\BeforePackageDownloadEvent;
+use Joomla\CMS\Uri\Uri;
+
+// In the system plugin you already ship: one entry in getSubscribedEvents(), and the method.
+public static function getSubscribedEvents(): array
+{
+    return [
+        // ...the events your plugin already handles stay as they are
+        'onInstallerBeforePackageDownload' => 'onInstallerBeforePackageDownload',
+    ];
+}
+
+public function onInstallerBeforePackageDownload(BeforePackageDownloadEvent $event): void
+{
+    $url   = $event->getUrl();
+    $parts = parse_url($url);
+
+    // Only this product's download on your store - never another vendor's.
+    if (strcasecmp($parts['host'] ?? '', 'your-store.com') !== 0
+        || !preg_match('#/licensedock/downloads/42/?$#', $parts['path'] ?? '')
+    ) {
+        return;
+    }
+
+    // The site doing the download, not the one stored when the key was saved.
+    parse_str($parts['query'] ?? '', $query);
+    $query['identifier'] = Uri::getInstance()->getHost();
+
+    $event->updateUrl(strtok($url, '?') . '?' . http_build_query($query, '', '&', PHP_QUERY_RFC3986));
+}
+```
+
+The host and path check keeps it to your own product's download, so the customer's domain is never sent to another vendor's update server. Modules and content plugins can't do this themselves: only a plugin loaded during an update download receives the event.
+
+### 6. Set the product's Download API Access
 
 Set it to **License key + activated identifier**. A download is then refused with `ACTIVATION_REQUIRED` when no domain is sent, and `ACTIVATION_NOT_FOUND` when the domain was never activated.
 
@@ -395,7 +436,7 @@ public function postflight(string $type, InstallerAdapter $adapter): bool
 
 ### 4. Set the product's Download API Access
 
-Set it to **License key + activated identifier**, as in Setup B, step 5.
+Set it to **License key + activated identifier**, as in Setup B, step 6.
 
 ## Errors in Joomla
 
