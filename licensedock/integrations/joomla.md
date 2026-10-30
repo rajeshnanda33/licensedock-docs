@@ -102,21 +102,28 @@ Joomla calls a field's `filter` while saving the form, so the same field works i
 ```xml
 <!-- In your settings form: config.xml (a component's Options), or the <config>
      of your module, plugin or template manifest. -->
-<field name="license_key" type="text" label="License key"
+<field name="license_key" type="text" label="COM_MYEXT_LICENSE_KEY"
        filter="YourVendor\Component\Myext\Administrator\Helper\License::activate"/>
 ```
 
 ### 4. Add the License class
 
+Put it in your own namespace: the comment at the top shows the form for a module or plugin, and the field's `filter` must name the same class. The label and the warning use language keys, so add `COM_MYEXT_LICENSE_KEY` and `COM_MYEXT_LICENSE_UNREACHABLE` to your language file.
+
 On save, `activate()` activates the site and stores the key with its domain on your update site. On a local or staging site (`localhost`, `.test`, `.local`, an IP) it stores the key only, without activating, so no site is used up. If the key is refused or the store can't be reached, it stores the key without a domain and tells the admin.
 
 ```php
+// A component's namespace. For a module use e.g. YourVendor\Module\Myext\Site\Helper, for a
+// plugin YourVendor\Plugin\System\Myext\Helper - and name the same class in the field's filter.
 namespace YourVendor\Component\Myext\Administrator\Helper;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Http\HttpFactory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Database\DatabaseInterface;
+use Joomla\Database\ParameterType;
+use Joomla\Registry\Registry;
 
 \defined('_JEXEC') or die;
 
@@ -148,7 +155,7 @@ final class License
 
         if (!isset($body['data'])) {
             // Limit reached, invalid or expired key, wrong product, or the store was not reached.
-            Factory::getApplication()->enqueueMessage($body['error']['message'] ?? 'The license could not be checked. Try again later.', 'warning');
+            Factory::getApplication()->enqueueMessage($body['error']['message'] ?? Text::_('COM_MYEXT_LICENSE_UNREACHABLE'), 'warning');
             self::store($key, '');
 
             return $key;
@@ -159,13 +166,13 @@ final class License
         return $key;
     }
 
-    // Call at most once a day. A site whose domain is not activated - a copy of another
-    // site - keeps the key but stops sending a domain, so it stops updating.
+    // Call it from code that runs regularly; it asks the store at most once a day. A site whose
+    // domain is not activated - a copy of another site - keeps the key but stops updating.
     public static function recheck(string $key): void
     {
         $domain = Uri::getInstance()->getHost();
 
-        if ($key === '') {
+        if ($key === '' || !self::due()) {
             return;
         }
 
@@ -184,6 +191,47 @@ final class License
 
         $activated = !empty($body['data']['valid']) && !empty($body['data']['identifier_activated']);
         self::store($key, $activated ? $domain : '');
+    }
+
+    // At most once a day: the time of the last check is kept on your extension's own row.
+    private static function due(): bool
+    {
+        $db      = Factory::getContainer()->get(DatabaseInterface::class);
+        $element = self::ELEMENT;
+        $row     = $db->setQuery(
+            $db->createQuery()
+                ->select($db->quoteName(['extension_id', 'params']))
+                ->from($db->quoteName('#__extensions'))
+                ->where($db->quoteName('element') . ' = :element')
+                ->bind(':element', $element),
+            0,
+            1
+        )->loadObject();
+
+        if (!$row) {
+            return false;
+        }
+
+        $params = new Registry((string) $row->params);
+
+        if ((int) $params->get('license_checked', 0) > time() - 86400) {
+            return false;
+        }
+
+        $params->set('license_checked', time());
+        $json = $params->toString();
+        $id   = (int) $row->extension_id;
+
+        $db->setQuery(
+            $db->createQuery()
+                ->update($db->quoteName('#__extensions'))
+                ->set($db->quoteName('params') . ' = :params')
+                ->where($db->quoteName('extension_id') . ' = :id')
+                ->bind(':params', $json)
+                ->bind(':id', $id, ParameterType::INTEGER)
+        )->execute();
+
+        return true;
     }
 
     private static function isLiveHost(string $host): bool
@@ -247,12 +295,11 @@ Joomla appends the stored line to the download URL, so the store sees `?dlid=KEY
 
 ### 5. Re-check once a day
 
-A copied site carries the original site's stored line. The daily re-check asks the store about this site's own domain: if it isn't activated, the site keeps the key but stops sending a domain, so it stops updating. A local copy drops the domain without asking the store.
+A copied site carries the original site's stored line. `recheck()` asks the store about this site's own domain: if it isn't activated, the site keeps the key but stops sending a domain, so it stops updating. A local copy drops the domain without asking the store. Call it from code that runs regularly; it keeps the time of its last check on your extension's own row and asks the store at most once a day.
 
 ```php
-// Somewhere that runs regularly - your component's dashboard, a module's render, a
-// system plugin. Keep the time of the last call with your settings, so it runs at
-// most once a day.
+// From code that runs regularly - your component's dashboard, a module's render, a
+// system plugin. It asks the store at most once a day.
 License::recheck($params->get('license_key', ''));
 ```
 
@@ -495,7 +542,7 @@ Ship the plugin in a package with your extension, because a component or module 
     </files>
     <changelogurl>https://your-store.com/api/index.php/v1/licensedock/changelog/42</changelogurl>
     <updateservers>
-        <server type="extension" name="Your Extension">https://your-store.com/updates/my-extension.xml</server>
+        <server type="extension" name="My Extension">https://your-store.com/updates/my-extension.xml</server>
     </updateservers>
     <dlid prefix="dlid=" suffix=""/>
 </extension>
