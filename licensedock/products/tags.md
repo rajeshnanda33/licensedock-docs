@@ -28,13 +28,13 @@ Create a menu item that lists the products with one tag:
 3. Set **Filter by Tag** to the tag
 4. Save
 
-The page lists only products with that tag. The tag's image and description appear above the list, the tag title is added to the breadcrumb, and the tag title is used as the page heading unless the menu item sets its own.
+The page lists only products with that tag. The tag's image and description appear above the list, the tag title is added to the breadcrumb and used as the page heading unless the menu item sets its own.
 
 Use this to build category pages such as *Joomla Extensions*, *WordPress Plugins* or *Themes* from one catalogue.
 
 ## Tag Filter on the Products Page
 
-The products listing has a tag dropdown in its toolbar. It lists published tags that have at least one published product, so empty tags stay hidden. Choosing a tag reloads the listing with a `tag` parameter holding the tag ID, such as `?tag=3`.
+The products listing has a tag dropdown in its toolbar. It lists published tags that have at least one published product. Choosing a tag reloads the listing with a `tag` parameter holding the tag ID, such as `?tag=3`.
 
 ## Translations
 

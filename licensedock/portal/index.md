@@ -20,7 +20,7 @@ Each portal page is its own menu item type. Create the ones you want under **Men
 A common setup is one **Account** item in your user menu, with the other account pages in a hidden menu so they get clean URLs. The **Page Display** and **Metadata** tabs of each menu item (browser page title, page heading, meta description, robots) apply to the page.
 
 ::: info
-**Order History** was replaced by **Account: Invoices** in 1.9.0. An old Order History menu item still opens the Invoices page. Switch it to **Account: Invoices** when convenient.
+From 1.9.0, **Account: Invoices** takes the place of **Order History**. An existing Order History menu item opens the Invoices page. Switch it to **Account: Invoices** when convenient.
 :::
 
 ## Access

@@ -57,7 +57,7 @@ The name of the tax (VAT, GST, Sales Tax or Tax) comes from **Settings → Billi
 
 Everything printed on an invoice is fixed at the moment it is issued: your company details and footer, the buyer's billing details, the labels, the date format and the language. Changing your store address or tax ID later leaves past invoices as they were.
 
-The one exception is the logo. The PDF always uses the current store logo.
+The logo is the exception: the PDF always uses the current store logo.
 
 Invoices are written in the language the buyer checked out in. A blank **Invoice Footer** prints the built-in footer in that language; credit notes print no default footer, only one you have set yourself.
 
@@ -98,7 +98,7 @@ PDFs are stored in the download folder set under **Settings → Downloads**, whi
 
 ### Import History
 
-Orders completed before a store had invoices, or orders migrated in directly, have no invoice. While any exist, the toolbar shows **Import history (n)**. Each click processes a batch and creates the missing invoices – plus credit notes for their refunds – dated to the original order. The button disappears when nothing is left.
+Orders completed before a store had invoices, or orders migrated in directly, have no invoice. While any exist, the toolbar shows **Import history (n)**. Each click processes a batch and creates the missing invoices, plus credit notes for their refunds, dated to the original order. The button disappears when nothing is left.
 
 An order that already carries an invoice number keeps it. An order with none gets an invoice with no number, so old sales are counted on the dashboard without being threaded into your live numbering. Customers do not see these unnumbered invoices in their account.
 

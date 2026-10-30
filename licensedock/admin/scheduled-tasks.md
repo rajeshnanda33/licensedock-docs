@@ -89,5 +89,5 @@ Joomla's Lazy Scheduler runs tasks when visitors load pages. It is on by default
 ## Checking the Tasks
 
 - **System → Scheduled Tasks** shows each task's last run and whether it succeeded
-- **Store Health → Scheduled Tasks** checks that each task exists, is enabled and has run recently – see [Dashboard & Store Health](/licensedock/admin/dashboard#store-health)
+- **Store Health → Scheduled Tasks** checks that each task exists, is enabled and has run recently. See [Dashboard & Store Health](/licensedock/admin/dashboard#store-health)
 - **Logs → Email** shows emails sitting in the Queued state if the queue task is not running

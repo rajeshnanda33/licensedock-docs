@@ -4,7 +4,7 @@ When a customer goes to the payment page and never pays, LicenseDock can email t
 
 ## What Counts as Abandoned
 
-An order is created when the customer clicks **Proceed to payment** and is sent to the gateway. If it is still **pending** later – the customer closed the tab at Stripe, PayPal or Mollie, or never came back – it is abandoned.
+An order is created when the customer clicks **Proceed to payment** and is sent to the gateway. If it is still **pending** later (the customer closed the tab at Stripe, PayPal or Mollie, or never came back), it is abandoned.
 
 Reminders go only to pending orders that have a billing email. They are not sent for:
 

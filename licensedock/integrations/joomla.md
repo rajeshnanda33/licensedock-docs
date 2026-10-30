@@ -92,7 +92,7 @@ Either way, the URL Joomla requests is:
 https://your-store.com/api/index.php/v1/licensedock/downloads/42?dlid=A1B2C3D4-E5F6A7B8-C9D0E1F2-A3B4C5D6
 ```
 
-That's the whole required setup. Joomla offers your updates, and each download checks that the license is valid, current and for this product.
+With that in place, Joomla offers your updates, and each download checks that the license is valid, current and for this product.
 
 ### Errors in Joomla
 
@@ -124,7 +124,7 @@ Labels and headings in the release notes become Joomla's groups (Bug Fixes, New 
 
 ## Optional: Enforce the Activation Limit
 
-The setup above doesn't record which sites use a key, so one key can update any number of sites. Joomla's updater sends the key and nothing else – no site URL, no identifying header. Closing that takes three steps inside your extension, each depending on the one before.
+The setup above doesn't record which sites use a key, so one key can update any number of sites. Joomla's updater sends only the key, with no site URL or identifying header. Enforcing the limit takes three steps inside your extension, each depending on the one before.
 
 ### 1. Read the key inside your extension
 
@@ -144,7 +144,7 @@ $key = $dl['dlid'] ?? '';
 
 ### 2. Activate the site's domain
 
-A plain API call, so it can go anywhere in your extension. The save handler of your settings screen is the natural place.
+This is a plain API call, so it can go anywhere in your extension. The save handler of your settings screen is the obvious place.
 
 ```php
 use Joomla\CMS\Factory;
@@ -209,7 +209,7 @@ final class MyExtIdentifier extends CMSPlugin implements SubscriberInterface
 
 With all three steps in place, set the product's **Download API Access** to **License key + activated identifier**. A download from a site that was never activated is then refused with `ACTIVATION_REQUIRED` or `ACTIVATION_NOT_FOUND`.
 
-Check **Components → LicenseDock → Downloads**, filtered to **Refused**, after switching, to see which customers are affected.
+After switching, check **Components → LicenseDock → Downloads**, filtered to **Refused**, to see which customers are affected.
 
 ## Validating Keys in Your Extension
 

@@ -18,7 +18,7 @@ Stripe handles one-time payments, subscriptions (including paid trials and loyal
 5. Click **Apply**.
 6. Click **Check connection** in the card header. LicenseDock calls Stripe with the saved keys for the mode selected on the card and shows the connected account, or Stripe's error message.
 
-Switch the card to the other mode and repeat when you are ready to take real payments. Both sets of keys can be stored at once – only the selected mode is used for checkout.
+Switch the card to the other mode and repeat when you are ready to take real payments. Both sets of keys can be stored at once. Checkout uses only the selected mode.
 
 ### Credential storage
 

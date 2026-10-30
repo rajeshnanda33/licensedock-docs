@@ -254,7 +254,7 @@ The card links to the **Checkout Consent** screen.
 
 ## Encryption
 
-Gateway secret keys, the SMTP password and your LicenseDock license key are encrypted at rest with authenticated AES-256-GCM. Admin forms never show a saved secret – an empty field keeps the stored value.
+Gateway secret keys, the SMTP password and your LicenseDock license key are encrypted at rest with authenticated AES-256-GCM. Admin forms never show a saved secret, and an empty field keeps the stored value.
 
 ## Next Steps
 

@@ -16,7 +16,7 @@ Stripe and PayPal need the URL added in their dashboards, with the events listed
 
 ### Webhook Base URL
 
-The URLs are built from your site's address. For local development, enter a public tunnel URL (ngrok, Cloudflare Tunnel) in **Webhook Base URL** at the top of the Payment Gateways page and click **Apply** – gateways can't reach `localhost`. Leave it empty in production. **Store Health** warns when its host doesn't match your site.
+The URLs are built from your site's address. Gateways can't reach `localhost`, so for local development enter a public tunnel URL (ngrok, Cloudflare Tunnel) in **Webhook Base URL** at the top of the Payment Gateways page and click **Apply**. Leave it empty in production. **Store Health** warns when its host doesn't match your site.
 
 ## What each event does
 
@@ -147,7 +147,7 @@ Customers change plans from their account. They pick whether the change happens 
 | Scheduled | Change applies at the next renewal | No | No |
 | Downgrade | "No charge or refund today", applies at the next renewal | No | No |
 
-Proration is based on the actual days left in the current cycle and the amount the customer actually paid for it (after any coupon).
+Proration is based on the actual days left in the current cycle and the amount the customer paid for it (after any coupon).
 
 ## Troubleshooting
 

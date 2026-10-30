@@ -69,7 +69,7 @@ $my_plugin_ld->setLicenseKey(get_option('my_plugin_license_key', ''));
 $my_plugin_ld->init();
 ```
 
-That's enough for updates. Run it on every load – `init()` registers the WordPress hooks.
+That's enough for updates. Run it on every load, since `init()` registers the WordPress hooks.
 
 Keep the `class_exists()` guard. A site can run several plugins that each ship the SDK, and the first copy loaded is the one used. From SDK 2.1.0 the files skip their own declarations when the classes already exist, but a plugin carrying an older copy does not, so the guard in your plugin is what keeps the site running.
 
@@ -155,7 +155,7 @@ function my_plugin_license_page()
 
 Activate on save, never on page load. Each call is an HTTP request to your store, and activation is [rate limited](/licensedock/api/#rate-limiting) to 20 calls per key per hour.
 
-The SDK would activate the site anyway on its first update. Activating on save reports a bad key while the admin is still on the screen.
+The SDK activates the site on its first update anyway, but activating on save reports a bad key while the admin is still on the screen.
 
 To branch on the error, use `$result->code`. The codes are listed in the [API Reference](/licensedock/api/#error-codes). A connection failure has an empty `code` and the reason in `message`.
 
@@ -263,7 +263,7 @@ Call `clearUpdateCache()` after saving a new key, so the next check uses it.
 
 ## Domain Activation on First Update
 
-Added in SDK 2.0.0.
+Requires SDK 2.0.0 or later.
 
 When the SDK builds an update offer, it puts the site's domain on the download URL as `identifier`. Before it does, it makes sure the domain is activated on the key:
 
@@ -272,18 +272,18 @@ When the SDK builds an update offer, it puts the site's domain on the download U
 3. If not, it calls activate, which takes a slot on the license
 4. A successful result is cached for 6 hours
 
-So each site that updates appears on the license in your store, and the activation limit applies to updates too. Before 2.0.0 the SDK sent no domain, and one key could update any number of sites.
+Each site that updates appears on the license in your store, and the activation limit applies to updates too. SDK versions before 2.0.0 send no domain, so with them one key can update any number of sites.
 
 ### When activation fails
 
-If the domain can't be activated – the limit is reached, the key is invalid or expired, the store can't be reached – the SDK hands WordPress a download URL **without** an identifier. Your product's **Download API Access** setting decides what happens:
+If the domain can't be activated (the limit is reached, the key is invalid or expired, or the store can't be reached), the SDK hands WordPress a download URL **without** an identifier. Your product's **Download API Access** setting decides what happens:
 
 | Download API Access | Result |
 |---------------------|--------|
 | Not set (with *Requires License* = Yes) | The update installs |
 | License key | The update installs |
 | License key + activated identifier | Refused with `ACTIVATION_REQUIRED`. WordPress reports the download as failed |
-| Account only | Refused with `ACCOUNT_DOWNLOAD_REQUIRED` – don't use this for WordPress plugins |
+| Account only | Refused with `ACCOUNT_DOWNLOAD_REQUIRED`. Don't use this for WordPress plugins |
 
 WordPress fetches the package itself, so the SDK can't see a refusal and retry. It resolves the activation before handing over the URL. A failed activation isn't cached, so the next update check tries again.
 

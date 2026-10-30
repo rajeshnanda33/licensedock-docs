@@ -1,6 +1,6 @@
 # Activations
 
-An activation records that a license is in use somewhere – a website, a device, a user or a server instance. The plan's **Activation Type** decides what an activation represents, and its **Activation Limit** decides how many are allowed.
+An activation records that a license is in use somewhere: a website, a device, a user or a server instance. The plan's **Activation Type** decides what an activation represents, and its **Activation Limit** decides how many are allowed.
 
 ## Activation Types
 
@@ -82,7 +82,7 @@ Activation attempts that fail because the limit is reached or the license has ex
 | **Remove activation** | Deletes the activation and frees a slot. Can't be undone |
 | **Change limit** | Sets this license's limit. `0` means unlimited. A limit below the current number of activations is refused |
 
-**Change limit** is the way to give one customer an extra slot without a plan change or a charge.
+Use **Change limit** to give one customer an extra slot without a plan change or a charge.
 
 ## Activation-Gated Downloads
 

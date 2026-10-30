@@ -11,7 +11,7 @@
 | Mode | **Live** or **Test**. Test orders never mix with live figures |
 | Period buttons | Today, 7D, 30D, 90D, 12M |
 | Period menu | This Month (default), This Year, Last Month, Last Year, All Time, or a custom date range |
-| Reporting currency | Appears only when the store holds data in more than one currency. Every figure – money and counts – follows the selected currency |
+| Reporting currency | Appears only when the store holds data in more than one currency. Every figure, money and counts alike, follows the selected currency |
 
 Where a comparison period exists, the figures show the change against the previous period of the same length.
 
@@ -27,7 +27,7 @@ Where a comparison period exists, the figures show the change against the previo
 | New Subscriptions | Subscriptions started in the period. Cancellations and expiries in the period, and the churn rate, are shown underneath |
 | Active Subscriptions | Subscriptions active now |
 
-Tiles that link through open the matching filtered list – for example **Total Revenue** opens the paid invoices.
+Tiles that link through open the matching filtered list. For example, **Total Revenue** opens the paid invoices.
 
 The churn rate is the share of paid subscriptions active at the start of the period that were lost during it. It is shown once at least 10 subscriptions were active at the start.
 
@@ -70,5 +70,5 @@ For scheduled tasks, "recently" means within 15 minutes for the email queue and 
 
 - Live orders are never touched
 - Coupon uses made by test orders are given back
-- Joomla accounts created by test checkouts are left alone – the screen links to **Users** so you can review them
+- Joomla accounts created by test checkouts are left alone. The screen links to **Users** so you can review them
 - There is no undo

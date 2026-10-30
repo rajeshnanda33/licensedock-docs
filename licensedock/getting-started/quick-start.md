@@ -49,7 +49,7 @@ See [Downloads](/licensedock/products/downloads).
 
 1. **Menus → Main Menu → New**
 2. Menu Item Type: **LicenseDock → Checkout**
-3. Save. The item can be hidden from the menu – the URL just needs to exist
+3. Save. The item can be hidden from the menu: checkout only needs its URL to exist
 
 Add a **LicenseDock → Single Product** or **Products** menu item for a public product page. Without one, customers can reach checkout through a buy link: **Copy buy link** on each price copies a checkout URL for it.
 

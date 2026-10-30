@@ -50,7 +50,7 @@ Completed and refunded orders keep their billing details, and invoices and credi
 
 ### Changed Email Addresses
 
-When a customer changes their email address in Joomla – on the site or in admin – LicenseDock updates the customer record to match, so receipts and reminders go to the new address.
+When a customer changes their email address in Joomla (on the site or in admin), LicenseDock updates the customer record to match, so receipts and reminders go to the new address.
 
 ## Automatic Deletion
 

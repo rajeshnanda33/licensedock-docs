@@ -1,6 +1,6 @@
 # Checkout Consent
 
-Checkboxes shown above the pay button – terms acceptance, a cooling-off waiver for digital content, a marketing opt-in and your own – plus a privacy policy notice. Each order keeps a record of exactly what the buyer saw and ticked.
+Checkout consent adds checkboxes above the pay button (terms acceptance, a cooling-off waiver for digital content, a marketing opt-in and your own) plus a privacy policy notice. Each order keeps a record of exactly what the buyer saw and ticked.
 
 Everything here is off until you publish it.
 
@@ -55,7 +55,7 @@ It is an information notice with no checkbox, and shows whether or not any conse
 - Boxes appear above the pay button in the order you set. They load unticked every time, except those set to **Pre-checked**. A reminder link or a returning session never ticks them.
 - A link to a Joomla menu item opens in a modal, so the buyer stays on checkout. An external URL opens in a new tab.
 - An unticked required box shows "Please accept this to continue." next to it. The server checks again and refuses the order with "Please accept the required agreements to continue."
-- The block only appears when the customer can actually pay: at least one gateway is enabled, or the order is free.
+- The block only appears when the customer can pay: at least one gateway is enabled, or the order is free.
 
 ## Proof of Consent
 

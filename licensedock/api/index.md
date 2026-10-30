@@ -1,6 +1,6 @@
 # API Reference
 
-LicenseDock provides a REST API for license activation, license checks, update checks and file downloads. Your software calls it on your store.
+LicenseDock has a REST API for license activation, license checks, update checks and file downloads. Your software calls it on your store.
 
 To wire the API into a WordPress plugin, a Joomla extension or other PHP code, start with [Integrations](/licensedock/integrations/). This section is the raw contract.
 
@@ -97,7 +97,7 @@ The download endpoint is the one exception: it streams a file on success, and ca
 
 Treat a code you don't recognise as a generic failure. Later versions may add codes.
 
-**Validate is the exception.** An unknown, inactive or expired key comes back as `200` with `valid: false`. Read `valid` and `status` there. See [Validate License](/licensedock/api/validate).
+Validate is the exception: an unknown, inactive or expired key comes back as `200` with `valid: false`. Read `valid` and `status` there. See [Validate License](/licensedock/api/validate).
 
 ## Rate Limiting
 

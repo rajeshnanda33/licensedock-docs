@@ -1,6 +1,6 @@
 # Products
 
-Products are the core of LicenseDock. Each product is one digital item you sell – a Joomla extension, a desktop app, a theme, a font, an ebook, a course download.
+Each product is one digital item you sell – a Joomla extension, a desktop app, a theme, a font, an ebook, a course download.
 
 ## Structure
 

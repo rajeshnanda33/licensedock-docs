@@ -91,7 +91,7 @@ A plan can carry several prices – for example a *Developer* plan with a monthl
 | Price | Required. `0` makes the price free |
 | Tax class | Shown when tax is enabled in Settings. **Standard (taxed)** is taxed at the destination rate; **None (tax-exempt)** is exempt |
 
-A One-Time price of `0` gives instant access at checkout with no payment step. A recurring price of `0` still sends the customer through the payment gateway to authorise a payment method for future charges – use One-Time for a free product.
+A One-Time price of `0` gives instant access at checkout with no payment step. A recurring price of `0` still sends the customer through the payment gateway to authorise a payment method for future charges. Use One-Time for a free product.
 
 ### Trial (recurring only)
 

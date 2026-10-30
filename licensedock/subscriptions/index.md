@@ -41,7 +41,7 @@ A successful gateway renewal that arrives after the subscription expired (for ex
 
 ## Keeping Licenses in Step
 
-The license's own expiry date is what the API enforces, so LicenseDock copies the subscription's date onto the license at every change: order completion, gateway renewal, checkout renewal, plan change, expiry and admin edits. Revoked and cancelled licenses are never changed by this sync.
+The API enforces the license's own expiry date, so LicenseDock copies the subscription's date onto the license at every change: order completion, gateway renewal, checkout renewal, plan change, expiry and admin edits. Revoked and cancelled licenses are never changed by this sync.
 
 ## The Reminders & Expiration Task
 

@@ -37,7 +37,7 @@ English (`en-GB`) and German (`de-DE`) are included for the storefront, checkout
 
 ## Plugins After Install
 
-On a fresh install, the web services, user, task and page cache plugins are enabled automatically. The content plugin is left disabled – enable it under **System → Plugins** when you want product shortcodes.
+On a fresh install, the web services, user, task and page cache plugins are enabled automatically. The content plugin is left disabled. Enable it under **System → Plugins** when you want product shortcodes.
 
 On an update, plugin states are left as they are, so a plugin you disabled on purpose stays disabled.
 
@@ -59,7 +59,7 @@ Then point a real cron job at the scheduler. See [Scheduled Tasks](/licensedock/
 
 Go to **Components → LicenseDock → Settings**. The **LicenseDock License** card at the top of the page takes your license key and activates it for the current domain. The card shows the status, domains used and the expiry date.
 
-The same key authorises LicenseDock updates through Joomla's own updater – there is no separate Download Key to enter. Local and reserved addresses cannot be activated, so a local or staging copy does not use up a domain.
+The same key authorises LicenseDock updates through Joomla's own updater, so there is no separate Download Key to enter. Local and reserved addresses cannot be activated, so a local or staging copy does not use up a domain.
 
 ## Uninstalling
 

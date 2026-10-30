@@ -34,7 +34,7 @@ Mollie notifications carry only a payment ID and no signature. LicenseDock fetch
 Mollie keeps the webhook URL that was sent when each payment or subscription was created. Subscriptions created before a domain change keep notifying the old URL.
 :::
 
-For local development, set **Webhook Base URL** at the top of the Payment Gateways page to a public tunnel URL (ngrok, Cloudflare Tunnel). Mollie can't reach `localhost`. Clear it again in production – **Store Health** warns when its host doesn't match your site.
+For local development, set **Webhook Base URL** at the top of the Payment Gateways page to a public tunnel URL (ngrok, Cloudflare Tunnel). Mollie can't reach `localhost`. Clear it again in production. **Store Health** warns when its host doesn't match your site.
 
 ## What each notification does
 

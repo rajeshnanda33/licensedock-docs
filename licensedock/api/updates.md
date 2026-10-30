@@ -1,6 +1,6 @@
 # Check Updates
 
-Return the latest published version of a product. Public – the license key is optional.
+Return the latest published version of a product. Public: the license key is optional.
 
 Use this for custom updaters (desktop apps, CLI tools, your own PHP). WordPress plugins get this through the [WordPress SDK](/licensedock/integrations/wordpress). Joomla extensions use Joomla's own updater, see [Joomla update server integration](#joomla-update-server-integration).
 
@@ -64,7 +64,7 @@ With a `license_key` that covers the product, four fields are added:
 
 | Field | Notes |
 |-------|-------|
-| `update_available` | `true` when a published version exists. The API doesn't know which version the caller has installed – compare `version` with it yourself |
+| `update_available` | `true` when a published version exists. The API doesn't know which version the caller has installed, so compare `version` with it yourself |
 | `name` | Product title |
 | `version` | Version string as entered in the admin |
 | `download_url` | Absolute URL of the [download endpoint](/licensedock/api/downloads). `null` when the product is set to *Account only* |
@@ -126,4 +126,4 @@ The download endpoint is where access is enforced. An expired key gets the metad
 
 Joomla's updater reads its own XML format, so Joomla extensions don't call this endpoint. Joomla fetches your update XML and downloads the package from the [download endpoint](/licensedock/api/downloads) with the customer's key as `dlid`.
 
-The full setup – update XML, manifest, Download Key, sending the site domain – is on [Joomla Extensions](/licensedock/integrations/joomla).
+The full setup (update XML, manifest, Download Key, sending the site domain) is on [Joomla Extensions](/licensedock/integrations/joomla).

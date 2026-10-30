@@ -152,7 +152,7 @@ $reports->activate($bundleKey, 'customer-site.com');
 $export->activate($bundleKey, 'customer-site.com');
 ```
 
-The store accepts a bundle key for each product in the bundle. Activations belong to the bundle license, and its plan sets the activation type and limit. Activating the same identifier from two products in the bundle uses one slot – the second call finds it already activated.
+The store accepts a bundle key for each product in the bundle. Activations belong to the bundle license, and its plan sets the activation type and limit. Activating the same identifier from two products in the bundle uses one slot: the second call finds it already activated.
 
 Update checks and downloads for a bundled product see its all-plans files. Only one level is resolved: a bundle inside a bundle doesn't pass its products through.
 
@@ -172,8 +172,8 @@ class MyLicenseClient extends LicenseDockClient
 }
 ```
 
-The WordPress SDK does exactly this with `wp_remote_get()` / `wp_remote_post()`.
+The WordPress SDK does this with `wp_remote_get()` / `wp_remote_post()`.
 
 ## Other Languages
 
-The client is a thin layer over form-encoded HTTP calls. Port it, or call the endpoints directly – see the [API Reference](/licensedock/api/).
+The client is a thin layer over form-encoded HTTP calls. Port it, or call the endpoints directly (see the [API Reference](/licensedock/api/)).

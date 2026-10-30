@@ -37,7 +37,7 @@ Set per product in **Components → LicenseDock → Products → [product] → D
 
 | Setting | What `/downloads` needs |
 |---------|------------------------|
-| **Not set** | Decided from the product's own settings on every request – see below |
+| **Not set** | Decided from the product's own settings on every request. See below |
 | **License key** | A valid key. Where it is used isn't checked |
 | **License key + activated identifier** | A valid key and an `identifier` already activated on that license |
 | **Account only** | Never served by the API. The customer downloads from their account |

@@ -68,7 +68,7 @@ Guests see an **Already have an account? Sign in** panel above **Your Details**.
 - Failed attempts get one message for every cause: "Invalid email or password. Please try again."
 - Attempts are limited to 10 per 10 minutes per IP and 5 per 15 minutes per email address.
 
-There is no registration form. Guests get an account automatically after payment – see [Guest Checkout](/licensedock/checkout/guest-checkout).
+There is no registration form. Guests get an account automatically after payment. See [Guest Checkout](/licensedock/checkout/guest-checkout).
 
 ## Your Details and Billing Address
 
@@ -164,7 +164,7 @@ Cancelled and expired subscriptions are not blocked: buying again counts as a re
 
 ## Renewing from the Account
 
-On the account Subscriptions page, a subscription that doesn't auto-renew – an expired or cancelled one, or a one-time purchase with an expiry date – shows **Renew**. The same button appears on the product page's plan cards. It takes the customer to checkout with their existing plan price selected, trial and coupon cleared.
+On the account Subscriptions page, a subscription that doesn't auto-renew (an expired or cancelled one, or a one-time purchase with an expiry date) shows **Renew**. The same button appears on the product page's plan cards. It takes the customer to checkout with their existing plan price selected, trial and coupon cleared.
 
 - A recurring subscription that was cancelled but is still inside its paid period gets **Resume** instead, which turns auto-renewal back on with no payment.
 - If that plan or price has been unpublished, they land on the product page's plans to pick a current one. If the whole product is unpublished they see "This product is no longer offered. Please contact us about alternatives."

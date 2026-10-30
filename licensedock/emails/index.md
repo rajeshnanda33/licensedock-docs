@@ -29,7 +29,7 @@ Sent and failed emails are deleted from the queue after 90 days.
 | Template | Title in admin | Sent when |
 |----------|----------------|-----------|
 | `purchase_confirmation` | Purchase Confirmation | An order is paid. Includes license keys, download links (with the Email + Account delivery method), the consents the buyer accepted, and the invoice PDF as an attachment |
-| `account_activation` | Set Your Password | A customer account needs a password and no receipt carries the link – for example an account created by an admin or by the importer, or an admin clicks **Resend activation email** |
+| `account_activation` | Set Your Password | A customer account needs a password and no receipt carries the link (for example an account created by an admin or by the importer), or an admin clicks **Resend activation email** |
 | `welcome` | Welcome | The customer sets a password and activates the account |
 | `abandoned_recovery` | Abandoned Checkout Reminder | A checkout was started but not paid. Sent on the configured intervals |
 | `renewal_receipt` | Renewal Receipt | A subscription auto-renewal charge succeeds. The renewal invoice PDF is attached |
@@ -70,9 +70,9 @@ Admin emails go to every address in **Settings → Emails → Admin Notification
 | `admin_plan_change` | Plan Change | A customer changes, schedules or cancels a plan change |
 | `admin_dispute_opened` | Chargeback / Dispute Opened | A gateway reports a new dispute |
 | `admin_dispute_resolved` | Chargeback / Dispute Resolved | A dispute is won or lost |
-| `admin_gateway_error` | Gateway Action Failed | A refund or cancel call to a gateway fails – including a subscription LicenseDock could not cancel at the gateway after its Joomla user was deleted |
+| `admin_gateway_error` | Gateway Action Failed | A refund or cancel call to a gateway fails, including a subscription LicenseDock could not cancel at the gateway after its Joomla user was deleted |
 | `admin_mollie_loyalty_patch_failed` | Mollie Loyalty Rate Not Applied | The loyalty rate could not be applied to a Mollie subscription |
-| `admin_attention` | Action Needed | An event needs manual review – for example a coupon that passed its usage limits while two checkouts completed at once |
+| `admin_attention` | Action Needed | An event needs manual review, for example a coupon that passed its usage limits while two checkouts completed at once |
 
 ## Editing Templates
 

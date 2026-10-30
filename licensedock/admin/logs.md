@@ -22,7 +22,7 @@ The **Logs** group of the LicenseDock menu has four screens: Email, Webhook, Sub
 
 Click a row to see the email as it was sent: From, To, Reply-To, date, subject, the rendered body, and any attachments, which can be downloaded while the file still exists.
 
-**Resend** in a row's action menu sends the stored email again straight away, exactly as it was rendered – it is not rebuilt from current data. If the send fails, the error is shown and the email stays queued for the next run. Resending an email that was already sent asks for confirmation first.
+**Resend** in a row's action menu sends the stored email again straight away, exactly as it was rendered, not rebuilt from current data. If the send fails, the error is shown and the email stays queued for the next run. Resending an email that was already sent asks for confirmation first.
 
 Sent and failed emails are deleted automatically after 90 days. The toolbar can delete selected rows sooner.
 

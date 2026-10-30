@@ -157,7 +157,7 @@ Two settings decide how files reach buyers. They are independent.
 | License key | A valid license key for the product is required. Where it is used is not checked |
 | License key + activated identifier | The request must also send an identifier that is already activated on the license |
 | Account only – never served by the API | The API refuses the download. The customer downloads from their account |
-| Public – no license key needed | Anyone can download the product's all-plans files, no key needed |
+| Public – no license key needed | Anyone can download the product's all-plans files without a key |
 
 With **Not set**, the API behaves as follows:
 

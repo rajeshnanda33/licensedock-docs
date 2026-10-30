@@ -1,6 +1,6 @@
 # Imports
 
-**Components → LicenseDock → Import** brings customers, orders, subscriptions and licenses into LicenseDock from a spreadsheet – typically when moving a store from another platform.
+**Components → LicenseDock → Import** brings customers, orders, subscriptions and licenses into LicenseDock from a spreadsheet, typically when moving a store from another platform.
 
 Products are not imported. Create your products and plans first; imported rows are matched to them by alias.
 
@@ -131,7 +131,7 @@ Orders are written one at a time, so a problem with one order does not roll back
 
 ## Missing Licenses
 
-When completed orders for products that require a license have no license – for example after importing orders but no licenses – the Import and Licenses screens show a **Generate N Missing Licenses** toolbar button. It creates the missing keys after a confirmation.
+When completed orders for products that require a license have no license (for example after importing orders but no licenses), the Import and Licenses screens show a **Generate N Missing Licenses** toolbar button. It creates the missing keys after a confirmation.
 
 ## Import History
 

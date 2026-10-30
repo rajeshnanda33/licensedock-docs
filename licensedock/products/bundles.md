@@ -2,7 +2,7 @@
 
 A bundle is a product that includes other products. The customer buys the bundle once and gets the downloads, updates and license coverage of every included product.
 
-A bundle is an ordinary product with its own plans, prices, page and license settings. What makes it a bundle is its list of included products.
+A bundle is an ordinary product with its own plans, prices, page and license settings, plus a list of included products.
 
 ## Creating a Bundle
 

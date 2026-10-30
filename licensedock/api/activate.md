@@ -1,6 +1,6 @@
 # Activate License
 
-Register an activation against a license. Idempotent – activating the same identifier twice returns success and uses one slot.
+Register an activation against a license. Idempotent: activating the same identifier twice returns success and uses one slot.
 
 ## Request
 

@@ -29,7 +29,7 @@ The guest's thank-you page depends on the account:
 
 Returning customers can sign in from the panel on the checkout page. Their selection, trial and coupon survive the login, and their saved billing details are filled in. A normal Joomla login page works too.
 
-A guest who never signs in but uses the email of an existing account is still handled: the order joins that account after payment.
+If a guest doesn't sign in but uses the email of an existing account, the order joins that account after payment.
 
 ## What Is Remembered
 
@@ -39,6 +39,6 @@ A guest who never signs in but uses the email of an existing account is still ha
 | Name and email typed so far | Session | Session |
 | Name, email and billing fields | The browser's `localStorage`, same device only | The longest abandoned-checkout reminder interval plus 12 hours, capped at 7 days. 24 hours when reminders are off |
 
-The `localStorage` copy never leaves the browser and is cleared on the thank-you page. It lets a guest who returns from a reminder email find their details already filled in. When a reminder link is opened on a different device, the details come from the original order instead – see [Abandoned Checkout Recovery](/licensedock/checkout/abandoned-checkout).
+The `localStorage` copy never leaves the browser and is cleared on the thank-you page. It lets a guest who returns from a reminder email find their details already filled in. When a reminder link is opened on a different device, the details come from the original order instead. See [Abandoned Checkout Recovery](/licensedock/checkout/abandoned-checkout).
 
 The `ld_cart` cookie holds only the price ID, trial flag and coupon code. See [The `ld_cart` Cookie](/licensedock/checkout/#ld-cart-cookie).

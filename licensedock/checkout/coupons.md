@@ -50,7 +50,7 @@ For a recurring discount on renewals, use the product's **Renewal Discount (%)**
 
 ## Usage Counting
 
-- **Times Used** and the per-customer count go up only when an order is paid. Entering a code counts for nothing.
+- **Times Used** and the per-customer count go up only when an order is paid.
 - Per-customer limits and **New Customers Only** identify a customer by their account, or by billing email for a guest. Checking out logged-out with the same email doesn't reset the limit.
 - The per-customer limit is enforced again when the order completes, so several simultaneous checkouts by one buyer can't exceed it.
 - Refunds don't give a use back.
