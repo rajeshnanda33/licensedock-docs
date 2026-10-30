@@ -1,8 +1,8 @@
 # Joomla Extensions
 
-Joomla has its own updater, so a Joomla extension needs no SDK. You give Joomla an update XML that points at LicenseDock's download endpoint, and Joomla sends the customer's license key as its Download Key.
+Joomla has its own updater, so a Joomla extension needs no SDK. You give Joomla an update XML that points at LicenseDock's download endpoint, and Joomla sends the customer's license key with each update download.
 
-The product's **Downloads → Integration → Joomla** tab in the LicenseDock admin shows every snippet on this page with your store URL, host and product ID filled in.
+The product's **Downloads → Integration → Joomla** tab in the LicenseDock admin shows Setup A and Setup B with your store URL and product ID filled in.
 
 ## How It Works
 
@@ -14,11 +14,21 @@ Manifest <updateservers> → your update XML → Joomla offers the update
 1. Your extension's manifest declares an update server URL
 2. Joomla fetches that URL and reads the XML for available versions
 3. A newer version shows in **System → Update → Extensions**
-4. On update, Joomla downloads from the `<downloadurl>` in the XML, with the customer's key appended as `dlid`
+4. On update, Joomla downloads from the `<downloadurl>` in the XML, with the update site's stored line (`dlid=KEY`) appended
 
-## Required Setup
+## Pick a Setup
 
-### 1. Write the update XML
+| | Setup A | Setup B |
+|---|---|---|
+| Who asks for the key | Joomla's Download Key box | your extension's settings |
+| Limits how many sites a key can update | no | yes |
+| Code | none | one settings field and one save handler |
+
+Both give your customers updates inside Joomla. Choose B if one key should only update the number of sites its plan allows.
+
+## Setup A: Joomla Asks for the Key
+
+### 1. Put the update XML on your server
 
 LicenseDock doesn't generate Joomla's XML. Host a static file on your site, e.g. `https://your-store.com/updates/my-extension.xml`, and point its download URL at the product's [download endpoint](/licensedock/api/downloads):
 
@@ -39,62 +49,355 @@ LicenseDock doesn't generate Joomla's XML. Host a static file on your site, e.g.
 </updates>
 ```
 
-The download URL is fixed per product and always serves the latest version. Update the `<version>` and `<sha256>` in this file at each release. Joomla compares `<version>` with the installed version, and checks the downloaded file against `<sha256>` when it's present.
+The download URL is fixed per product and always serves the latest version. Update `<version>` and `<sha256>` in this file at each release. Joomla compares `<version>` with the installed version, and checks the downloaded file against `<sha256>` when it's present.
 
 `<element>` and `<type>` must match your extension. For a package, use `pkg_myext` and `package`.
 
-### 2. Add the update server to your manifest
+### 2. Add these lines to your manifest
 
 ```xml
+<!-- in your extension's manifest, e.g. com_myext.xml -->
+<changelogurl>https://your-store.com/api/index.php/v1/licensedock/changelog/42</changelogurl>
 <updateservers>
   <server type="extension" name="My Extension">https://your-store.com/updates/my-extension.xml</server>
 </updateservers>
-```
-
-Without an update site, Joomla never checks for updates, and option (b) below has no row to write the key to.
-
-### 3. Get the key onto the download URL
-
-Pick one.
-
-**a. Let Joomla collect it (recommended).** Add a `<dlid>` element to the manifest, next to `<updateservers>`:
-
-```xml
 <dlid prefix="dlid=" suffix=""/>
 ```
 
-Joomla then shows a **Download Key** field for your extension under **System → Update Sites**, and appends the key to every update download. Tell your customers:
+`<dlid>` makes Joomla show a **Download Key** field for your extension under **System → Update Sites**, and append the key to every update download. Tell your customers:
 
 1. Go to **System → Update Sites**
 2. Open your extension's update site
 3. Paste the license key into **Download Key**
 4. Save
 
-**b. Collect it in your own settings screen.** Write the key onto your update site yourself, so customers enter it in one place inside your extension. Don't add `<dlid>` in this case. Run this after you've confirmed the key is good (for example in the success branch of the activation call below), so a bad key never replaces a working one:
+### 3. Set the product's Download API Access
+
+Set it to **License key**. Joomla now offers your updates, and each download checks that the license is valid, current and for this product. One key can update any number of sites.
+
+## Setup B: Your Extension Asks for the Key
+
+Each site activates its key, and a download from a site that was never activated is refused. The site's domain travels as `identifier` in the same stored line as the key, so this needs no plugin, and it works the same for a component, module, plugin or template.
+
+### 1. Put the update XML on your server
+
+The same file as Setup A, step 1.
+
+### 2. Add these lines to your manifest
+
+Leave out `<dlid>`: your extension stores the key itself.
+
+```xml
+<!-- in your extension's manifest, e.g. com_myext.xml -->
+<changelogurl>https://your-store.com/api/index.php/v1/licensedock/changelog/42</changelogurl>
+<updateservers>
+  <server type="extension" name="My Extension">https://your-store.com/updates/my-extension.xml</server>
+</updateservers>
+```
+
+### 3. Add a License key field to your extension's settings
+
+### 4. Activate the site and store the key when the field is saved
 
 ```php
-if ($licensed) {
-    $eq = 'dlid=' . $key;   // Joomla appends extra_query to every update download
+use Joomla\CMS\Factory;
+use Joomla\CMS\Http\HttpFactory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Database\DatabaseInterface;
+
+// In the save handler of your settings screen - not on every page load.
+$key    = trim((string) $params->get('license_key'));   // the field from step 3
+$domain = Uri::getInstance()->getHost();                 // this site, e.g. customer-site.com
+
+// 1. Activate this site against the key.
+$response = (new HttpFactory())->getHttp()->post(
+    'https://your-store.com/api/index.php/v1/licensedock/licenses/activate',
+    ['license_key' => $key, 'identifier' => $domain, 'product_id' => 42]
+);
+$body = json_decode((string) $response->getBody(), true);
+
+if (isset($body['error'])) {
+    // Limit reached, invalid or expired key, wrong product: tell the admin, store nothing.
+    Factory::getApplication()->enqueueMessage($body['error']['message'], 'warning');
+
+    return;
+}
+
+// 2. Store key + domain on your update site. Joomla sends this line with every
+//    update download, so the store knows which site is asking.
+$db      = Factory::getContainer()->get(DatabaseInterface::class);  // or $this->getDatabase()
+$element = 'com_myext';   // your extension's element - pkg_myext if you ship a package
+$extra   = 'dlid=' . rawurlencode($key) . '&identifier=' . rawurlencode($domain);
+
+$siteIds = $db->setQuery(
+    $db->createQuery()
+        ->select($db->quoteName('se.update_site_id'))
+        ->from($db->quoteName('#__update_sites_extensions', 'se'))
+        ->join('INNER', $db->quoteName('#__extensions', 'e'), $db->quoteName('e.extension_id') . ' = ' . $db->quoteName('se.extension_id'))
+        ->where($db->quoteName('e.element') . ' = :element')
+        ->bind(':element', $element)
+)->loadColumn();
+
+if ($siteIds) {
     $db->setQuery(
-        'UPDATE ' . $db->quoteName('#__update_sites', 's')
-        . ' INNER JOIN ' . $db->quoteName('#__update_sites_extensions', 'se') . ' ON se.update_site_id = s.update_site_id'
-        . ' INNER JOIN ' . $db->quoteName('#__extensions', 'e') . ' ON e.extension_id = se.extension_id'
-        . ' SET s.extra_query = ' . $db->quote($eq)
-        . ' WHERE e.element = ' . $db->quote('com_myext')
-        . ' AND NOT (s.extra_query <=> ' . $db->quote($eq) . ')'
+        $db->createQuery()
+            ->update($db->quoteName('#__update_sites'))
+            ->set($db->quoteName('extra_query') . ' = :extra')
+            ->whereIn($db->quoteName('update_site_id'), $siteIds)
+            ->bind(':extra', $extra)
     )->execute();
 }
 ```
 
-Either way, the URL Joomla requests is:
+Joomla appends the stored line to the download URL, so the store sees `?dlid=KEY&identifier=customer-site.com` and checks that this domain was activated for the key.
 
+Each activation is an HTTP request to your store, so run it when the key is saved, not on every page load. To re-check later, call [validate](/licensedock/api/validate) now and then, e.g. once a day.
+
+### 5. Set the product's Download API Access
+
+Set it to **License key + activated identifier**. A download is then refused with `ACTIVATION_REQUIRED` when no domain is sent, and `ACTIVATION_NOT_FOUND` when the domain was never activated.
+
+After switching an existing product, check **Components → LicenseDock → Downloads**, filtered to **Refused**, to see which customers are affected.
+
+## Setup A Plus the Site Limit
+
+For an extension already selling with Setup A that wants the site limit without asking customers to type their key again. It reaches the same result as Setup B with more code: Joomla keeps the key, your extension reads it and activates the site, and a plugin adds the domain to each update download.
+
+### 1. Read the key Joomla stored
+
+```php
+use Joomla\CMS\Factory;
+use Joomla\Database\DatabaseInterface;
+
+// The key the customer entered as Joomla's Download Key lives in the
+// update site's extra_query as "dlid=KEY". Read it - no extra field.
+$db      = Factory::getContainer()->get(DatabaseInterface::class);  // or $this->getDatabase()
+$element = 'com_myext';   // your extension's element - pkg_myext if you ship a package
+$query   = $db->createQuery()
+    ->select($db->quoteName('s.extra_query'))
+    ->from($db->quoteName('#__update_sites', 's'))
+    ->join('INNER', $db->quoteName('#__update_sites_extensions', 'se'), $db->quoteName('se.update_site_id') . ' = ' . $db->quoteName('s.update_site_id'))
+    ->join('INNER', $db->quoteName('#__extensions', 'e'), $db->quoteName('e.extension_id') . ' = ' . $db->quoteName('se.extension_id'))
+    ->where($db->quoteName('e.element') . ' = :element')
+    ->bind(':element', $element);
+
+parse_str((string) $db->setQuery($query)->loadResult(), $dl);
+$key = $dl['dlid'] ?? '';   // hand this to the activate() call in step 2
 ```
-https://your-store.com/api/index.php/v1/licensedock/downloads/42?dlid=A1B2C3D4-E5F6A7B8-C9D0E1F2-A3B4C5D6
+
+### 2. Activate the site with it
+
+Do this in your settings screen's save handler, not on every page load.
+
+```php
+use Joomla\CMS\Factory;
+use Joomla\CMS\Http\HttpFactory;
+use Joomla\CMS\Uri\Uri;
+
+$domain = Uri::getInstance()->toString(['host']);  // this site, e.g. customer-site.com
+// $key: the key read in step 1
+
+$response = (new HttpFactory())->getHttp()->post(
+    'https://your-store.com/api/index.php/v1/licensedock/licenses/activate',
+    ['license_key' => $key, 'identifier' => $domain, 'product_id' => 42]
+);
+$body = json_decode((string) $response->getBody(), true);
+
+if (isset($body['error'])) {
+    // Not activated: limit reached, invalid/expired key, wrong product.
+    // Warn the admin or degrade paid features.
+    Factory::getApplication()->enqueueMessage($body['error']['message'], 'warning');
+    $licensed = false;
+} else {
+    $licensed = true; // activated on this domain – full features
+}
 ```
 
-With that in place, Joomla offers your updates, and each download checks that the license is valid, current and for this product.
+Pass the fields as an array so they go as form fields. The API ignores a JSON body.
 
-### Errors in Joomla
+### 3. Add the domain to each update download with a plugin
+
+Joomla rebuilds the stored line from the Download Key box whenever the customer saves it, so the domain can't be stored there. It has to be added at download time, in the `onInstallerBeforePackageDownload` event, and only a plugin receives it: a component's listeners are registered only while that component runs, and during an update the running component is `com_installer`. The method is the same either way; only where it lives differs.
+
+**Your extension already ships a system plugin?** Add the method to it. System plugins load on every request, the command line included, so it gets this event too. It stops only if the site owner switches that plugin off.
+
+```php
+// In the system plugin you already ship: two use lines, one entry in
+// getSubscribedEvents(), and the method. Nothing else changes.
+use Joomla\CMS\Event\Installer\BeforePackageDownloadEvent;
+use Joomla\CMS\Uri\Uri;
+
+public static function getSubscribedEvents(): array
+{
+    return [
+        // ...the events your plugin already handles stay as they are
+        'onInstallerBeforePackageDownload' => 'addIdentifier',
+    ];
+}
+
+public function addIdentifier(BeforePackageDownloadEvent $event): void
+{
+    $url = $event->getUrl();
+
+    // This fires for EVERY package Joomla downloads. Without the host
+    // check you would send your customer's domain to every other
+    // vendor's update server.
+    if (Uri::getInstance($url)->getHost() !== 'your-store.com') {
+        return;
+    }
+
+    $event->updateUrl(
+        $url . (str_contains($url, '?') ? '&' : '?')
+            . 'identifier=' . urlencode(Uri::getInstance()->getHost())
+    );
+}
+```
+
+**No plugin yet?** Create one in the `installer` group. Joomla loads that group right before every update download and nowhere else.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<!-- plugins/installer/myext/myext.xml -->
+<extension type="plugin" group="installer" method="upgrade">
+    <name>plg_installer_myext</name>
+    <version>1.0.0</version>
+    <namespace path="src">YourVendor\Plugin\Installer\Myext</namespace>
+    <files>
+        <folder plugin="myext">services</folder>
+        <folder>src</folder>
+    </files>
+</extension>
+```
+
+```php
+<?php
+// plugins/installer/myext/services/provider.php
+\defined('_JEXEC') or die;
+
+use Joomla\CMS\Extension\PluginInterface;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\DI\Container;
+use Joomla\DI\ServiceProviderInterface;
+use YourVendor\Plugin\Installer\Myext\Extension\Myext;
+
+return new class () implements ServiceProviderInterface {
+    public function register(Container $container)
+    {
+        $container->set(
+            PluginInterface::class,
+            function (Container $container) {
+                $plugin = new Myext((array) PluginHelper::getPlugin('installer', 'myext'));
+                $plugin->setApplication(Factory::getApplication());
+
+                return $plugin;
+            }
+        );
+    }
+};
+```
+
+```php
+<?php
+// plugins/installer/myext/src/Extension/Myext.php
+namespace YourVendor\Plugin\Installer\Myext\Extension;
+
+use Joomla\CMS\Event\Installer\BeforePackageDownloadEvent;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Event\SubscriberInterface;
+
+\defined('_JEXEC') or die;
+
+final class Myext extends CMSPlugin implements SubscriberInterface
+{
+    public static function getSubscribedEvents(): array
+    {
+        return ['onInstallerBeforePackageDownload' => 'addIdentifier'];
+    }
+
+    public function addIdentifier(BeforePackageDownloadEvent $event): void
+    {
+        $url = $event->getUrl();
+
+        // This fires for EVERY package Joomla downloads. Without the host
+        // check you would send your customer's domain to every other
+        // vendor's update server.
+        if (Uri::getInstance($url)->getHost() !== 'your-store.com') {
+            return;
+        }
+
+        $event->updateUrl(
+            $url . (str_contains($url, '?') ? '&' : '?')
+                . 'identifier=' . urlencode(Uri::getInstance()->getHost())
+        );
+    }
+}
+```
+
+Ship the plugin in a package with your extension, because a component or module can't install a plugin on its own. A module or template has no other way here: only plugins receive events. The update site and the Download Key then sit on the package (`pkg_myext`), so the update XML describes the package. Swap the module line for your extension:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<!-- pkg_myext.xml - your module and the installer plugin, installed and updated together -->
+<extension type="package" method="upgrade">
+    <name>Your Extension</name>
+    <packagename>myext</packagename>
+    <version>1.0.0</version>
+    <scriptfile>script.php</scriptfile>
+    <files>
+        <file type="module" id="mod_myext" client="site">mod_myext.zip</file>
+        <file type="plugin" id="myext" group="installer">plg_installer_myext.zip</file>
+    </files>
+    <changelogurl>https://your-store.com/api/index.php/v1/licensedock/changelog/42</changelogurl>
+    <updateservers>
+        <server type="extension" name="Your Extension">https://your-store.com/updates/my-extension.xml</server>
+    </updateservers>
+    <dlid prefix="dlid=" suffix=""/>
+</extension>
+```
+
+Joomla installs every new plugin switched off, so switch it on from the package's install script:
+
+```php
+// Your package's install script (<scriptfile> in pkg_myext.xml).
+use Joomla\CMS\Factory;
+use Joomla\CMS\Installer\InstallerAdapter;
+use Joomla\Database\DatabaseInterface;
+
+public function postflight(string $type, InstallerAdapter $adapter): bool
+{
+    // Install only: an update must never re-enable a plugin the site owner turned off.
+    if ($type === 'install') {
+        $db      = Factory::getContainer()->get(DatabaseInterface::class);
+        $kind    = 'plugin';
+        $folder  = 'installer';
+        $element = 'myext';
+
+        $db->setQuery(
+            $db->createQuery()
+                ->update($db->quoteName('#__extensions'))
+                ->set($db->quoteName('enabled') . ' = 1')
+                ->where($db->quoteName('type') . ' = :kind')
+                ->where($db->quoteName('folder') . ' = :folder')
+                ->where($db->quoteName('element') . ' = :element')
+                ->bind(':kind', $kind)
+                ->bind(':folder', $folder)
+                ->bind(':element', $element)
+        )->execute();
+    }
+
+    return true;
+}
+```
+
+`getUrl()` and `updateUrl()` are the event's own methods. `$event['url'] = …` throws, because the event is immutable. The older by-reference `&$url` listener signature still works in current Joomla and is dropped in Joomla 7.
+
+### 4. Set the product's Download API Access
+
+Set it to **License key + activated identifier**, as in Setup B, step 5.
+
+## Errors in Joomla
 
 When the request carries `dlid`, the download endpoint answers errors with an HTML page carrying the status code, the error code, a message and a link to the customer's account. Joomla records a failed update download against the HTTP status. The codes are in [Downloads](/licensedock/api/downloads#errors).
 
@@ -121,95 +424,6 @@ Joomla reads the manifest copy for the installed version in **System → Manage 
 Joomla shows only the entry whose version exactly equals the version in your package. Enter the same string on the Downloads tab: `2.1.0` and `v2.1.0` don't match, and Joomla then shows no button.
 
 Labels and headings in the release notes become Joomla's groups (Bug Fixes, New Features and so on). See [Writing release notes](/licensedock/products/downloads#writing-release-notes).
-
-## Optional: Enforce the Activation Limit
-
-The setup above doesn't record which sites use a key, so one key can update any number of sites. Joomla's updater sends only the key, with no site URL or identifying header. Enforcing the limit takes three steps inside your extension, each depending on the one before.
-
-### 1. Read the key inside your extension
-
-If you chose (b), you already have it. If you chose (a), the customer typed it into Joomla, so read it back from the update site:
-
-```php
-$q = $db->getQuery(true)
-    ->select($db->quoteName('s.extra_query'))
-    ->from($db->quoteName('#__update_sites', 's'))
-    ->join('INNER', $db->quoteName('#__update_sites_extensions', 'se') . ' ON se.update_site_id = s.update_site_id')
-    ->join('INNER', $db->quoteName('#__extensions', 'e') . ' ON e.extension_id = se.extension_id')
-    ->where($db->quoteName('e.element') . ' = ' . $db->quote('com_myext'));
-
-parse_str((string) $db->setQuery($q)->loadResult(), $dl);
-$key = $dl['dlid'] ?? '';
-```
-
-### 2. Activate the site's domain
-
-This is a plain API call, so it can go anywhere in your extension. The save handler of your settings screen is the obvious place.
-
-```php
-use Joomla\CMS\Factory;
-use Joomla\CMS\Http\HttpFactory;
-use Joomla\CMS\Uri\Uri;
-
-$domain = Uri::getInstance()->toString(['host']);
-
-$response = (new HttpFactory())->getHttp()->post(
-    'https://your-store.com/api/index.php/v1/licensedock/licenses/activate',
-    ['license_key' => $key, 'identifier' => $domain, 'product_id' => 42]
-);
-$body = json_decode((string) $response->getBody(), true);
-
-if (isset($body['error'])) {
-    // Limit reached, invalid or expired key, wrong product.
-    Factory::getApplication()->enqueueMessage($body['error']['message'], 'warning');
-    $licensed = false;
-} else {
-    $licensed = true;
-}
-```
-
-Pass the fields as an array so they go as form fields. The API ignores a JSON body.
-
-### 3. Send the domain with the update download
-
-The only place to add it is the `onInstallerBeforePackageDownload` event, which fires just before Joomla downloads a package. It has to be a plugin: a component's listeners are only registered while that component runs, and during an update the running component is `com_installer`. If you already ship a system plugin, add the method there. Otherwise ship a small plugin in the `installer` group inside your package.
-
-```php
-use Joomla\CMS\Event\Installer\BeforePackageDownloadEvent;
-use Joomla\CMS\Plugin\CMSPlugin;
-use Joomla\CMS\Uri\Uri;
-use Joomla\Event\SubscriberInterface;
-
-final class MyExtIdentifier extends CMSPlugin implements SubscriberInterface
-{
-    public static function getSubscribedEvents(): array
-    {
-        return ['onInstallerBeforePackageDownload' => 'addIdentifier'];
-    }
-
-    public function addIdentifier(BeforePackageDownloadEvent $event): void
-    {
-        $url = $event->getUrl();
-
-        // This fires for every package Joomla downloads. Without the host check
-        // you would send your customer's domain to other vendors' update servers.
-        if (Uri::getInstance($url)->getHost() !== 'your-store.com') {
-            return;
-        }
-
-        $event->updateUrl(
-            $url . (str_contains($url, '?') ? '&' : '?')
-                 . 'identifier=' . urlencode(Uri::getInstance()->getHost())
-        );
-    }
-}
-```
-
-`getUrl()` and `updateUrl()` are the event's own methods. `$event->setArgument('url', …)` also works. `$event['url'] = …` throws, because the event is immutable. The older by-reference `&$url` listener signature still works in current Joomla and is dropped in Joomla 7.
-
-With all three steps in place, set the product's **Download API Access** to **License key + activated identifier**. A download from a site that was never activated is then refused with `ACTIVATION_REQUIRED` or `ACTIVATION_NOT_FOUND`.
-
-After switching, check **Components → LicenseDock → Downloads**, filtered to **Refused**, to see which customers are affected.
 
 ## Validating Keys in Your Extension
 

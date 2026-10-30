@@ -32,7 +32,7 @@ Every product shows integration code already filled in with its own ID and your 
 
 | Tab | Shows |
 |-----|-------|
-| **Joomla** | The product's download URL, a sample update XML, the manifest lines, reading the key, activating the domain, and the installer plugin that sends the domain with each update |
+| **Joomla** | The product's download URL and two setups, each a numbered list with its code: Setup A (Joomla asks for the key, no code) and Setup B (your extension asks for the key and activates each site) |
 | **WordPress** | The SDK setup and activate-on-save snippets |
 | **REST API** | curl requests and responses for each endpoint, and the error codes |
 
