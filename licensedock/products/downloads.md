@@ -24,9 +24,16 @@ Manage them on the product's **Downloads** tab. Save the product first – the t
 
 ## Writing Release Notes
 
-Write one change per line. A line can start with `-`, `*` or `•`.
+Write one change per line in the **Release notes** field, and start each line with a label:
 
-Start a line with one of these words to label it. The label sets the badge on the download page and the changelog page, and the group in Joomla's **Changelog** window:
+```
+- New: Zoom on the gallery
+- Fix: Crash on save
+- Fix: Typo in the settings screen
+- Change: Faster import
+```
+
+The label sets the badge on the download page and the changelog page, and the group in Joomla's **Changelog** window:
 
 | Start the line with | Badge | Joomla group |
 |---------------------|-------|--------------|
@@ -38,20 +45,19 @@ Start a line with one of these words to label it. The label sets the badge on th
 | `Language:` | Language | Language |
 | `Note:` | Note | Notes |
 
-The word and colon are removed from the text, and the next letter is capitalised. A line without a label keeps its text as typed, gets no badge, and lands in Joomla's **Changes**.
+The label and colon are removed from the text, and the next letter is capitalised. The `-` at the start is optional. A line without a label keeps its text as typed, gets no badge, and lands in Joomla's **Changes**.
 
-Notes copied from a `CHANGELOG.md` can keep their headings. A heading labels every line below it, up to the next heading:
+You can also put lines under a heading instead of labelling each one:
 
 ```
-## [2.1.0] - 2026-10-30
-### Fixed
+### Fix
 - Crash on save
 - Typo in the settings screen
-### Added
+### New
 - Zoom on the gallery
 ```
 
-Headings accept the same words, plural forms such as `Fixes` and `Bug fixes`, and the Keep a Changelog names (`Fixed`, `Added`, `Changed`, `Removed`, `Security`, and `Deprecated`, which becomes a note). A heading word alone with a colon, such as `Bug fixes:`, works too. A line's own label wins over its heading. A version heading such as `## [2.1.0]` labels nothing, and an unknown heading ends the section above it.
+Headings take the same words, plus forms such as `Fixed`, `Added`, `Bug fixes` and `Deprecated` (which becomes a note). A line's own label wins over its heading.
 
 Write the labels in English in every language. Joomla translates its group names, and LicenseDock translates the badges.
 
