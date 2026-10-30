@@ -24,30 +24,17 @@ Manage them on the product's **Downloads** tab. Save the product first – the t
 
 ## Writing Release Notes
 
-Write one change per line in the **Release notes** field, and start each line with a label:
+Write one change per line in the **Release notes** field. There are three ways to write them.
+
+**Plain text.** Each line is shown as typed. Start lines with `-`, `*` or `•` to show them as a list:
 
 ```
-- New: Zoom on the gallery
-- Fix: Crash on save
-- Fix: Typo in the settings screen
-- Change: Faster import
+- Zoom on the gallery
+- Crash on save fixed
+- Faster import
 ```
 
-The label sets the badge on the download page and the changelog page, and the group in Joomla's **Changelog** window:
-
-| Start the line with | Badge | Joomla group |
-|---------------------|-------|--------------|
-| `Security:` | Security | Security Fixes |
-| `Fix:` or `Fixed:` | Fix | Bug Fixes |
-| `New:` or `Added:` | New | New Features |
-| `Change:` or `Changed:` | Change | Changes |
-| `Removed:` or `Remove:` | Removed | Removed |
-| `Language:` | Language | Language |
-| `Note:` | Note | Notes |
-
-The label and colon are removed from the text, and the next letter is capitalised. The `-` at the start is optional. A line without a label keeps its text as typed, gets no badge, and lands in Joomla's **Changes**.
-
-You can also put lines under a heading instead of labelling each one:
+**Headings.** Group lines under a heading. Each line gets the heading's badge on the download page and the changelog page, and goes into the matching group in Joomla's **Changelog** window:
 
 ```
 ### Fix
@@ -57,9 +44,29 @@ You can also put lines under a heading instead of labelling each one:
 - Zoom on the gallery
 ```
 
-Headings take the same words, plus forms such as `Fixed`, `Added`, `Bug fixes` and `Deprecated` (which becomes a note). A line's own label wins over its heading.
+**A label on each line.** The same result, written per line:
 
-Write the labels in English in every language. Joomla translates its group names, and LicenseDock translates the badges.
+```
+- New: Zoom on the gallery
+- Fix: Crash on save
+- Fix: Typo in the settings screen
+```
+
+Headings and labels use these words:
+
+| Heading or label | Badge | Joomla group |
+|------------------|-------|--------------|
+| `Security` | Security | Security Fixes |
+| `Fix` or `Fixed` | Fix | Bug Fixes |
+| `New` or `Added` | New | New Features |
+| `Change` or `Changed` | Change | Changes |
+| `Removed` or `Remove` | Removed | Removed |
+| `Language` | Language | Language |
+| `Note` | Note | Notes |
+
+A label is the word followed by a colon (`Fix:`). It is removed from the text, and the next letter is capitalised. A line without a heading or label gets no badge and goes into Joomla's **Changes**. A line's own label wins over its heading.
+
+Write the words in English in every language. Joomla translates its group names, and LicenseDock translates the badges.
 
 ## Changelog Page
 
