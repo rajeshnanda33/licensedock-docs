@@ -532,7 +532,7 @@ Ship the plugin in a package with your extension, because a component or module 
 <?xml version="1.0" encoding="utf-8"?>
 <!-- pkg_myext.xml - your module and the installer plugin, installed and updated together -->
 <extension type="package" method="upgrade">
-    <name>Your Extension</name>
+    <name>My Extension</name>
     <packagename>myext</packagename>
     <version>1.0.0</version>
     <scriptfile>script.php</scriptfile>
