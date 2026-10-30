@@ -18,7 +18,7 @@ Selling a theme? See [WordPress Themes](/licensedock/integrations/wordpress-them
 
 ## Getting the Files
 
-Download the SDK from your account at contona.com, next to the LicenseDock package. Unzip `licensedock-sdk-v2.1.0.zip`:
+Download the SDK from your account at contona.com, next to the LicenseDock package. Unzip `licensedock-sdk-v2.1.1.zip`:
 
 ```
 sdk/
@@ -235,7 +235,7 @@ Without the header, or on WordPress before 5.8, the SDK adds the update to WordP
 
 - `update_plugins_{your store's host}` – answers WordPress when the plugin declares an `Update URI` on your store
 - `pre_set_site_transient_update_plugins` – the fallback without the header. The SDK asks your store for the latest version and compares it with the installed one. A newer version is offered with a package URL pointing at the [download endpoint](/licensedock/api/downloads)
-- `plugins_api` – fills the **View details** modal with the name, version and the version's **Release Notes** from LicenseDock, shown under **Changelog**. Lines that start with `-`, `*` or `•` become a list, as on the customer's account page
+- `plugins_api` – fills the **View details** modal with the name, version and the version's **Release Notes** from LicenseDock, shown under **Changelog**. Lines that start with `-`, `*` or `•` become a list, as on the customer's account page. Headings such as `### Fix` show as headings, with their lines below them
 
 WordPress downloads the package from your store itself, with the license key in the URL. The store checks the key before serving the file.
 
@@ -324,6 +324,15 @@ Downloads then carry the key only. No slot is taken on update and the store can'
 - **Dashboard → Updates → Check again** on a test site with an older version installed shows the update
 - The license in **Components → LicenseDock → Licenses** lists the test site's domain after the first update
 - **Components → LicenseDock → Downloads** shows the download, with the domain. Switch the filter to **Refused** to see refusals and their reason codes
+
+## Upgrading From SDK 2.1.0
+
+Nothing you call has changed. 2.1.1 fixes two things:
+
+- **Check again** (`?force-check=1`) now works only in the admin, for a user who can update plugins or themes. Before, any visitor could clear the update cache and spend your store's API calls
+- Release notes written with headings, such as `### Fix`, show those headings in **View details**. Before, they showed with the `###` in front
+
+Replace the WordPress files in your plugin or theme.
 
 ## Upgrading From SDK 2.0.0
 

@@ -56,8 +56,9 @@ A repeatable list of links shown below the product hero – Documentation, Live 
 
 | Field | Default | Notes |
 |-------|---------|-------|
-| Label | – | Button text |
-| URL | – | A full URL (`https://example.com/docs`) or a path on this site (`/docs`, `#section`) |
+| Link to | Custom URL | **Custom URL**, or **Changelog page** for the product's [changelog page](/licensedock/products/downloads#changelog-page). A changelog button needs no URL and shows once a version has release notes |
+| Label | – | Button text. Left empty on a changelog button, it reads "Changelog" in the visitor's language |
+| URL | – | For a custom URL: a full URL (`https://example.com/docs`) or a path on this site (`/docs`, `#section`) |
 | Open In | New Tab | New Tab or Same Tab |
 | Style | Outline Primary | Bootstrap button style |
 

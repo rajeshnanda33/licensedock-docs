@@ -107,7 +107,8 @@ export default defineConfig({
             { text: 'Deactivate License', link: '/licensedock/api/deactivate' },
             { text: 'Validate License', link: '/licensedock/api/validate' },
             { text: 'Check Updates', link: '/licensedock/api/updates' },
-            { text: 'Downloads', link: '/licensedock/api/downloads' }
+            { text: 'Downloads', link: '/licensedock/api/downloads' },
+            { text: 'Changelog', link: '/licensedock/api/changelog' }
           ]
         },
         {

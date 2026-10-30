@@ -6,7 +6,7 @@ It needs PHP 7.4 or later and the cURL extension.
 
 ## Getting the File
 
-Download the SDK from your account at contona.com, next to the LicenseDock package. `LicenseDockClient.php` is in the root of `licensedock-sdk-v2.1.0.zip`.
+Download the SDK from your account at contona.com, next to the LicenseDock package. `LicenseDockClient.php` is in the root of `licensedock-sdk-v2.1.1.zip`.
 
 ## Quick Start
 

@@ -19,6 +19,7 @@ https://yoursite.com/api/index.php/v1/licensedock/
 | POST | [`/licenses/validate`](/licensedock/api/validate) | Check license status |
 | GET | [`/updates/{product_id}`](/licensedock/api/updates) | Latest published version of a product |
 | GET | [`/downloads/{product_id}`](/licensedock/api/downloads) | Download the latest published file |
+| GET | [`/changelog/{product_id}`](/licensedock/api/changelog) | Release notes of every published version, as Joomla changelog XML |
 
 ## Authentication
 
@@ -104,7 +105,7 @@ Every limit uses a sliding window and answers `429 RATE_LIMITED` when exceeded.
 
 | Limit | Applies to |
 |-------|-----------|
-| 60 requests per 60 seconds, per IP, per endpoint | All five endpoints |
+| 60 requests per 60 seconds, per IP, per endpoint | All six endpoints |
 | 20 requests per hour, per license key, per endpoint | Activate, deactivate, validate |
 | 40 unknown or inactive keys per hour, per IP | Shared across all endpoints. Counts only keys that fail to resolve |
 | 30 refused downloads per hour, per license key | Download |

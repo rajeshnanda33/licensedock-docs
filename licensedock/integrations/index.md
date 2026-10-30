@@ -14,7 +14,7 @@ Your software talks to your store through the [REST API](/licensedock/api/). How
 
 ## Getting the SDK
 
-The SDK is a separate download. Download it from your account at contona.com, next to the LicenseDock package. The file is `licensedock-sdk-v2.1.0.zip`:
+The SDK is a separate download. Download it from your account at contona.com, next to the LicenseDock package. The file is `licensedock-sdk-v2.1.1.zip`:
 
 ```
 sdk/

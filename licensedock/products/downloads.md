@@ -19,8 +19,55 @@ Manage them on the product's **Downloads** tab. Save the product first – the t
 |-------|-------|
 | Version | Required. Use semantic versioning, such as `1.0.0` or `2.1.3` |
 | Release date | Optional. The date shown to customers. Blank uses the upload date. It does not affect which version auto-update serves |
-| Release notes | Shown to customers on the download page. Start lines with `-`, `*` or `•` to render a bullet list |
+| Release notes | The version's changelog. Shown on the customer's download page, in WordPress's **View details**, in Joomla's **Changelog** window and on the product's [changelog page](#changelog-page). See [Writing release notes](#writing-release-notes) |
 | Status | Published or Unpublished. Only published versions are offered to customers and updaters |
+
+## Writing Release Notes
+
+Write one change per line. A line can start with `-`, `*` or `•`.
+
+Start a line with one of these words to label it. The label sets the badge on the download page and the changelog page, and the group in Joomla's **Changelog** window:
+
+| Start the line with | Badge | Joomla group |
+|---------------------|-------|--------------|
+| `Security:` | Security | Security Fixes |
+| `Fix:` or `Fixed:` | Fix | Bug Fixes |
+| `New:` or `Added:` | New | New Features |
+| `Change:` or `Changed:` | Change | Changes |
+| `Removed:` or `Remove:` | Removed | Removed |
+| `Language:` | Language | Language |
+| `Note:` | Note | Notes |
+
+The word and colon are removed from the text, and the next letter is capitalised. A line without a label keeps its text as typed, gets no badge, and lands in Joomla's **Changes**.
+
+Notes copied from a `CHANGELOG.md` can keep their headings. A heading labels every line below it, up to the next heading:
+
+```
+## [2.1.0] - 2026-10-30
+### Fixed
+- Crash on save
+- Typo in the settings screen
+### Added
+- Zoom on the gallery
+```
+
+Headings accept the same words, plural forms such as `Fixes` and `Bug fixes`, and the Keep a Changelog names (`Fixed`, `Added`, `Changed`, `Removed`, `Security`, and `Deprecated`, which becomes a note). A heading word alone with a colon, such as `Bug fixes:`, works too. A line's own label wins over its heading. A version heading such as `## [2.1.0]` labels nothing, and an unknown heading ends the section above it.
+
+Write the labels in English in every language. Joomla translates its group names, and LicenseDock translates the badges.
+
+## Changelog Page
+
+Each product with release notes has a public changelog page at the product's address plus `/changelog`, such as `https://your-store.com/products/my-extension/changelog`. It lists every published version that has notes. The newest version is open, and older ones fold into one line each with the version and date.
+
+To link it from the product page, add an [Info Button](/licensedock/products/#info-buttons) and set **Link to** to **Changelog page**. The button appears once a version has notes.
+
+The page follows the product's own settings:
+
+- A product set to **No page**, or a product without published notes, answers 404
+- The product's **Robots** value applies. Left blank, an unlisted product's changelog is `noindex` and a listed one is indexable
+- A listed product's changelog has a canonical link to itself. An unlisted one has none
+
+Joomla extensions can show the same notes in Joomla's own **Changelog** window. See [Joomla Extensions](/licensedock/integrations/joomla#optional-a-changelog-button).
 
 ## Files
 

@@ -16,7 +16,7 @@
 
 ## Getting the Files
 
-Download the SDK from your account at contona.com, next to the LicenseDock package, and unzip `licensedock-sdk-v2.1.0.zip`. Ship three files inside your theme:
+Download the SDK from your account at contona.com, next to the LicenseDock package, and unzip `licensedock-sdk-v2.1.1.zip`. Ship three files inside your theme:
 
 ```
 my-theme/
@@ -93,7 +93,7 @@ The page itself is the same as the [plugin example](/licensedock/integrations/wo
 
 ## Update Details
 
-On a theme update, WordPress shows a **View version details** link and opens it in a popup frame. Most stores send a header that refuses to be shown inside another site's frame, so the SDK serves the details from the customer's own admin instead: the version and its **Release Notes** from LicenseDock. Lines that start with `-`, `*` or `•` become a list.
+On a theme update, WordPress shows a **View version details** link and opens it in a popup frame. Most stores send a header that refuses to be shown inside another site's frame, so the SDK serves the details from the customer's own admin instead: the version and its **Release Notes** from LicenseDock. Lines that start with `-`, `*` or `•` become a list, and headings such as `### Fix` show as headings.
 
 The page is only shown to users who can update themes.
 

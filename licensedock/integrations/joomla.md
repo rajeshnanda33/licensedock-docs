@@ -100,6 +100,28 @@ When the request carries `dlid`, the download endpoint answers errors with an HT
 
 Joomla sometimes joins the key with `&amp;dlid=` in place of `&dlid=`. LicenseDock reads both.
 
+## Optional: A Changelog Button
+
+Joomla shows a **Changelog** button next to an extension when it has a changelog URL. Point it at the product's [changelog endpoint](/licensedock/api/changelog), which serves the release notes from the product's **Downloads** tab.
+
+Add the line to your manifest, next to `<updateservers>`:
+
+```xml
+<changelogurl>https://your-store.com/api/index.php/v1/licensedock/changelog/42</changelogurl>
+```
+
+and inside `<update>` in your update XML:
+
+```xml
+<changelogurl>https://your-store.com/api/index.php/v1/licensedock/changelog/42</changelogurl>
+```
+
+Joomla reads the manifest copy for the installed version in **System → Manage → Extensions**, and the update XML copy for the offered version in **System → Update → Extensions**.
+
+Joomla shows only the entry whose version exactly equals the version in your package. Enter the same string on the Downloads tab: `2.1.0` and `v2.1.0` don't match, and Joomla then shows no button.
+
+Labels and headings in the release notes become Joomla's groups (Bug Fixes, New Features and so on). See [Writing release notes](/licensedock/products/downloads#writing-release-notes).
+
 ## Optional: Enforce the Activation Limit
 
 The setup above doesn't record which sites use a key, so one key can update any number of sites. Joomla's updater sends the key and nothing else – no site URL, no identifying header. Closing that takes three steps inside your extension, each depending on the one before.
