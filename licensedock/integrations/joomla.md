@@ -22,7 +22,7 @@ Manifest <updateservers> → your update XML → Joomla offers the update
 |---|---|---|
 | Who asks for the key | Joomla's Download Key box | your extension's settings |
 | Limits how many sites a key can update | no | yes |
-| Code | none | one settings field and one save handler |
+| Code | none | one settings field and one small class |
 
 Both give your customers updates inside Joomla. Choose B if one key should only update the number of sites its plan allows.
 
@@ -51,7 +51,7 @@ LicenseDock doesn't generate Joomla's XML. Host a static file on your site, e.g.
 
 The download URL is fixed per product and always serves the latest version. Update `<version>` and `<sha256>` in this file at each release. Joomla compares `<version>` with the installed version, and checks the downloaded file against `<sha256>` when it's present.
 
-`<element>` and `<type>` must match your extension. For a package, use `pkg_myext` and `package`.
+`<element>` and `<type>` must match your extension. For a module, plugin, template or package, also add `<client>site</client>` (a plugin also needs `<folder>` with its group): Joomla assumes `administrator` when `<client>` is missing, and then never offers the update. For a package, use `pkg_myext` and `package`.
 
 ### 2. Add these lines to your manifest
 
@@ -77,7 +77,7 @@ Set it to **License key**. Joomla now offers your updates, and each download che
 
 ## Setup B: Your Extension Asks for the Key
 
-Each site activates its key, and a download from a site that was never activated is refused. The site's domain travels as `identifier` in the same stored line as the key, so this needs no plugin, and it works the same for a component, module, plugin or template.
+Each site activates its key, and a download from a site that was never activated is refused. A local or staging site keeps the key without using up a site, and gets no updates. The site's domain travels as `identifier` in the update site's stored line, next to the key, so this needs no plugin, and it works the same for a component, module, plugin or template.
 
 ### 1. Put the update XML on your server
 
@@ -95,65 +95,168 @@ Leave out `<dlid>`: your extension stores the key itself.
 </updateservers>
 ```
 
-### 3. Add a License key field to your extension's settings
+### 3. Add a License key field with a filter
 
-### 4. Activate the site and store the key when the field is saved
+Joomla calls a field's `filter` while saving the form, so the same field works in a component's Options (`config.xml`), a module, a plugin or a template, with no save handler of your own:
+
+```xml
+<!-- In your settings form: config.xml (a component's Options), or the <config>
+     of your module, plugin or template manifest. -->
+<field name="license_key" type="text" label="License key"
+       filter="YourVendor\Component\Myext\Administrator\Helper\License::activate"/>
+```
+
+### 4. Add the License class
+
+On save, `activate()` activates the site and stores the key with its domain on your update site. On a local or staging site (`localhost`, `.test`, `.local`, an IP) it stores the key only, without activating, so no site is used up. If the key is refused or the store can't be reached, it stores the key without a domain and tells the admin.
 
 ```php
+namespace YourVendor\Component\Myext\Administrator\Helper;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Http\HttpFactory;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Database\DatabaseInterface;
 
-// In the save handler of your settings screen - not on every page load.
-$key    = trim((string) $params->get('license_key'));   // the field from step 3
-$domain = Uri::getInstance()->getHost();                 // this site, e.g. customer-site.com
+\defined('_JEXEC') or die;
 
-// 1. Activate this site against the key.
-$response = (new HttpFactory())->getHttp()->post(
-    'https://your-store.com/api/index.php/v1/licensedock/licenses/activate',
-    ['license_key' => $key, 'identifier' => $domain, 'product_id' => 42]
-);
-$body = json_decode((string) $response->getBody(), true);
+final class License
+{
+    private const STORE   = 'https://your-store.com/api/index.php/v1/licensedock';
+    private const PRODUCT = 42;
+    private const ELEMENT = 'com_myext';   // your extension's element - pkg_myext if you ship a package
 
-if (isset($body['error'])) {
-    // Limit reached, invalid or expired key, wrong product: tell the admin, store nothing.
-    Factory::getApplication()->enqueueMessage($body['error']['message'], 'warning');
+    // The field's filter: Joomla calls it while saving your settings, and saves what it returns.
+    public static function activate($value): string
+    {
+        $key    = trim((string) $value);
+        $domain = Uri::getInstance()->getHost();
 
-    return;
-}
+        if ($key === '') {
+            return '';
+        }
 
-// 2. Store key + domain on your update site. Joomla sends this line with every
-//    update download, so the store knows which site is asking.
-$db      = Factory::getContainer()->get(DatabaseInterface::class);  // or $this->getDatabase()
-$element = 'com_myext';   // your extension's element - pkg_myext if you ship a package
-$extra   = 'dlid=' . rawurlencode($key) . '&identifier=' . rawurlencode($domain);
+        // A local or staging site keeps the key but is not activated: no site is used up,
+        // and with no domain on the update site it gets no updates.
+        if (!self::isLiveHost($domain)) {
+            self::store($key, '');
 
-$siteIds = $db->setQuery(
-    $db->createQuery()
-        ->select($db->quoteName('se.update_site_id'))
-        ->from($db->quoteName('#__update_sites_extensions', 'se'))
-        ->join('INNER', $db->quoteName('#__extensions', 'e'), $db->quoteName('e.extension_id') . ' = ' . $db->quoteName('se.extension_id'))
-        ->where($db->quoteName('e.element') . ' = :element')
-        ->bind(':element', $element)
-)->loadColumn();
+            return $key;
+        }
 
-if ($siteIds) {
-    $db->setQuery(
-        $db->createQuery()
-            ->update($db->quoteName('#__update_sites'))
-            ->set($db->quoteName('extra_query') . ' = :extra')
-            ->whereIn($db->quoteName('update_site_id'), $siteIds)
-            ->bind(':extra', $extra)
-    )->execute();
+        $body = self::call('activate', ['license_key' => $key, 'identifier' => $domain, 'product_id' => self::PRODUCT]);
+
+        if (!isset($body['data'])) {
+            // Limit reached, invalid or expired key, wrong product, or the store was not reached.
+            Factory::getApplication()->enqueueMessage($body['error']['message'] ?? 'The license could not be checked. Try again later.', 'warning');
+            self::store($key, '');
+
+            return $key;
+        }
+
+        self::store($key, $domain);
+
+        return $key;
+    }
+
+    // Call at most once a day. A site whose domain is not activated - a copy of another
+    // site - keeps the key but stops sending a domain, so it stops updating.
+    public static function recheck(string $key): void
+    {
+        $domain = Uri::getInstance()->getHost();
+
+        if ($key === '') {
+            return;
+        }
+
+        // A local copy of a live site never updates on that site's activation.
+        if (!self::isLiveHost($domain)) {
+            self::store($key, '');
+
+            return;
+        }
+
+        $body = self::call('validate', ['license_key' => $key, 'identifier' => $domain, 'product_id' => self::PRODUCT]);
+
+        if (!isset($body['data'])) {
+            return;   // no answer: leave things as they are
+        }
+
+        $activated = !empty($body['data']['valid']) && !empty($body['data']['identifier_activated']);
+        self::store($key, $activated ? $domain : '');
+    }
+
+    private static function isLiveHost(string $host): bool
+    {
+        $host = strtolower($host);
+
+        if ($host === '' || $host === 'localhost' || filter_var(trim($host, '[]'), FILTER_VALIDATE_IP)) {
+            return false;
+        }
+
+        foreach (['.test', '.local', '.localhost', '.localdomain', '.invalid', '.example'] as $suffix) {
+            if (str_ends_with($host, $suffix)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static function call(string $endpoint, array $fields): ?array
+    {
+        try {
+            $response = (new HttpFactory())->getHttp()->post(self::STORE . '/licenses/' . $endpoint, $fields, [], 10);
+
+            return json_decode((string) $response->getBody(), true) ?: null;
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    // Joomla sends the update site's line with every update download.
+    private static function store(string $key, string $domain): void
+    {
+        $db      = Factory::getContainer()->get(DatabaseInterface::class);
+        $element = self::ELEMENT;
+        $extra   = 'dlid=' . rawurlencode($key) . ($domain !== '' ? '&identifier=' . rawurlencode($domain) : '');
+
+        $siteIds = $db->setQuery(
+            $db->createQuery()
+                ->select($db->quoteName('se.update_site_id'))
+                ->from($db->quoteName('#__update_sites_extensions', 'se'))
+                ->join('INNER', $db->quoteName('#__extensions', 'e'), $db->quoteName('e.extension_id') . ' = ' . $db->quoteName('se.extension_id'))
+                ->where($db->quoteName('e.element') . ' = :element')
+                ->bind(':element', $element)
+        )->loadColumn();
+
+        if ($siteIds) {
+            $db->setQuery(
+                $db->createQuery()
+                    ->update($db->quoteName('#__update_sites'))
+                    ->set($db->quoteName('extra_query') . ' = :extra')
+                    ->whereIn($db->quoteName('update_site_id'), $siteIds)
+                    ->bind(':extra', $extra)
+            )->execute();
+        }
+    }
 }
 ```
 
 Joomla appends the stored line to the download URL, so the store sees `?dlid=KEY&identifier=customer-site.com` and checks that this domain was activated for the key.
 
-Each activation is an HTTP request to your store, so run it when the key is saved, not on every page load. To re-check later, call [validate](/licensedock/api/validate) now and then, e.g. once a day.
+### 5. Re-check once a day
 
-### 5. Optional: check the domain at download time
+A copied site carries the original site's stored line. The daily re-check asks the store about this site's own domain: if it isn't activated, the site keeps the key but stops sending a domain, so it stops updating. A local copy drops the domain without asking the store.
+
+```php
+// Somewhere that runs regularly - your component's dashboard, a module's render, a
+// system plugin. Keep the time of the last call with your settings, so it runs at
+// most once a day.
+License::recheck($params->get('license_key', ''));
+```
+
+### 6. Optional: check the domain at download time
 
 The stored line carries the domain that was activated. If someone copies a whole site (files and database), the copy carries that line too and can download under the original site's activation.
 
@@ -194,7 +297,7 @@ public function onInstallerBeforePackageDownload(BeforePackageDownloadEvent $eve
 
 The host and path check keeps it to your own product's download, so the customer's domain is never sent to another vendor's update server. Modules and content plugins can't do this themselves: only a plugin loaded during an update download receives the event.
 
-### 6. Set the product's Download API Access
+### 7. Set the product's Download API Access
 
 Set it to **License key + activated identifier**. A download is then refused with `ACTIVATION_REQUIRED` when no domain is sent, and `ACTIVATION_NOT_FOUND` when the domain was never activated.
 
@@ -436,7 +539,7 @@ public function postflight(string $type, InstallerAdapter $adapter): bool
 
 ### 4. Set the product's Download API Access
 
-Set it to **License key + activated identifier**, as in Setup B, step 6.
+Set it to **License key + activated identifier**, as in Setup B, step 7.
 
 ## Errors in Joomla
 
