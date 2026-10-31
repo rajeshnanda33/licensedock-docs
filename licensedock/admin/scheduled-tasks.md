@@ -1,6 +1,6 @@
 # Scheduled Tasks
 
-LicenseDock's background work runs through Joomla's Task Scheduler, using the **LicenseDock - Scheduled Tasks** plugin (`plg_task_licensedock`). The plugin adds three task types. None of them run until you create them.
+LicenseDock's background work runs through Joomla's Task Scheduler, using the **LicenseDock - Scheduled Tasks** plugin (`plg_task_licensedock`). The plugin adds four task types. None of them run until you create them.
 
 ## The Tasks
 
@@ -9,8 +9,9 @@ LicenseDock's background work runs through Joomla's Task Scheduler, using the **
 | LicenseDock - Process Email Queue | Interval, Minutes | 5 |
 | LicenseDock - Reminders & Expiration | Interval, Hours | 1 |
 | LicenseDock - Abandoned Checkout Recovery | Interval, Minutes | 15 |
+| LicenseDock - Gallery Image Copies | Interval, Days | 1 |
 
-These are the recommended intervals. Store Health warns when the email queue task has not run for 15 minutes, or either of the other two for 120 minutes.
+These are the recommended intervals. Store Health warns when the email queue task has not run for 15 minutes, or the reminders or abandoned checkout task for 120 minutes. Gallery Image Copies is optional: Store Health only shows a warning, and only when a product has images, if it is missing, switched off or has not run for a day.
 
 ### Process Email Queue
 
@@ -42,12 +43,16 @@ Each step runs on its own. If one throws an error, the rest still run, the error
 
 Emails customers who started checkout but did not pay, with a link that restores their checkout. It follows **Intervals (hours)** and **Max Attempts** under **Settings → Automation**, handles up to 100 orders per run, and does nothing while **Enabled** is set to No.
 
+### Gallery Image Copies
+
+Makes the smaller copies of product images that were added to a gallery folder since the last run, and deletes copies of images that were removed. Saving a product does the same for that product. Without this task, page views make missing copies a few at a time, so the first visitors after you add photos wait longer. A run spends at most 20 seconds on images; if copies are left, Joomla runs it again straight away.
+
 ## Creating the Tasks
 
 1. Go to **System → Scheduled Tasks → New**
 2. Pick the task type, for example **LicenseDock - Process Email Queue**
 3. Set the Execution Rule and value from the table above
-4. Save, and repeat for the other two
+4. Save, and repeat for the others
 
 The **Automation** tab of LicenseDock Settings shows the same table and links to the Scheduled Tasks screen.
 
