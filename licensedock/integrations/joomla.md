@@ -97,7 +97,7 @@ Leave out `<dlid>`: your extension stores the key itself.
 
 ### 3. Add a License key field with a filter
 
-Joomla calls a field's `filter` while saving the form, so the same field works in a component's Options (`config.xml`), a module, a plugin or a template, with no save handler of your own:
+Joomla calls a field's `filter` while saving the form, so the same field works in a component, a module, a plugin or a template, with no save handler of your own:
 
 ```xml
 <!-- In your settings form: config.xml (a component's Options), or the <config>
