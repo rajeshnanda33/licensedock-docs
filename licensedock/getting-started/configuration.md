@@ -189,8 +189,8 @@ Leave any days field blank to switch that email off. Auto-renewing subscriptions
 | Before expiry – Second | 14 days before | `renewal_reminder_2` |
 | Before expiry – Final | 3 days before | `renewal_reminder_3` |
 | Expiry day – Send notice | Yes | `expiration_notice` |
-| After expiry (grace period) – First | 7 | `grace_period_reminder_1` |
-| After expiry (grace period) – Final | 3 | `grace_period_reminder_2` |
+| After expiry (renewal grace period) – First | 7 | `grace_period_reminder_1` |
+| After expiry (renewal grace period) – Final | 3 | `grace_period_reminder_2` |
 | After trial cancellation – Winback | 7 days after | `trial_cancellation_reminder` |
 
 Grace reminders are sent inside the product's **Grace Period (days)** window, and each value is the number of days left in that window when the email goes out. A grace reminder is skipped when its value is not smaller than the product's grace period, and it is only sent when the product's renewal discount is higher than its lapsed discount.

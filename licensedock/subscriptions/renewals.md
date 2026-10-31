@@ -69,7 +69,7 @@ The portal's Subscriptions page shows the relevant prices on each card: "Renew b
 | | Second | 14 days before | Renewal Reminder - Second |
 | | Final | 3 days before | Renewal Reminder - Final |
 | Expiry day | Send notice | Yes | Subscription Expired |
-| After expiry (grace period) | First | 7 | Grace Reminder - First |
+| After expiry (renewal grace period) | First | 7 | Grace Reminder - First |
 | | Final | 3 | Grace Reminder - Final |
 | After trial cancellation | Winback | 7 days after | Trial Winback |
 
