@@ -305,9 +305,11 @@ License::recheck($params->get('license_key', ''));
 
 ### 6. Optional: check the domain at download time
 
-The stored line carries the domain that was activated. If someone copies a whole site (files and database), the copy carries that line too and can download under the original site's activation.
+Steps 1 to 5 already refuse a site that was never activated, and a new site can only get in by activating, up to the plan's limit. What they leave open is a copy of a live site (files and database): it carries the original's stored line, so it downloads under the original's activation until the daily re-check in step 5 drops the domain.
 
-If your extension ships a system plugin, close that gap there: at download time, replace the stored domain with the domain of the site actually downloading. A copied site then sends its own domain, which was never activated, and the store refuses it with `ACTIVATION_NOT_FOUND` until it activates and uses up a site.
+If a system plugin is part of what you ship (the product itself, or a component, module or template packaged with one), close that gap there: at download time, send the domain of the site actually downloading instead of the stored one. A copy then sends its own domain, which was never activated, and the store refuses it with `ACTIVATION_NOT_FOUND` at its first update. To update, it has to activate and use up a site.
+
+A module, template, content plugin or component on its own can't do this: only a plugin loaded during the update download receives the event, which means a system plugin, or an installer plugin.
 
 ```php
 use Joomla\CMS\Event\Installer\BeforePackageDownloadEvent;
@@ -342,7 +344,7 @@ public function onInstallerBeforePackageDownload(BeforePackageDownloadEvent $eve
 }
 ```
 
-The host and path check keeps it to your own product's download, so the customer's domain is never sent to another vendor's update server. Modules and content plugins can't do this themselves: only a plugin loaded during an update download receives the event.
+The host and path check keeps it to your own product's download, so the customer's domain is never sent to another vendor's update server.
 
 ### 7. Set the product's Download API Access
 
