@@ -113,7 +113,22 @@ The **Account: Details** page has two cards:
 
 | Card | Fields |
 |------|--------|
-| Your Details | Full name (optional, used on invoices; blank uses the account name), email (read-only) |
+| Your Details | Full name (optional, used on invoices; blank uses the account name), email (changed with **Change**, below) |
 | Billing Address | The same address fields as checkout: company, address, city, state, postcode, country, tax ID and phone, as configured for the customer's country and in **Settings → Storefront** |
 
 **Save Changes** validates the fields the same way checkout does. Saved details prefill the next checkout and appear on future invoices.
+
+### Changing the Email Address
+
+**Change** next to the email opens a box for the new address. It is separate from **Save Changes**, which never changes the email.
+
+1. The customer enters the new address and clicks **Send link**. An address another account already uses is refused, and a customer can send at most 5 links an hour.
+2. LicenseDock emails a confirmation link to the new address (`email_change_confirm`). Nothing changes until it is clicked. Until then the page shows the address it is waiting for, with **Resend** and **Cancel change**.
+3. Clicking the link, signed in or not, changes the account email, and the username too when it was the old email (accounts created at checkout sign in with their email). LicenseDock's customer record follows. A signed-out customer lands on the sign-in page with the new address filled in, then returns to Account Details.
+4. LicenseDock tells the old address (`email_changed`), so an owner whose account was taken over finds out.
+
+The link works for 24 hours and only once. **Resend**, **Cancel change** or the change itself makes any earlier link stop working.
+
+Past orders and invoices keep the email they were made with, and so do the customer records at Stripe, Mollie and PayPal. LicenseDock sends every customer email itself, so these go to the new address straight away. If the customer later buys as a guest with the old address, that purchase goes to a new account.
+
+An admin can still change a customer's email under **Users** in Joomla. That skips the confirmation link and the notice, and the customer record follows the same way.

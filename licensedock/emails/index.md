@@ -11,7 +11,7 @@ Every email is written to the email queue first, fully rendered, and then sent.
 
 | Sent straight away | |
 |--------------------|---|
-| Customer | `purchase_confirmation`, `account_activation`, `welcome`, `subscription_cancelled`, `subscription_resumed`, `plan_change_confirmed`, `plan_change_scheduled`, `plan_change_cancelled` |
+| Customer | `purchase_confirmation`, `account_activation`, `welcome`, `email_change_confirm`, `email_changed`, `subscription_cancelled`, `subscription_resumed`, `plan_change_confirmed`, `plan_change_scheduled`, `plan_change_cancelled` |
 | Admin | `admin_new_order`, `admin_renewal`, `admin_payment_failed`, `admin_dispute_opened`, `admin_gateway_error`, `admin_mollie_loyalty_patch_failed` |
 
 Retries and failures:
@@ -31,6 +31,8 @@ Sent and failed emails are deleted from the queue after 90 days.
 | `purchase_confirmation` | Purchase Confirmation | An order is paid. Includes license keys, download links (with the Email + Account delivery method), the consents the buyer accepted, and the invoice PDF as an attachment |
 | `account_activation` | Set Your Password | A customer account needs a password and no receipt carries the link (for example an account created by an admin or by the importer), or an admin clicks **Resend activation email** |
 | `welcome` | Welcome | The customer sets a password and activates the account |
+| `email_change_confirm` | Confirm New Email | A customer asks to change their email on **Account: Details**. Sent to the new address with the link that confirms it |
+| `email_changed` | Email Address Changed | The change is confirmed. Sent to the old address |
 | `abandoned_recovery` | Abandoned Checkout Reminder | A checkout was started but not paid. Sent on the configured intervals |
 | `renewal_receipt` | Renewal Receipt | A subscription auto-renewal charge succeeds. The renewal invoice PDF is attached |
 | `payment_failed` | Payment Failed | A renewal charge or a checkout payment fails |
