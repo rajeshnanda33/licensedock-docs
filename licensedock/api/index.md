@@ -83,8 +83,8 @@ The download endpoint is the one exception: it streams a file on success, and ca
 | Code | HTTP | Returned by | When |
 |------|------|-------------|------|
 | `INVALID_REQUEST` | 400 | all | A parameter is missing, too long (over 255 characters), or malformed |
-| `LICENSE_INVALID` | 403 | activate, deactivate, download | Key not found, or its status isn't `active`. One code for both, so nobody can probe which keys exist |
-| `LICENSE_EXPIRED` | 403 | activate, download | License is past `expires_at`. A license expiring at this exact second counts as expired |
+| `LICENSE_INVALID` | 403 | activate, deactivate, download | Key not found, revoked or suspended (deactivate: also expired). One code for all, so nobody can probe which keys exist |
+| `LICENSE_EXPIRED` | 403 | activate, download | License is marked expired, or is past `expires_at` (a license expiring at this exact second counts). On activate the error also carries `expires_at` |
 | `PRODUCT_MISMATCH` | 403 | activate, deactivate, validate, download | The key is valid but belongs to a different product |
 | `ACTIVATION_LIMIT_REACHED` | 403 | activate | No free activation slots. The payload also carries `activation_limit` and `activations_used` |
 | `ACTIVATION_NOT_FOUND` | 404 / 403 | deactivate (404), download (403) | The identifier sent isn't activated on this license |

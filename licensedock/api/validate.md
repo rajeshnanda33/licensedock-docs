@@ -43,7 +43,10 @@ curl -X POST https://yoursite.com/api/index.php/v1/licensedock/licenses/validate
     "activation_limit": 5,
     "activations_used": 2,
     "expires_at": "2027-03-20T03:21:26Z",
-    "identifier_activated": true
+    "identifier_activated": true,
+    "auto_renew": true,
+    "next_payment_at": "2027-02-20T03:21:26Z",
+    "payment_failed": false
   }
 }
 ```
@@ -62,7 +65,10 @@ curl -X POST https://yoursite.com/api/index.php/v1/licensedock/licenses/validate
     "activation_limit": 0,
     "activations_used": 0,
     "expires_at": null,
-    "identifier_activated": false
+    "identifier_activated": false,
+    "auto_renew": false,
+    "next_payment_at": null,
+    "payment_failed": false
   }
 }
 ```
@@ -74,6 +80,9 @@ curl -X POST https://yoursite.com/api/index.php/v1/licensedock/licenses/validate
 | `activation_limit` | `0` means unlimited |
 | `expires_at` | `null` for a license that doesn't expire |
 | `identifier_activated` | `true` when no `identifier` was sent. Otherwise, whether that identifier is activated on this license |
+| `auto_renew` | `true` when a payment gateway charges the license's subscription by itself – show "Renews on `next_payment_at`" and no Renew button. `false` when the customer renews by hand (warn before `expires_at`), or the license never ends (`expires_at` is `null`) |
+| `next_payment_at` | The next automatic charge. `null` unless `auto_renew` is `true` |
+| `payment_failed` | `true` when the last renewal charge failed and the store is retrying – ask the customer to update their payment details |
 
 ### Errors
 

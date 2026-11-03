@@ -47,7 +47,7 @@ curl "https://yoursite.com/api/index.php/v1/licensedock/updates/42?license_key=A
 }
 ```
 
-With a `license_key` that covers the product, four fields are added:
+With a `license_key` that covers the product, five fields are added:
 
 ```json
 {
@@ -57,7 +57,8 @@ With a `license_key` that covers the product, four fields are added:
     "license_status": "active",
     "license_expires_at": "2027-04-03T00:00:00Z",
     "auto_renew": true,
-    "next_payment_at": "2027-03-03T00:00:00Z"
+    "next_payment_at": "2027-03-03T00:00:00Z",
+    "payment_failed": false
   }
 }
 ```
@@ -75,8 +76,9 @@ With a `license_key` that covers the product, four fields are added:
 | `requires_license` | The product's *Requires License* setting |
 | `license_status` | `active`, `expired`, `suspended`, `revoked` or `cancelled`. An active license past its expiry date reports `expired` |
 | `license_expires_at` | `null` for a license that doesn't expire |
-| `auto_renew` | `true` when the license renews through a recurring subscription |
-| `next_payment_at` | Next renewal date, or `null` |
+| `auto_renew` | `true` when a payment gateway charges the license's subscription by itself – show "Renews on `next_payment_at`" and no Renew button. `false` when the customer renews by hand (warn before `expires_at`), or the license never ends (`expires_at` is `null`) |
+| `next_payment_at` | The next automatic charge. `null` unless `auto_renew` is `true` |
+| `payment_failed` | `true` when the last renewal charge failed and the store is retrying – ask the customer to update their payment details |
 
 `download_requires` values:
 

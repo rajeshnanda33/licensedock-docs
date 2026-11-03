@@ -77,13 +77,17 @@ $result->code      // string – error code, '' on success
   "activation_limit": 5,
   "activations_used": 1,
   "expires_at": "2027-03-20T00:00:00Z",
-  "identifier_activated": true
+  "identifier_activated": true,
+  "auto_renew": true,
+  "next_payment_at": "2027-02-20T00:00:00Z",
+  "payment_failed": false
 }
 ```
 
-Three things to handle:
+Four things to handle:
 
 - **`validate()` returns license problems as data.** An unknown, inactive or expired key gives `success = true` with `data->valid === false`. Branch on `data->valid`, and read `data->status` for the reason.
+- **Warn about the end date only when the customer has to act.** `data->auto_renew` is `true` when a payment gateway charges the subscription by itself: show "Renews on `next_payment_at`" and no Renew button, or the customer may pay twice. When it's `false`, warn before `expires_at`. `data->payment_failed` means the last charge failed: ask for new payment details.
 - **A connection failure has an empty `code`.** `message` starts with `Connection error:`. A response that isn't JSON gives `Invalid response from server.`, also with an empty code.
 - **Treat an unknown `code` as a generic failure.** Later store versions add codes. The current list is in the [API Reference](/licensedock/api/#error-codes).
 
