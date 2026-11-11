@@ -2,8 +2,8 @@
 
 ## Requirements
 
-- Joomla
-- The PHP version your Joomla release requires, with the OpenSSL extension (gateway keys and the SMTP password are encrypted with it)
+- Joomla 5 or 6
+- PHP 8.1 or newer (Joomla 5's own minimum), with the OpenSSL extension (gateway keys and the SMTP password are encrypted with it). Joomla offers LicenseDock updates only to sites that meet it, and the installer says so on older PHP
 - MySQL or MariaDB
 - HTTPS on the live site – Store Health flags a store served over plain HTTP
 
@@ -30,6 +30,10 @@ The package installs the component and five plugins:
 | `plg_task_licensedock` | Scheduled tasks: email queue, reminders and expiry, abandoned checkout recovery – see [Scheduled Tasks](/licensedock/admin/scheduled-tasks) |
 | `plg_pagecache_licensedock` | Keeps checkout and account pages out of Joomla's page cache |
 | `plg_content_licensedock` | Product shortcodes for articles and modules |
+
+## Updating
+
+Back up your site first: Joomla can't go back to an older version of an extension. Then update from **System → Update → Extensions**, or install the new package over the old one. Settings, orders and customers are kept, and email templates you haven't edited take the new wording. The first LicenseDock page after an update re-checks your LicenseDock license.
 
 ## Languages
 

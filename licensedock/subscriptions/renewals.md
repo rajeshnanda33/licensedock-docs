@@ -4,8 +4,8 @@ There are two ways a subscription renews:
 
 | Type | Applies to | How |
 |------|-----------|-----|
-| Automatic | Recurring plans with auto-renewal on | The gateway charges the saved payment method. LicenseDock records the payment from the webhook, extends the subscription and license, issues an invoice and sends **Renewal Receipt** |
-| Manual | One-time purchases with an access period, recurring subscriptions with auto-renewal turned off, expired or cancelled subscriptions, and past-due subscriptions | The customer clicks **Renew** in the portal (or the link in a reminder email) and pays through checkout |
+| Automatic | Recurring plans with auto-renewal on, paid through Stripe, PayPal or Mollie | The gateway charges the saved payment method. LicenseDock records the payment from the webhook, extends the subscription and license, issues an invoice and sends **Renewal Receipt** |
+| Manual | One-time purchases with an access period, recurring subscriptions with auto-renewal turned off, expired or cancelled subscriptions, past-due subscriptions, and subscriptions paid any other way (a payment you recorded by hand, an import, your own payment integration) | The customer clicks **Renew** in the portal (or the link in a reminder email) and pays through checkout |
 
 Lifetime purchases never expire, so they have nothing to renew.
 
@@ -16,15 +16,17 @@ Lifetime purchases never expire, so they have nothing to renew.
 - the **same** subscription is extended; no second subscription or license is created
 - if the subscription had time left, the new period starts at the current expiry, so no paid time is lost; if it had expired, the new period starts at payment
 - the license returns to `active` with the new expiry, and its activation limit and type are reset to the plan's
-- a recurring plan goes back on auto-renewal with a new gateway subscription, and any old gateway subscription is cancelled
+- a recurring plan paid through Stripe, PayPal or Mollie goes back on auto-renewal with a new gateway subscription, and any old gateway subscription is cancelled
 - any scheduled plan change is dropped
 - the event log records **Renewed**
 
+A renewal you record yourself (**Orders → New Order → Renewal**) extends the subscription the same way but leaves it renewing by hand: the customer keeps the **Renew** button. The form warns when the subscription already has an unpaid renewal order, and an unpaid renewal order is not completed once a gateway bills the subscription again.
+
 | Situation | Renew behaviour |
 |-----------|-----------------|
-| Auto-renewal cancelled, paid period not over | The card shows **Resume subscription**, which turns auto-renewal back on with nothing charged today |
+| Auto-renewal off, paid period not over | The card shows **Turn On Auto-Renewal** instead, which turns auto-renewal back on with nothing charged today |
 | The customer's plan or price has been unpublished | Renew opens the product page so the customer picks a current plan. The renewal discount is worked out against that plan |
-| The whole product has been unpublished | "This product is no longer offered. Please contact us about alternatives." |
+| The whole product has been unpublished | No **Renew** button: a retired product is not sold to anyone, and a renew link opened anyway says "This product is no longer offered. Please contact us about alternatives." While paid time is left, **Turn On Auto-Renewal** still keeps the subscription at the customer's own price |
 | An expired trial that was never paid | The button reads **Buy Now** and charges the full price |
 
 ## Renewal Discount
@@ -55,7 +57,7 @@ The discount at checkout depends on where the subscription is in its life:
 | Expired, product has no renewal discount | Lapsed Discount |
 | Expired trial that was never paid | None |
 
-A recurring plan renewed this way keeps renewing at the Renewal Discount rate. A lapsed renewal charges the lapsed price once, then recurs at the renewal rate.
+A recurring plan renewed this way keeps renewing at the Renewal Discount rate. A lapsed renewal charges the Lapsed Discount price once; later renewals charge the Renewal Discount price, or the full price when the product has none. This holds on Stripe, PayPal and Mollie.
 
 The portal's Subscriptions page shows the relevant prices on each card: "Renew before expiry" and "After expiry" while the subscription is active, "Renew now", "Discount expires" and "After that" during the grace period.
 
@@ -92,6 +94,7 @@ Grace reminder days are counted back from the end of the grace period: with a 14
 Reminders are also skipped when the renewal would cost nothing. Reminders and the expiry notice are both skipped when:
 
 - the product has been unpublished
+- the purchase was fully refunded, lost a dispute or its order was cancelled: access ended then, so there is nothing to renew or expire
 - the customer's plan has been retired and the product has no current paid plan to move to
 
 The subscription still expires on time in those cases; only the email is left out.

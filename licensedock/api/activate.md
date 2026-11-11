@@ -42,7 +42,10 @@ curl -X POST https://yoursite.com/api/index.php/v1/licensedock/licenses/activate
     "activation_limit": 5,
     "activations_used": 1,
     "expires_at": "2027-03-20T03:21:26Z",
-    "identifier": "example.com"
+    "identifier": "example.com",
+    "auto_renew": true,
+    "next_payment_at": "2027-02-20T03:21:26Z",
+    "payment_failed": false
   }
 }
 ```
@@ -53,6 +56,7 @@ curl -X POST https://yoursite.com/api/index.php/v1/licensedock/licenses/activate
 | `activation_limit` | `0` means unlimited |
 | `expires_at` | `null` for a license that doesn't expire |
 | `product` | The product the license was bought for. For a bundle key, this is the bundle |
+| `auto_renew`, `next_payment_at`, `payment_failed` | Whether the license renews by itself. Same as [Validate](/licensedock/api/validate#response) |
 
 An identifier that is already activated returns the same success response without using another slot.
 
@@ -61,14 +65,26 @@ An identifier that is already activated returns the same success response withou
 | Code | HTTP | When |
 |------|------|------|
 | `INVALID_REQUEST` | 400 | Missing `license_key` or `identifier`, a value over 255 characters, or a domain that normalises to nothing |
-| `LICENSE_INVALID` | 403 | Key doesn't exist, or its status isn't `active` |
+| `LICENSE_INVALID` | 403 | Key doesn't exist, or is revoked or suspended |
 | `PRODUCT_MISMATCH` | 403 | `product_id` was sent and the key doesn't cover it |
-| `LICENSE_EXPIRED` | 403 | License is past `expires_at` |
+| `LICENSE_EXPIRED` | 403 | License is marked expired, or is past `expires_at`. The error also carries `expires_at`, so you can say when it ended |
 | `ACTIVATION_LIMIT_REACHED` | 403 | All activation slots are used |
 | `RATE_LIMITED` | 429 | Per-IP or per-key limit hit. See [Rate Limiting](/licensedock/api/#rate-limiting) |
 | `INTERNAL_ERROR` | 500 | Unexpected server failure |
 
 The checks run in the order listed, so a bad key is reported as `LICENSE_INVALID` before anything else about it.
+
+An expired license:
+
+```json
+{
+  "error": {
+    "code": "LICENSE_EXPIRED",
+    "message": "License has expired.",
+    "expires_at": "2026-03-20T03:21:26Z"
+  }
+}
+```
 
 When the limit is reached, the response includes the usage so your software can show it:
 

@@ -66,6 +66,15 @@ Sending `identifier` opts in to being checked against it, whatever the setting. 
 
 Under *Public*, `identifier` is only logged.
 
+### Development sites
+
+On a license whose activations are domains, a development site downloads without an activation, so it doesn't use up a site:
+
+- `localhost`, an IP address, or a name ending in `.test`, `.local`, `.localhost`, `.localdomain`, `.invalid` or `.example`
+- `staging.`, `dev.` or `test.` in front of a domain that is activated on the license
+
+Under *License key + activated identifier*, development addresses on one license may download from at most 3 different places (IP addresses) per licensed site in 30 days, so a key can't be shared through them. Past that the download is refused with `DEV_LIMIT_REACHED`. A license with unlimited sites has no limit, and `staging.`, `dev.` and `test.` sites are not counted. The limit is fixed and has no setting.
+
 The [update check](/licensedock/api/updates) returns `download_requires`, so a client can find out what it needs before it tries.
 
 ## Response
@@ -101,14 +110,15 @@ When the request carries `dlid`, or an `Accept` header containing `text/html`, e
 
 | Code | HTTP | When |
 |------|------|------|
-| `DOWNLOAD_NOT_FOUND` | 404 | Product doesn't exist or isn't published |
+| `DOWNLOAD_NOT_FOUND` | 404 | Product doesn't exist, or is unpublished and no key was sent. An unpublished (retired) product is still served to a valid license |
 | `INVALID_REQUEST` | 400 | The setting needs a key and none was sent |
 | `ACCOUNT_DOWNLOAD_REQUIRED` | 403 | The product is *Account only* |
-| `LICENSE_INVALID` | 403 | Key doesn't exist, or its status isn't `active` |
-| `LICENSE_EXPIRED` | 403 | License is past `expires_at` |
+| `LICENSE_INVALID` | 403 | Key doesn't exist, or is revoked or suspended |
+| `LICENSE_EXPIRED` | 403 | License is marked expired, or is past `expires_at` |
 | `PRODUCT_MISMATCH` | 403 | The key doesn't cover this product, directly or through a bundle |
 | `ACTIVATION_REQUIRED` | 403 | *License key + activated identifier* and no `identifier` was sent |
-| `ACTIVATION_NOT_FOUND` | 403 | An `identifier` was sent and it isn't activated on this license |
+| `ACTIVATION_NOT_FOUND` | 403 | An `identifier` was sent and it isn't activated on this license (development sites excepted, above) |
+| `DEV_LIMIT_REACHED` | 403 | Development addresses downloaded with this license from more places in 30 days than it allows. See [Development sites](#development-sites) |
 | `DOWNLOAD_NOT_FOUND` | 404 | No published file for this license's plan |
 | `FILE_NOT_FOUND` | 404 | The download record exists but the file is missing on the server |
 | `RATE_LIMITED` | 429 | Too many requests. See below |

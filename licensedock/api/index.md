@@ -83,14 +83,15 @@ The download endpoint is the one exception: it streams a file on success, and ca
 | Code | HTTP | Returned by | When |
 |------|------|-------------|------|
 | `INVALID_REQUEST` | 400 | all | A parameter is missing, too long (over 255 characters), or malformed |
-| `LICENSE_INVALID` | 403 | activate, deactivate, download | Key not found, or its status isn't `active`. One code for both, so nobody can probe which keys exist |
-| `LICENSE_EXPIRED` | 403 | activate, download | License is past `expires_at`. A license expiring at this exact second counts as expired |
+| `LICENSE_INVALID` | 403 | activate, deactivate, download | Key not found, revoked or suspended (deactivate: also expired). One code for all, so nobody can probe which keys exist |
+| `LICENSE_EXPIRED` | 403 | activate, download | License is marked expired, or is past `expires_at` (a license expiring at this exact second counts). On activate the error also carries `expires_at` |
 | `PRODUCT_MISMATCH` | 403 | activate, deactivate, validate, download | The key is valid but belongs to a different product |
 | `ACTIVATION_LIMIT_REACHED` | 403 | activate | No free activation slots. The payload also carries `activation_limit` and `activations_used` |
 | `ACTIVATION_NOT_FOUND` | 404 / 403 | deactivate (404), download (403) | The identifier sent isn't activated on this license |
 | `ACTIVATION_REQUIRED` | 403 | download | The product needs an activated identifier and none was sent |
 | `ACCOUNT_DOWNLOAD_REQUIRED` | 403 | download | The product is only delivered through the customer's account |
-| `DOWNLOAD_NOT_FOUND` | 404 | download | Product doesn't exist, isn't published, or has no published file for this license's plan |
+| `DEV_LIMIT_REACHED` | 403 | download | Development addresses (localhost, `.test`, an IP) downloaded with this license from more places in 30 days than it allows. Activated domains are never affected. See [Development sites](/licensedock/api/downloads#development-sites) |
+| `DOWNLOAD_NOT_FOUND` | 404 | download | Product doesn't exist, has no published file for this license's plan, or is unpublished and no key was sent |
 | `FILE_NOT_FOUND` | 404 | download | The download record exists but its file is missing on the server |
 | `RATE_LIMITED` | 429 | all | Too many requests. Back off and retry. It says nothing about the license |
 | `INTERNAL_ERROR` | 500 | all | Unexpected server failure. Safe to retry |

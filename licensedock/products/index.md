@@ -94,6 +94,8 @@ The pricing plans render between the two descriptions.
 | Ordering | – | Position in the default product listing order |
 | Tags | – | One or more [tags](/licensedock/products/tags) |
 
+**Unpublishing retires a product: it is no longer sold to new customers.** Customers whose subscription still runs keep it. It goes on renewing at their price, their software still gets updates (the download API serves a retired product to a valid license), and a customer who switched auto-renewal off can turn it back on while paid time is left. Once it has ended, the product can't be bought again. A retired product with no license key (a free download) stops downloading.
+
 ### License
 
 | Field | Default | Notes |

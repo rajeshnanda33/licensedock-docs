@@ -39,8 +39,8 @@ A lost dispute ends access the same way a full refund does:
 | Subscriptions | Cancelled in LicenseDock and at the gateway, so the customer isn't charged again |
 | Chargeback transaction | Marked successful. It counts toward the order's refunded total |
 | Invoice | The invoice for the disputed payment goes back to unpaid for the amount lost. No credit note is issued |
-| Customer emails | Refund Issued, plus the subscription cancellation email for each cancelled subscription |
-| Admin emails | Refund Issued and **Chargeback / Dispute Resolved**, outcome lost |
+| Customer emails | None. The customer's bank took the money back; the store refunded nothing |
+| Admin emails | **Chargeback / Dispute Resolved**, outcome lost |
 
 ## How each gateway reports outcomes
 
@@ -62,10 +62,12 @@ If the chargeback is later reversed in your favour, LicenseDock doesn't change t
 
 A gateway can deliver the closing event before the opening one has been processed. LicenseDock asks the gateway to retry the closing event until the opening one lands. If the dispute is more than three days old and its opening event still hasn't arrived (for example because the webhook was set up after the dispute started), the closing event is logged and dropped, and the order is left as it was.
 
+A chargeback can also arrive before the payment it disputes has been recorded. Stripe and PayPal are then asked to send it again, so it isn't lost.
+
 ## Finding disputes
 
 - **Orders** – filter by status **Disputed**.
-- **Orders → View** – the **Transactions** list shows the **Chargeback** row with its amount, status and the gateway dispute ID as the reference. The reason is in the admin email.
+- **Orders → View** – the **Transactions** list shows the **Chargeback** row as money going out, with its amount, status (**Won** for a dispute you won) and the gateway dispute ID as the reference. The reason is in the admin email.
 - **Subscription Events** – the **Suspended** entry for each affected subscription.
 - **Webhook Log** – the dispute events as received.
 - The two admin emails can be edited under **Email Templates** (**Chargeback / Dispute Opened** and **Chargeback / Dispute Resolved**).

@@ -11,7 +11,7 @@ Manage them on the product's **Downloads** tab. Save the product first – the t
 3. Enter the **Version** (required, for example `1.2.0`) and, optionally, a **Release date**
 4. Add one or more files
 5. Write the **Release notes**
-6. Set the status and click **Apply**
+6. Set the status and click **Save**
 
 ### Version fields
 
@@ -144,8 +144,12 @@ Two settings decide how files reach buyers. They are independent.
 
 | Option | Behaviour |
 |--------|-----------|
-| Email + Account | Default. Download links in the receipt email (valid for 3 days) and on the account page |
-| Account Only | Download links on the account page only. Buyers must sign in |
+| Email + Account | Download links in the receipt email (valid for 3 days) and on the account page |
+| Account Only | Default for new stores. Download links on the account page only. Buyers must sign in |
+
+Stores installed before 1.9.5 keep the method they had; Email + Account was their default.
+
+The receipt links the release that auto-update serves the buyer's plan, not extras added later (an SDK or documentation version), and leaves out files reserved for another plan. It reminds the buyer that all files and earlier versions stay in their account.
 
 ### Download API Access
 
@@ -182,7 +186,7 @@ See [Downloads API](/licensedock/api/downloads) and [Joomla Extensions](/license
 
 ## Download Log
 
-Every download is logged. Open **Components → LicenseDock → Downloads** to browse served downloads by product and version. **Refused Downloads** lists downloads the API refused, grouped by license and reason, and keeps them for 90 days.
+Every download is logged. Open **Components → LicenseDock → Downloads** to browse served downloads by product and version. **Refused Downloads** lists downloads the API refused, grouped by license and reason, and keeps them for 90 days. Each reason is written once in plain words; hover it for the API code.
 
 ## Translations
 
