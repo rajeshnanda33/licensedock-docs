@@ -67,7 +67,9 @@ LicenseDock checks the `Stripe-Signature` header (HMAC-SHA256) against the webho
 | Subscription | Stripe Checkout in subscription mode. Stripe charges each cycle and sends `invoice.paid` |
 | Subscription with a paid trial or loyalty pricing | Stripe Checkout in setup mode collects the card only. LicenseDock then builds a Stripe subscription schedule, so the trial fee, first cycle and renewal price are billed exactly |
 
-The order completes when the customer returns from Stripe or when the webhook arrives, whichever comes first.
+The order completes when the customer returns from Stripe or when the webhook arrives, whichever comes first. Both can arrive together; they take turns, so the subscription is set up once. If the webhook arrives while the return is still setting it up, LicenseDock asks Stripe to send it again.
+
+In setup mode the card is first charged when LicenseDock builds the schedule, after the customer leaves Stripe. If that charge is declined, the order fails and the customer is sent back to checkout with their selection kept, and can pay with another card straight away.
 
 Coupons apply to the first charge only. Renewals bill at the plan's renewal price.
 

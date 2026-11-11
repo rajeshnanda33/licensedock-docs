@@ -23,16 +23,20 @@ The refundable balance covers everything paid on the order: the first payment, s
 | Licenses | Stay active | Revoked |
 | Subscriptions | Keep running | Cancelled in LicenseDock and at the gateway, immediately |
 | Credit note | Issued for the refunded amount | Issued for the refunded amount |
-| Customer email | Partial Refund Issued | Refund Issued, plus the subscription cancellation email |
+| Customer email | Partial Refund Issued | Refund Issued, which says access to the purchase has ended. No separate cancellation email |
 | Admin email | Refund Issued | Refund Issued |
 
 A partial refund that brings the total refunded up to the full amount paid is treated as a full refund.
+
+When the refund is spread over several payments, the customer gets one email with the total, not one per payment. If it stops short of the full amount, they get one partial-refund email for what was refunded.
+
+A full refund also ends access to the purchase's downloads, including products sold without a license key, and stops renewal reminders. See [Subscriptions](/licensedock/subscriptions/#lifecycle).
 
 Revoked licenses fail activation and validation through the [License API](/licensedock/api/).
 
 ## Credit notes
 
-Every refund gets a credit note: a document in its own numbering series (for example `CN-0001`) that points at the invoice it credits. When the order has several invoices (renewals, plan-change top-ups), the credit note goes against the invoice for the payment that was refunded.
+Every refund gets a credit note: a document in its own numbering series (for example `CN-0001`) that points at the invoice it credits. When the order has several invoices (renewals, plan-change top-ups), each credit note goes against the invoice for the payment it refunds, and names that invoice.
 
 The credit note PDF is attached to the customer's refund email, and it appears alongside invoices in admin and in the customer's account. Test orders use a separate numbering series. See [Invoices](/licensedock/invoices/).
 

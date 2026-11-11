@@ -90,7 +90,8 @@ The download endpoint is the one exception: it streams a file on success, and ca
 | `ACTIVATION_NOT_FOUND` | 404 / 403 | deactivate (404), download (403) | The identifier sent isn't activated on this license |
 | `ACTIVATION_REQUIRED` | 403 | download | The product needs an activated identifier and none was sent |
 | `ACCOUNT_DOWNLOAD_REQUIRED` | 403 | download | The product is only delivered through the customer's account |
-| `DOWNLOAD_NOT_FOUND` | 404 | download | Product doesn't exist, isn't published, or has no published file for this license's plan |
+| `DEV_LIMIT_REACHED` | 403 | download | Development addresses (localhost, `.test`, an IP) downloaded with this license from more places in 30 days than it allows. Activated domains are never affected. See [Development sites](/licensedock/api/downloads#development-sites) |
+| `DOWNLOAD_NOT_FOUND` | 404 | download | Product doesn't exist, has no published file for this license's plan, or is unpublished and no key was sent |
 | `FILE_NOT_FOUND` | 404 | download | The download record exists but its file is missing on the server |
 | `RATE_LIMITED` | 429 | all | Too many requests. Back off and retry. It says nothing about the license |
 | `INTERNAL_ERROR` | 500 | all | Unexpected server failure. Safe to retry |

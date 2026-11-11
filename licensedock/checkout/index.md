@@ -105,13 +105,13 @@ Below the fields, **Country availability** limits where you sell:
 
 A country outside the list is refused at checkout with "This country is not available."
 
-Fields are validated in the browser and again on the server. If the server refuses a submission, the customer returns to checkout with "Please check the highlighted fields." and their entries kept.
+Fields are validated in the browser and again on the server. If the server refuses a submission, the customer returns to checkout with "Please check the highlighted fields." and their entries kept. A form left open while the session changed, for example after signing in from another tab, is refused the same way with a message to try again, and the selection is kept. The entries also survive a page reload.
 
 The billing details are saved to the customer record and prefilled on their next order.
 
 ## Order Summary
 
-The summary shows the product and plan, the billing cycle, any trial terms, and then:
+The summary shows the product and plan, the billing cycle, any trial terms (a recurring plan reads "Renews automatically. Cancel anytime.", or "Renews automatically after the trial."), and then:
 
 | Line | When |
 |------|------|
@@ -144,7 +144,7 @@ See [Stripe](/licensedock/gateways/stripe), [PayPal](/licensedock/gateways/paypa
 
 ## Free Orders
 
-A **one-time** price of 0 shows a **Get it Free** button. The order completes immediately with no gateway, and the customer goes straight to the thank-you page.
+A **one-time** order that totals 0 (a price of 0, or a 100% coupon) shows a **Get it Free** button. The order completes immediately with no gateway, and the customer goes straight to the thank-you page. It is stored and shown as **Free**: on the order, its invoice ("Paid via: Free"), the receipt and your new-order email.
 
 A **recurring** order that totals 0 today (a free trial, or a 100% coupon on a subscription) still goes through the gateway, so a payment method is on file for later renewals.
 
@@ -166,7 +166,7 @@ Cancelled and expired subscriptions are not blocked: buying again counts as a re
 
 On the account Subscriptions page, a subscription that doesn't auto-renew (an expired or cancelled one, or a one-time purchase with an expiry date) shows **Renew**. The same button appears on the product page's plan cards. It takes the customer to checkout with their existing plan price selected, trial and coupon cleared.
 
-- A recurring subscription that was cancelled but is still inside its paid period gets **Resume** instead, which turns auto-renewal back on with no payment.
+- A recurring subscription that was cancelled but is still inside its paid period gets **Turn On Auto-Renewal** instead, which turns auto-renewal back on with no payment.
 - If that plan or price has been unpublished, they land on the product page's plans to pick a current one. If the whole product is unpublished they see "This product is no longer offered. Please contact us about alternatives."
 - At checkout the product's renewal discount is applied and shown as **Renewal Discount**. It is worked out on the server from the subscription at that moment, so it cannot be carried over to a different product.
 - The order is linked to the subscription it renews, and the thank-you page reads "Thank you for renewing!"

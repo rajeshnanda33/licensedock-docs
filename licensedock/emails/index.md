@@ -34,13 +34,13 @@ Sent and failed emails are deleted from the queue after 90 days.
 | `email_change_confirm` | Confirm New Email | A customer asks to change their email on **Account: Details**. Sent to the new address with the link that confirms it |
 | `email_changed` | Email Address Changed | The change is confirmed. Sent to the old address |
 | `abandoned_recovery` | Abandoned Checkout Reminder | A checkout was started but not paid. Sent on the configured intervals |
-| `renewal_receipt` | Renewal Receipt | A subscription auto-renewal charge succeeds. The renewal invoice PDF is attached |
+| `renewal_receipt` | Renewal Receipt | A subscription auto-renewal charge succeeds. The renewal invoice PDF is attached. Its subject reads "Your receipt from …"; the first charge after a free trial says the trial has ended and the subscription has started, not that it renewed. A receipt you have edited keeps your wording |
 | `payment_failed` | Payment Failed | A renewal charge or a checkout payment fails |
 | `dunning_cancelled` | Subscription Cancelled (Payment Failed) | The dunning grace period runs out and the subscription is cancelled |
 | `expiration_notice` | Subscription Expired | A subscription expires without renewal. Also sent in place of `dunning_cancelled` when the customer had already cancelled |
-| `subscription_cancelled` | Subscription Cancelled | A subscription's auto-renewal is cancelled |
+| `subscription_cancelled` | Subscription Cancelled | A subscription's auto-renewal is cancelled. Not sent when a refund, a lost dispute or a cancelled manual order ends access; the refund email says so instead |
 | `subscription_resumed` | Subscription Resumed | A cancelled subscription's auto-renewal is turned back on |
-| `trial_ending` | Trial Ending Reminder | 3 days before a trial converts to a paid subscription |
+| `trial_ending` | Trial Ending Reminder | 3 days before a trial converts to a paid subscription. The subject says when the trial ends |
 | `trial_cancellation_reminder` | Trial Winback | The configured number of days after a trial is cancelled |
 | `renewal_reminder_1` | Renewal Reminder - First | First pre-expiry reminder |
 | `renewal_reminder_2` | Renewal Reminder - Second | Second pre-expiry reminder |
@@ -51,7 +51,7 @@ Sent and failed emails are deleted from the queue after 90 days.
 | `plan_change_scheduled` | Plan Change Scheduled | A plan change is set to apply at the next renewal |
 | `plan_change_applied` | Scheduled Plan Change Applied | A scheduled plan change takes effect at renewal |
 | `plan_change_cancelled` | Scheduled Plan Change Cancelled | The customer cancels a pending plan change |
-| `refund_confirmation` | Refund Issued | A full refund is processed. The credit note PDF is attached |
+| `refund_confirmation` | Refund Issued | A full refund is processed. Says access to the purchase has ended. One email for the total, even when the refund covers several payments. The credit note PDF is attached. Not sent for a lost dispute |
 | `partial_refund_confirmation` | Partial Refund Issued | A partial refund is processed. The credit note PDF is attached |
 
 The timing of reminders, winback, expiry notice and abandoned checkout emails is set on the **Automation** tab of Settings. Leaving a days field blank switches that email off. See [Configuration](/licensedock/getting-started/configuration#automation-tab).
@@ -65,14 +65,14 @@ Admin emails go to every address in **Settings → Emails → Admin Notification
 | `admin_new_order` | New Order | A customer completes a new order |
 | `admin_renewal` | Subscription Renewed | A subscription auto-renewal succeeds |
 | `admin_payment_failed` | Payment Failed | A payment fails |
-| `admin_refund` | Refund Issued | A full or partial refund is processed |
+| `admin_refund` | Refund Issued | A full or partial refund is processed. Not sent for a lost dispute, which sends Chargeback / Dispute Resolved |
 | `admin_expired` | Subscription Expired | A subscription expires, or is cancelled after dunning |
 | `admin_subscription_cancelled` | Subscription Cancelled | A subscription's auto-renewal is cancelled |
 | `admin_subscription_resumed` | Subscription Resumed | A cancelled subscription is resumed |
 | `admin_plan_change` | Plan Change | A customer changes, schedules or cancels a plan change |
 | `admin_dispute_opened` | Chargeback / Dispute Opened | A gateway reports a new dispute |
 | `admin_dispute_resolved` | Chargeback / Dispute Resolved | A dispute is won or lost |
-| `admin_gateway_error` | Gateway Action Failed | A refund or cancel call to a gateway fails, including a subscription LicenseDock could not cancel at the gateway after its Joomla user was deleted |
+| `admin_gateway_error` | Gateway Action Failed | A refund or cancel call to a gateway fails, including a subscription LicenseDock could not cancel at the gateway after its Joomla user was deleted. Also sent when Mollie took a first payment but refused to set up automatic renewal, saying what the customer can do |
 | `admin_mollie_loyalty_patch_failed` | Mollie Loyalty Rate Not Applied | The loyalty rate could not be applied to a Mollie subscription |
 | `admin_attention` | Action Needed | An event needs manual review, for example a coupon that passed its usage limits while two checkouts completed at once |
 

@@ -77,7 +77,7 @@ Coupons apply to the first charge only.
 | `BILLING.SUBSCRIPTION.ACTIVATED` | Completes the order if the customer closed the browser before returning. Also finishes a resumed subscription the same way |
 | `BILLING.SUBSCRIPTION.PAYMENT.FAILED` | Marks the subscription **Past Due** and emails the customer on the first failure. If payment hasn't recovered after the **Dunning grace period** (**Settings**, default 14 days), the subscription is cancelled |
 | `BILLING.SUBSCRIPTION.SUSPENDED` | Marks the subscription **Past Due**. Licenses are left as they are |
-| `BILLING.SUBSCRIPTION.CANCELLED` | If paid time remains, auto-renewal is turned off and the subscription runs until it expires (the customer can resume it). Otherwise the subscription is cancelled |
+| `BILLING.SUBSCRIPTION.CANCELLED` | If paid time remains, auto-renewal is turned off and the subscription runs until it expires (the customer can turn auto-renewal back on). Otherwise the subscription is cancelled |
 
 ## Plan changes
 

@@ -4,7 +4,7 @@ Every completed purchase creates a subscription record: recurring plans, one-tim
 
 | Purchase | Expiry | Renews |
 |----------|--------|--------|
-| Recurring price (monthly, quarterly, semi-annual, annual) | End of the current cycle, plus a 2-day buffer | Automatically through the gateway |
+| Recurring price (monthly, quarterly, semi-annual, annual) | End of the current cycle, plus a 2-day buffer | Automatically when paid through Stripe, PayPal or Mollie. Paid any other way (recorded by hand, imported, your own payment integration), manually with the **Renew** button |
 | One-time price with an access period | End of the access period | Manually, with the **Renew** button |
 | One-time lifetime price | None | Never needed |
 
@@ -20,7 +20,9 @@ Every completed purchase creates a subscription record: recurring plans, one-tim
 | `suspended` | Paused by an admin | `suspended` |
 | `pending` | Available when editing a manual subscription. No automatic flow sets it | Unchanged |
 
-When a customer clicks **Cancel Auto-Renewal**, the status stays as it is (`active`, `trialing` or `past_due`). LicenseDock turns off auto-renewal, cancels billing at the gateway and records the cancellation date. The customer keeps access until the end of the paid period, then the subscription moves to `expired`. Until then, **Resume subscription** turns auto-renewal back on.
+When a customer clicks **Cancel Auto-Renewal**, the status stays as it is (`active`, `trialing` or `past_due`). LicenseDock turns off auto-renewal, cancels billing at the gateway and records the cancellation date. The customer keeps access until the end of the paid period, then the subscription moves to `expired`. Until then, **Turn On Auto-Renewal** turns it back on.
+
+If Mollie takes the first payment but refuses to set up the subscription, LicenseDock turns auto-renewal off instead of showing a subscription that will never charge. The customer sees **Turn On Auto-Renewal** (nothing charged today), or **Renew** when that can't work, and you get an email. The event log records **Auto-renewal Not Set Up**.
 
 ## Lifecycle
 
@@ -35,7 +37,8 @@ When a customer clicks **Cancel Auto-Renewal**, the status stays as it is (`acti
 | Scheduled plan change reaches renewal | New plan applied. See [Plan Changes](/licensedock/subscriptions/plan-changes) |
 | End date passes without renewal | `expired`, license `expired`, **Subscription Expired** email |
 | Trial cancelled and trial end passes | `expired`, with the expiry set back to the trial end |
-| Full refund | `cancelled`, gateway subscription cancelled, license `revoked` |
+| Full refund, lost dispute or cancelled order | `cancelled`, gateway subscription cancelled, license `revoked`. Access ends at once: the purchase leaves the customer's Downloads, its files stop downloading (also for products sold without a license key), and no reminders or expiry notice follow. Buying again costs the full price |
+| Product unpublished (retired) | Nothing changes for existing subscriptions: they keep renewing, updating and downloading. New customers can't buy it |
 
 A successful gateway renewal that arrives after the subscription expired (for example a late retry after dunning ran out) brings the subscription and its license back to `active`, so a customer who paid always gets their access.
 
@@ -88,11 +91,11 @@ The details modal shows the source order, key dates (starts, trial end, next pay
 | Expired needs a past expiry | A future date contradicts the status |
 | Gateway-billed subscriptions can't be edited | The gateway owns their status and dates. Use **Cancel Subscription** |
 
-Saving copies the status and expiry onto the subscription's licenses. See [Managing Licenses](/licensedock/licenses/#changing-status-or-expiry).
+Saving copies the status and expiry onto the subscription's licenses, and records each change in the event log (**Status Changed**, **Expiry Changed**) and the audit log. See [Managing Licenses](/licensedock/licenses/#changing-status-or-expiry).
 
 ### Cancelling
 
-**Cancel Subscription** works on recurring subscriptions that are active, trialing or past due. It cancels billing at the gateway first and stops if the gateway call fails. It then turns off auto-renewal the same way the customer's own cancel does: the customer keeps access until the current period ends, no refund is issued, and the customer can still resume. To end access immediately, refund the order.
+**Cancel Subscription** works on recurring subscriptions that are active, trialing or past due. It cancels billing at the gateway first and stops if the gateway call fails. It then turns off auto-renewal the same way the customer's own cancel does: the customer keeps access until the current period ends, no refund is issued, and the customer can still turn auto-renewal back on. To end access immediately, refund the order.
 
 ### Billing mismatch
 
@@ -111,17 +114,19 @@ Every state change is written to the event log with the actor that caused it: **
 | Plan Change Cancelled | A scheduled change is withdrawn |
 | Scheduled Change Applied | A scheduled change takes effect at renewal |
 | Auto-renewal Cancelled | The customer or an admin turns off auto-renewal |
+| Auto-renewal Not Set Up | Mollie took the first payment but refused to create the subscription |
 | Auto-renewal resumed | The customer turns auto-renewal back on |
 | Cancelled | The subscription is ended (gateway, refund, lost dispute, void) |
 | Refunded | A refund is applied to the subscription's order |
 | Dunning Failed | A renewal payment fails |
 | Renewal payment recovered | A renewal succeeds after one or more failures |
 | Suspended | A dispute is opened on the subscription's order |
+| Status Changed, Expiry Changed | An admin edits the subscription |
 | Expired | The end date passed, dunning ran out, or a trial lapsed |
 
 The log appears in three places:
 
-- **Components → LicenseDock → Subscription Events** – every event, with search and filters for event type and actor
+- **Components → LicenseDock → Subscription Events** – every event, with search and filters for event type and actor. Each row names the product; rows about a plan name it in **Detail**
 - the **Activity** timeline in a subscription's details
 - the customer's details on **Customers**, with a link to their full history
 

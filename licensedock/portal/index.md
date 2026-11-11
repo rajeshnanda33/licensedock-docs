@@ -29,7 +29,7 @@ From 1.9.0, **Account: Invoices** takes the place of **Order History**. An exist
 |--------|-----------|
 | Sign-in | Every account page requires a signed-in Joomla user. Guests are sent to the Joomla login page with a "Please log in to access your account." message and returned afterwards |
 | Ownership | Every page and action is limited to the signed-in user's own records |
-| Forms | Every action (cancel, resume, renew, change plan, save details, export) requires a valid Joomla form token |
+| Forms | Every action (cancel, turn on auto-renewal, renew, change plan, save details, export) requires a valid Joomla form token |
 
 ## Navigation
 
@@ -52,28 +52,36 @@ When a subscription that does not renew automatically expires within the next 30
 
 ## Subscriptions
 
-One card per subscription, showing product and plan, status badge, price, billing cycle, payment method, and either the next charge date (auto-renewing) or the expiry date. Auto-renewing cards show an **Auto-renewing** badge; cards where the customer turned renewal off show **Auto-renewal cancelled**.
+One card per subscription, showing product and plan, status badge, price, how it is billed, payment method, and a date:
+
+- **Billing** reads the way the customer is charged: "Annual", "Monthly", "One-Time · Lifetime", "One-Time · Valid for 1 year".
+- **Payment** names the gateway, "Manual" for a payment you recorded by hand, or "Free" for a free order.
+- **Next renewal** on an auto-renewing card, **First charge** during a trial, **Expires** while the paid period runs, **Expired** once it has passed, and **Access ended** after a full refund, a lost dispute or a cancelled order.
+- Every amount includes the customer's tax.
+
+Auto-renewing cards show an **Auto-renewing** badge; cards where the customer turned renewal off show **Auto-renewal off**. A subscription renews automatically only when Stripe, PayPal or Mollie bills it; anything else (a payment you record by hand, an import, your own payment integration) is renewed by the customer with **Renew**.
 
 | Button | Shown when | What it does |
 |--------|------------|--------------|
 | **Change Plan** | Auto-renewing, not in a trial, no plan change already scheduled, and another plan with the same billing cycle is on sale | Opens the plan change dialog. See [Plan Changes](/licensedock/subscriptions/plan-changes) |
 | **Cancel Auto-Renewal** | Recurring subscription that is active, trialing or past due | Stops billing at the gateway. Access continues until the end of the paid period |
-| **Resume subscription** | Auto-renewal was cancelled and the paid period has not ended | Turns auto-renewal back on. Nothing is charged today. PayPal asks the customer to approve a new agreement |
-| **Renew** | Subscription that does not renew automatically and has an end date (expired, cancelled, time-limited one-time purchase) | Sends the customer to checkout for the same plan with any [renewal discount](/licensedock/subscriptions/renewals) applied |
+| **Turn On Auto-Renewal** | Auto-renewal is off and the paid period has not ended. Also shown when Mollie took the first payment but refused to set up the subscription | Turns auto-renewal back on, on the same subscription at the customer's own price. Nothing is charged today. PayPal asks the customer to approve a new agreement |
+| **Renew** | Subscription that does not renew automatically and has an end date (expired, cancelled, time-limited one-time purchase), and whose product is still on sale | Sends the customer to checkout for the same plan with any [renewal discount](/licensedock/subscriptions/renewals) applied |
 | **Renew Now** | Subscription is past due | Same as Renew, for paying a failed renewal directly |
 | **Buy Now** | An expired trial that never converted | Checkout at the full price |
 | **Cancel scheduled change** | A plan change is scheduled | Keeps the subscription on its current plan |
-| **Browse Products** | The product has been retired | Links to the catalog |
+| **Browse Products** | The product has been retired and the subscription can't be kept: it doesn't renew automatically and its paid period is over | Links to the catalog |
 
 Extra information on the card:
 
 | Situation | Shown |
 |-----------|-------|
-| Trial | "Trial ends" date |
+| Trial | "Your trial ends on …" notice: the first payment is taken on or around that date, so cancel before then to avoid it |
 | Past due | "Last payment failed." alert, asking the customer to click **Renew Now** or update their payment details with the gateway (Stripe, PayPal or Mollie) |
 | Scheduled plan change | The plan it switches to and when |
 | Renewal discount available | "Renew before expiry", "After expiry", "Renew now", "Discount expires" and "After that" prices, depending on where the customer is in the renewal window |
 | Plan or price retired | A legacy-plan notice. Renew sends the customer to the product page to pick a current plan |
+| Product retired (unpublished) | "No longer sold to new customers. Your subscription continues." on an auto-renewing card, or "Turn auto-renewal back on to keep it." while auto-renewal is off and paid time is left. The customer keeps updates and downloads while they pay |
 
 Customers update their card or payment account with the gateway directly. LicenseDock has no payment-method form of its own.
 
@@ -85,6 +93,7 @@ Lists the published versions of every product the customer has access to, groupe
 |--------|--------|
 | Active, trialing or past-due subscription, or a cancelled one still inside its paid period | Download links |
 | Expired subscription | Versions listed with an **Expired** badge and no links |
+| Fully refunded, lost dispute or cancelled order | Not listed: access to the purchase has ended, also for products sold without a license key |
 | Bundle | Products included in a bundle inherit the bundle's access |
 
 Files restricted to a plan only appear for customers on that plan. Download links are signed and time-limited, and each download is recorded in the Download Log. See [Downloads](/licensedock/products/downloads).
@@ -105,7 +114,7 @@ The Licenses page is read-only. Activations are created and removed by the custo
 
 ## Invoices
 
-Lists the customer's issued invoices and credit notes with number, date, item, amount and status, with pagination. **Download** returns the PDF. See [Invoices](/licensedock/invoices/).
+Lists the customer's issued invoices and credit notes with number, date, item, amount and status (a credit note reads **Refunded**), with pagination. **Download** returns the PDF. See [Invoices](/licensedock/invoices/).
 
 ## Account Details
 

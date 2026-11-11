@@ -34,8 +34,8 @@ Test-mode payments draw from their own counters with a `TEST-` prefix, e.g. `TES
 - Title (**INVOICE** or **Credit note**) and your store logo
 - Seller: company name, address, email and tax ID
 - Bill to: name, company, address, region, country, email and the buyer's tax ID
-- Invoice or credit note number, order number, type, date, payment gateway and status
-- One line per item: product, plan, trial length where there is one, and the service period for subscriptions
+- Invoice or credit note number, order number, type, date, payment gateway ("Manual" for a payment you recorded, "Free" for a free order) and status. A credit note's status reads **Refunded**, and a credit note names the invoice it corrects
+- One line per item: product, plan, trial length where there is one, and the service period for subscriptions. A renewal's period is the month (or cycle) the customer paid for, from renewal date to renewal date
 - Subtotal, discount (when a coupon was used), tax and total
 - Footer
 
@@ -86,7 +86,7 @@ PDFs are stored in the download folder set under **Settings → Downloads**, whi
 
 ## The Invoices Screen
 
-**Components → LicenseDock → Invoices** lists every invoice and credit note with its number, type, customer, amount, status and a PDF download.
+**Components → LicenseDock → Invoices** lists every invoice and credit note with its number, type, customer, amount, status and a PDF download. A credit note's status reads **Refunded** here and in the CSV export, the same as on its PDF.
 
 | Filter | Options |
 |--------|---------|

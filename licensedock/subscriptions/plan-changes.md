@@ -57,7 +57,7 @@ total today     = charge − credit (plus tax)
 
 ## Downgrades
 
-A change whose total today would be negative is a downgrade. Downgrades never refund money. They are always scheduled for the next renewal, whatever the customer picked:
+A move to a plan with a lower list price is a downgrade, and so is any change whose total today would be negative. (A free first month, for example from a 100% coupon, gives no credit, so a cheaper plan would otherwise be charged the difference today.) Downgrades never refund money. They are always scheduled for the next renewal, whatever the customer picked:
 
 - the dialog removes **Change now**
 - it shows "Takes effect at your next renewal on [date]. No charge or refund today."
@@ -87,7 +87,7 @@ At the next successful renewal, the new plan applies: plan, price and license li
 
 | Action | Result |
 |--------|--------|
-| **Cancel scheduled change** | Gateway set back to the current plan (PayPal asks for approval), **Scheduled Plan Change Cancelled** email sent |
+| **Cancel scheduled change** | Gateway set back to the current plan (PayPal asks for approval, and the confirmation says so beforehand), **Scheduled Plan Change Cancelled** email sent |
 | Customer cancels auto-renewal | The scheduled change is dropped |
 | Customer renews through checkout | The scheduled change is dropped |
 
